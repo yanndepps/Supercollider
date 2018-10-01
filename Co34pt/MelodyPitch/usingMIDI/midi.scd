@@ -1,5 +1,4 @@
 // Boilerplate for a basic midi setup
-
 (
 // boot the server
 s.boot;

@@ -1,4 +1,5 @@
 # Supercollider
 A platform for audio synthesis and algorithmic composition
-* Lessons @EliFieldsteel
-* Live-code @theseanco
+* lessons @EliFieldsteel
+* live-code @theseanco
+* cl-collider @byulparan

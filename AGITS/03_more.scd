@@ -107,3 +107,76 @@ x = 11; y = 12;
 [x, y, 9] * 100;
 
 // Creating new Arrays
+// Arithmetic series
+Array.series(size: 6, start: 10, step: 3);
+// Geometric series
+Array.geom(size: 10, start: 1, grow: 2);
+// Compare
+Array.series(7, 100, -10);
+Array.geom(7, 100, 0.9);
+// The .fill method
+Array.fill(10, "same");
+// compare :
+Array.fill(10, rrand(1, 10));
+Array.fill(10, {rrand(1, 10)});
+// .fill method can take a default argument that is a counter.
+Array.fill(10, {arg counter; counter *10});
+Array.fill(5, {| c | c * 10});
+// generating a list of frequencies
+Array.fill(10, {| wow | wow + 1 * 440});
+// The .newClear method
+// create an empty array of given size
+a = Array.newClear(7);
+// same as a.put(3, "wow") :
+a[3] = "wow";
+a;
+
+// Shortcut notation :
+// creates an array containing the same item a number of times:
+30!4;
+"wow"!10;
+// gives same results as :
+30.dup(4);
+"wow".dup(10);
+// or :
+Array.fill(4, 30);
+Array.fill(10, "wow");
+
+// Another common syntax shortcut :
+(50..79);
+// arithmetic serie, same as :
+series(50, 51, 79);
+// or
+Array.series(30, 50, 1);
+// for a step different than 1, do :
+(50, 53 .. 79);
+// same as :
+series(50, 53, 79);
+Array.series(10, 50, 3);
+
+// How to "do" an Array : actions over all items of a collection
+~myFreqs = Array.fill(10, {rrand(440, 880)});
+// simple action on every item of the list :
+~myFreqs.do({arg item, count; ("Item " ++ count ++ " is " ++ item ++ " Hz. Closest midi note is " ++ item.cpsmidi.round).postln});
+// pipes
+~myFreqs.do({| item, count | ("Item " ++ count ++ " is " ++ item ++ " Hz. Closest midi note is " ++ item.cpsmidi.round).postln});
+
+// just use one arg if no need for the counter
+~myFreqs.do({| item | {SinOsc.ar(item, 0, 0.1)}.play});
+~myFreqs.do({| item | item.squared.postln});
+~myFreqs.squared;
+
+// When we "do" an array, we provide a function. The message "do" will iterate
+// through the items of the array and evaluate that function each time.
+// The function can take two arguments by default: the array item at current iteration,
+// and a counter that keeps track of number of iterations. The names are irrelevant but they
+// always come in this order : "item, count".
+// The method "collect" is similar but returns a new collection with all intermediate results.
+
+
+// END of Part III
+
+
+
+
+

@@ -33,13 +33,13 @@ Task({
 	\chan, 1,
 	// the rest of the pattern
 	\scale, Scale.minor,
-	//\degree, Pseq([0,5],inf),
-	\note, Pseq([[0, 3, 7], [2, 5, 8], [3, 7, 10], [5, 8, 12]], inf),
+	\degree, Pseq([0, 2, 7],inf),
+	//\note, Pseq([[0, 3, 7], [2, 5, 8], [3, 7, 10], [5, 8, 12]], inf),
 	\octave, 4,
 	\root, 0,
-	// \dur, Pwrand([0.25, Pn(0.5, 2)], [0.8, 0.2].normalizeSum, inf),
-	\dur, 4,
-	\legato, 0.4,
-	\strum, 0
+	 \dur, Pwrand([0.25, Pn(0.5, 2)], [0.2, 0.8].normalizeSum, inf),
+	//\dur, 1,
+	\legato, 0.8,
+	\strum, 0.4
 )
 )

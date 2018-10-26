@@ -4,3 +4,4 @@ A platform for audio synthesis and algorithmic composition
 * live-code @theseanco
 * cl-collider @byulparan
 * a gentle introduction @bruviaro
+* tidal superdirt + midi

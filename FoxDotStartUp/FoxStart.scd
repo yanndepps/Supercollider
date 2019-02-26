@@ -1,3 +1,0 @@
-FoxDot.start;
-
-StageLimiter.activate;

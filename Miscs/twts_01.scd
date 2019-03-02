@@ -1,4 +1,6 @@
-//--tweet0006
+s.boot;
+
+//tweet0006
 r{loop{x={GVerb.ar(MoogFF.ar(ClipNoise.ar*0.4,LFPar.kr({0.3.rand}!2,0,600,990)),9,9,1)}.play(s,0,19);3.wait;x.release}}.play
 
 //--tweet0014

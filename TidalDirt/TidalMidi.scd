@@ -1,3 +1,4 @@
+
 // start SuperDirt
 SuperDirt.start;
 
@@ -12,3 +13,9 @@ MIDIClient.init;
 
 // connect MIDI device to SuperDirt
 ~dirt.soundLibrary.addMIDI(\midi, ~midiOut);
+
+// GUIs
+s.meter;
+s.volume.gui;
+FreqScope.new;
+HelpBrowser.new; // or C-c h

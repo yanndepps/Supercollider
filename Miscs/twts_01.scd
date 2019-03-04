@@ -1,4 +1,8 @@
+s.options.memSize = 8192 * 256; // increase this if "alloc failed" messages
+
 s.boot;
+
+s.quit;
 
 //tweet0006
 r{loop{x={GVerb.ar(MoogFF.ar(ClipNoise.ar*0.4,LFPar.kr({0.3.rand}!2,0,600,990)),9,9,1)}.play(s,0,19);3.wait;x.release}}.play
@@ -25,7 +29,9 @@ play{a=SinOsc;a.ar(a.ar(a.ar(0.11)),a.ar(a.ar(95*a.ar(0.01,0,1,1),0,a.ar(5e-3,0,
 (
 Ndef(\grid, {var n= 8; Mix({|i|
         var t= i/n;
-        var z= LeakDC.ar(VarSaw.ar(SinOsc.ar(VarSaw.ar(i+1*VarSaw.ar(0.048, 0, 0.5, 25, 150), t, 1/3, 150), VarSaw.ar(100+i, t, VarSaw.ar(0.024, t, 0.25, 0.475, 0.5))*pi, VarSaw.ar(0.012, t, 0.75, VarSaw.ar(0.064, t, 0.5, 25, 50), 200), VarSaw.ar(0.16, t, 2/3, VarSaw.ar(0.02, t, 0.5, 7.5).abs, 300)), t));
+        var z= LeakDC.ar(VarSaw.ar(SinOsc.ar(VarSaw.ar(i+1*VarSaw.ar(0.048, 0, 0.5, 25, 150), t, 1/3, 150),
+			VarSaw.ar(100+i, t, VarSaw.ar(0.024, t, 0.25, 0.475, 0.5))*pi,
+			VarSaw.ar(0.012, t, 0.75, VarSaw.ar(0.064, t, 0.5, 25, 50), 200), VarSaw.ar(0.16, t, 2/3, VarSaw.ar(0.02, t, 0.5, 7.5).abs, 300)), t));
         Pan2.ar(z, VarSaw.ar(0.02, t, 0.5), 1/n);
 }!n)});
 )
@@ -38,7 +44,8 @@ Ndef(\sweep, {var n= 9; GVerb.ar(Mix({|i|
         var t= i/n;
         var t2pi= t*2pi;
         var f= 2**i*10+100;
-        var z= LeakDC.ar(VarSaw.ar(SinOsc.ar(i+1*0.005, SinOsc.ar(i+1*SinOsc.ar(0.05, t2pi, 0.2, 0.4), 0, 2pi), f*SinOsc.ar(0.002, t2pi, 0.3, 0.5), f), t, SinOsc.ar(i+1*0.006, t2pi, 0.4, 0.5), i.linlin(0, n-1, 0.4, 0.1)));
+        var z= LeakDC.ar(VarSaw.ar(SinOsc.ar(i+1*0.005, SinOsc.ar(i+1*SinOsc.ar(0.05, t2pi, 0.2, 0.4), 0, 2pi),
+			f*SinOsc.ar(0.002, t2pi, 0.3, 0.5), f), t, SinOsc.ar(i+1*0.006, t2pi, 0.4, 0.5), i.linlin(0, n-1, 0.4, 0.1)));
         Pan2.ar(z, SinOsc.ar(0.015, t2pi, i.linlin(0, n-1, 0.99, 0.2)), 1/n);
 }!n), 30, 5, 0.3, 0.8, 10)});
 )
@@ -46,11 +53,14 @@ Ndef(\sweep).play
 Ndef(\sweep).stop
 
 //--28
-
 Ndef(\round).play
 (
 Ndef(\round, {var n= 28; GVerb.ar(Limiter.ar(LeakDC.ar(Mix({|i|
-        var z= SinOsc.ar(i.linexp(0, n-1, 70, 1500), LFSaw.ar(i+1*5, 0, 0.5pi), LFSaw.ar(0.2+SinOsc.ar(i+1*0.001, 0, 0.5), i/n, 0.4).max(0))*SinOsc.ar(200+i, 0, SinOsc.ar(0.03, i+1, 0.5, 1))*SinOsc.ar(400+i, 0, SinOsc.ar(0.04, i+2, 0.5, 1))*SinOsc.ar(800+i, 0, SinOsc.ar(0.05, i+3, 0.5, 1));
+        var z= SinOsc.ar(i.linexp(0, n-1, 70, 1500), LFSaw.ar(i+1*5, 0, 0.5pi),
+			LFSaw.ar(0.2+SinOsc.ar(i+1*0.001, 0, 0.5), i/n, 0.4).max(0))*
+	SinOsc.ar(200+i, 0, SinOsc.ar(0.03, i+1, 0.5, 1))*
+	SinOsc.ar(400+i, 0, SinOsc.ar(0.04, i+2, 0.5, 1))*
+	SinOsc.ar(800+i, 0, SinOsc.ar(0.05, i+3, 0.5, 1));
         Pan2.ar(z, i.linlin(0, n-1, -0.925, 0.925), 1/n);
 }!n))), 3, 5, 0.2, 0.8, 20, 0.1)});
 )
@@ -67,7 +77,6 @@ Ndef(\wrap).play
 Ndef(\wrap).stop
 
 //--pakt24
-
 Ndef(\swoop).play
 (
 Ndef(\swoop, {var n= 24; Mix({|i|
@@ -100,7 +109,6 @@ Ndef(\wheel, {Splay.ar(BPF.ar(PinkNoise.ar(1!3)*SinOsc.ar(VarSaw.ar(#[0.011, 0.0
 Ndef(\wheel).stop
 
 //--pakt14
-
 Ndef(\interfere).play
 (
 Ndef(\interfere, {var a= #[3, 1, 5, 2]; Limiter.ar(Splay.ar(Formlet.ar(LFPulse.ar(a*100+SinOsc.ar(a, 0, a/20), 0, SinOsc.ar(a/10, 0, 0.45, 0.5), LFPulse.ar(a+a, 0, SinOsc.ar(a/10, 0, 0.45, 0.5), 0.1)), a*100+LFPulse.ar(a/2, 0, 0.5, a*SinOsc.ar(a/100, 0, 150, 200)), SinOsc.ar(a/30, 0, 0.01, 0.0125), SinOsc.ar(a/60, 0, 0.05, 0.055), 0.2)))});
@@ -108,7 +116,6 @@ Ndef(\interfere, {var a= #[3, 1, 5, 2]; Limiter.ar(Splay.ar(Formlet.ar(LFPulse.a
 Ndef(\interfere).stop
 
 //--pack13
-
 Ndef(\pulse).play
 (
 Ndef(\pulse, {GVerb.ar(Splay.ar(Resonz.ar(LFPulse.ar(#[121, 232, 343]), LFPulse.ar(#[0.121, 0.232, 0.343]).exprange(LFPulse.ar(#[12.1, 23.2, 34.3]).range(80, 100), LFPulse.ar(#[1.21, 2.32, 3.43].reverse).range(800, 1000)).sum*LFPulse.ar(#[0.121, 0.232, 0.343]).range(0.5, 1), 0.3, 0.15)), 34, 3, 0.2)});
@@ -116,7 +123,6 @@ Ndef(\pulse, {GVerb.ar(Splay.ar(Resonz.ar(LFPulse.ar(#[121, 232, 343]), LFPulse.
 Ndef(\pulse).stop
 
 //--pakt12
-
 Ndef(\waves).play
 (
 Ndef(\waves, {var n= 3; Mix({|i|
@@ -132,15 +138,6 @@ Ndef(\waves, {var n= 3; Mix({|i|
 Ndef(\waves).stop
 
 //--pakt11
-
-Ndef(\hail).play
-(
-Ndef(\hail, {Splay.ar(Ringz.ar(SinOsc.ar(#[0.000101, 0.000202, 0.000303, 0.000404, 0.000505, 0.000606], SinOsc.ar(#[101, 202, 303, 404, 505, 606], 0, SinOsc.ar(#[0.0101, 0.0202, 0.0303, 0.0404, 0.0505, 0.0606], 0, pi)))*VarSaw.ar(#[1.01, 2.02, 3.03, 4.04, 5.05, 6.06], #[0.101, 0.202, 0.303, 0.404, 0.505, 0.606], SinOsc.ar(#[0.00101, 0.00202, 0.00303, 0.00404, 0.00505, 0.00606], 0, 0.5, 0.5)), #[1010, 2020, 3030, 4040, 5050, 6060], SinOsc.ar(#[10.1, 20.2, 30.3, 40.4, 50.5, 60.6], 0, 0.1, 0.2), 0.2))});
-)
-Ndef(\hail).stop
-
-//--pakt11
-
 Ndef(\hail).play
 (
 Ndef(\hail, {Splay.ar(Ringz.ar(SinOsc.ar(#[0.000101, 0.000202, 0.000303, 0.000404, 0.000505, 0.000606], SinOsc.ar(#[101, 202, 303, 404, 505, 606], 0, SinOsc.ar(#[0.0101, 0.0202, 0.0303, 0.0404, 0.0505, 0.0606], 0, pi)))*VarSaw.ar(#[1.01, 2.02, 3.03, 4.04, 5.05, 6.06], #[0.101, 0.202, 0.303, 0.404, 0.505, 0.606], SinOsc.ar(#[0.00101, 0.00202, 0.00303, 0.00404, 0.00505, 0.00606], 0, 0.5, 0.5)), #[1010, 2020, 3030, 4040, 5050, 6060], SinOsc.ar(#[10.1, 20.2, 30.3, 40.4, 50.5, 60.6], 0, 0.1, 0.2), 0.2))});
@@ -148,7 +145,6 @@ Ndef(\hail, {Splay.ar(Ringz.ar(SinOsc.ar(#[0.000101, 0.000202, 0.000303, 0.00040
 Ndef(\hail).stop
 
 //--pakt10
-
 Ndef(\rain).play
 (
 Ndef(\rain, {
@@ -167,7 +163,6 @@ Ndef(\rain, {
 Ndef(\rain).stop
 
 //--pakt
-
 Ndef(\snow).play
 (
 Ndef(\snow, {
@@ -181,7 +176,6 @@ Ndef(\snow, {
 Ndef(\snow).stop
 
 //--pakt08
-
 Ndef(\redqueen3).play
 (
 Ndef(\redqueen3, {GVerb.ar(LeakDC.ar(
@@ -193,8 +187,8 @@ Ndef(\redqueen3, {GVerb.ar(LeakDC.ar(
 Ndef(\redqueen3).stop
 
 //--pakt07
-
 Ndef(\redqueen2).play
+Ndef(\redqueen2).stop
 (
 Ndef(\redqueen2, {GVerb.ar(LeakDC.ar(
 	SinOsc.ar(
@@ -231,13 +225,16 @@ Ndef(\redqueen2, {GVerb.ar(LeakDC.ar(
 	), 0, 0.1)
 ), 16, 8, 0.75, 0.5)});
 )
-Ndef(\redqueen2).stop
 
 //--pakt06
-
 Ndef(\redqueen).play
 (
-Ndef(\redqueen, {GVerb.ar(LeakDC.ar(SinOsc.ar(SinOsc.ar([1/16, 1/12], 0, 5), SinOsc.ar(0, SinOsc.ar([SinOsc.ar(3, 0, 5, 12), SinOsc.ar(4, 0, 4, 16)], SinOsc.ar([SinOsc.ar(1/64, SinOsc.ar(0.5, 0, pi)).exprange(1, 30), SinOsc.ar(1/48, SinOsc.ar(0.75, 0, pi)).exprange(1, 30)], SinOsc.ar(SinOsc.ar(1/32, 0, 4), 0, 2pi), SinOsc.ar([1/6, 1/8], 0, 0.5pi, 2pi)), SinOsc.ar([1/3, 2/3], 0, 0.5pi, SinOsc.ar(1/8, 0, 0.5pi, 2pi))), SinOsc.ar([4/3, 3/4], 0, 0.5pi, SinOsc.ar([SinOsc.ar(1/256).exprange(80, 800), SinOsc.ar(1/256).exprange(80.8, 808)], 0, 0.5pi, 2pi)))))*0.05, 10, 3, 0.5, 0.5)});
+Ndef(\redqueen, {GVerb.ar(LeakDC.ar(SinOsc.ar(SinOsc.ar([1/16, 1/12], 0, 5),
+	SinOsc.ar(0, SinOsc.ar([SinOsc.ar(3, 0, 5, 12), SinOsc.ar(4, 0, 4, 16)],
+		SinOsc.ar([SinOsc.ar(1/64, SinOsc.ar(0.5, 0, pi)).exprange(1, 30), SinOsc.ar(1/48, SinOsc.ar(0.75, 0, pi)).exprange(1, 30)],
+			SinOsc.ar(SinOsc.ar(1/32, 0, 4), 0, 2pi), SinOsc.ar([1/6, 1/8], 0, 0.5pi, 2pi)),
+		SinOsc.ar([1/3, 2/3], 0, 0.5pi, SinOsc.ar(1/8, 0, 0.5pi, 2pi))),
+		SinOsc.ar([4/3, 3/4], 0, 0.5pi, SinOsc.ar([SinOsc.ar(1/256).exprange(80, 800), SinOsc.ar(1/256).exprange(80.8, 808)], 0, 0.5pi, 2pi)))))*0.05, 10, 3, 0.5, 0.5)});
 )
 Ndef(\redqueen).stop
 
@@ -245,27 +242,46 @@ Ndef(\redqueen).stop
 //--pakt04
 Ndef(\lines).play
 (
-Ndef(\lines, {Splay.ar(LeakDC.ar(SinOsc.ar([0.033, 0.066, 0.055, 0.044], SinOsc.ar([0.12, 0.13, 0.11, 0.14]*SinOsc.ar([0.151, 0.152, 0.153, 0.154], SinOsc.ar([5, 4, 3, 2], 0, 2pi), SinOsc.ar([0.043, 0.053, 0.063, 0.073], 0, [80, 60, 40, 100])), SinOsc.ar(([60, 64, 67, 71]+SinOsc.ar([0.024, 0.025, 0.026, 0.027], SinOsc.ar([0.01, 0.02, 0.03, 0.04], 0, pi), 1).round).midicps, 0, 2pi)), 0.2)))})
+Ndef(\lines, {Splay.ar(LeakDC.ar(SinOsc.ar([0.033, 0.066, 0.055, 0.044], SinOsc.ar([0.12, 0.13, 0.11, 0.14]*
+	SinOsc.ar([0.151, 0.152, 0.153, 0.154], SinOsc.ar([5, 4, 3, 2], 0, 2pi), SinOsc.ar([0.043, 0.053, 0.063, 0.073], 0, [80, 60, 40, 100])),
+	SinOsc.ar(([60, 64, 67, 71]+SinOsc.ar([0.024, 0.025, 0.026, 0.027], SinOsc.ar([0.01, 0.02, 0.03, 0.04], 0, pi), 1).round).midicps, 0, 2pi)), 0.2)))})
 )
 Ndef(\lines).stop
 
 //--pakt03
+s.stopRecording;
 Ndef(\varsaws).play
 (
-Ndef(\varsaws, {GVerb.ar(CombC.ar(VarSaw.ar(SinOsc.ar([0.1, 0.11], 0, 5, 100+SinOsc.ar([0.05, 0.055], 0, 50, 50).round(50)), 0, SinOsc.ar([0.2, 0.22], 0, 0.5, SinOsc.ar([0.3, 0.33], 0, 0.1, 0.5)), 0.1), 1.01, SinOsc.ar([0.4, 0.44], 0, 0.01, 1), 8), 80, 5, 0.9)})
+Ndef(\varsaws, {GVerb.ar(CombC.ar(VarSaw.ar(SinOsc.ar([0.1, 0.11], 0, 5, 100+SinOsc.ar([0.05, 0.055], 0, 50, 50).round(50)), 0,
+	SinOsc.ar([0.2, 0.22], 0, 0.5,
+		SinOsc.ar([0.3, 0.33], 0, 0.1, 0.5)), 0.1), 1.01,
+	SinOsc.ar([0.4, 0.44], 0, 0.01, 1), 8), 80, 5, 0.9)})
 )
 Ndef(\varsaws).stop
 
 //--pakt02
 Ndef(\saws).play
 (
-Ndef(\saws, {Splay.ar(BPF.ar(LeakDC.ar(Saw.ar(SinOsc.ar((0..5)+1*0.02, SinOsc.ar((0..5)+1*101+300, 0, 2pi+SinOsc.ar(0.01, 0, 0.5*pi)), 400, 700))), SinOsc.ar((0..5)+1*0.004, 0, 100, 400), SinOsc.ar((0..5)+1*0.006, 0, 0.4, 0.8)))})
+Ndef(\saws, {Splay.ar(BPF.ar(LeakDC.ar(Saw.ar(SinOsc.ar((0..5)+1*0.02, SinOsc.ar((0..5)+1*101+300, 0, 2pi+SinOsc.ar(0.01, 0, 0.5*pi)), 400, 700))),
+	SinOsc.ar((0..5)+1*0.004, 0, 100, 400), SinOsc.ar((0..5)+1*0.006, 0, 0.4, 0.8)))})
 )
 Ndef(\saws).stop
 
 //--pakt00
 Ndef(\sines).play
 (
-Ndef(\sines, {GVerb.ar(Splay.ar(SinOsc.ar([100, 200, 300]+SinOsc.ar([0.11, 0.22, 0.33]), SinOsc.ar([0.1, 0.2, 0.3], 0, 2pi), 0.1+SinOsc.ar([0.01, 0.02, 0.03], 0, 0.05)), SinOsc.ar(SinOsc.ar(SinOsc.ar(0.13, 0, 5, 6), 0, 8, 50), 0, 1, 1), 0.7, SinOsc.ar(1.2, 0, 0.6)), 20, 5, 1, 0.5, 25, 0, 1, 1)})
+Ndef(\sines, {GVerb.ar(Splay.ar(SinOsc.ar([100, 200, 300]+SinOsc.ar([0.11, 0.22, 0.33]),
+	SinOsc.ar([0.1, 0.2, 0.3], 0, 2pi), 0.1+SinOsc.ar([0.01, 0.02, 0.03], 0, 0.05)),
+	SinOsc.ar(SinOsc.ar(SinOsc.ar(0.13, 0, 5, 6), 0, 8, 50), 0, 1, 1), 0.7, SinOsc.ar(1.2, 0, 0.6)), 20, 5, 1, 0.5, 25, 0, 1, 1)})
 )
 Ndef(\sines).stop
+
+// ---
+
+HelpBrowser.new;
+
+s.prepareForRecord; // if you want to start recording on a precise moment in time, you have to call this first.
+s.record; // start recording. This can also be called directly, if it isn't imprtant when precisely you need to start.
+s.pauseRecording; // pausable
+s.record // start again
+s.stopRecording; // this closes the file and deallocates the buffer recording node, etc.

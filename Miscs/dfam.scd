@@ -1,3 +1,6 @@
+s.boot;
+s.options.memSize = 8192 * 128; // increase this if "alloc failed" messages
+
 // Ndef.defaultReshaping = \elastic;
 (
 // Ndef(\dfam).clear
@@ -193,3 +196,8 @@ Pdef(\dfam_play, Ppar([
 	)
 ]) <> Pdef(\dfam)).play
 )
+
+// recording
+s.prepareForRecord;
+s.record;
+s.stopRecording;

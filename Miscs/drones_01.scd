@@ -1,9 +1,8 @@
-
 s.boot;
 
 (
 b = Buffer.alloc(s,512,1,{|z|z.sine1Msg(1.0/[1,3,5,7,9,11,13,15,17])});
-c = Buffer.read(s, "/pathtothesample");
+c = Buffer.read(s, "/Users/yanndepps/Documents/Musik/samplz/Telepathy/DeepDark_01.wav");
 
 fork{
     s.sync;
@@ -31,3 +30,8 @@ sig = sig + Decimator.ar(sig, 48000*LFNoise0.kr(1).range(0.25, 1), TChoose.kr(Im
 )
 
 s.quit;
+
+// recording
+s.prepareForRecord;
+s.record;
+s.stopRecording;

@@ -385,8 +385,9 @@ Pbindef(
 ).play;
 )
 
-Pbindef(\test, \aof, 5, \freq, Pseq([300,450,600].mirror/1.25,inf), \dur, 1/16);
+Pbindef(\test, \aof, 5, \freq, Pseq([300,450,600].mirror/1.25,inf), \dur, 1/16).play;
 
 Pbindef(\test).stop;
-
+s.record;
+s.stopRecording;
 //  --- END

@@ -249,7 +249,6 @@ Ndef(\lines, {Splay.ar(LeakDC.ar(SinOsc.ar([0.033, 0.066, 0.055, 0.044], SinOsc.
 Ndef(\lines).stop
 
 //--pakt03
-s.stopRecording;
 Ndef(\varsaws).play
 (
 Ndef(\varsaws, {GVerb.ar(CombC.ar(VarSaw.ar(SinOsc.ar([0.1, 0.11], 0, 5, 100+SinOsc.ar([0.05, 0.055], 0, 50, 50).round(50)), 0,
@@ -277,11 +276,3 @@ Ndef(\sines, {GVerb.ar(Splay.ar(SinOsc.ar([100, 200, 300]+SinOsc.ar([0.11, 0.22,
 Ndef(\sines).stop
 
 // ---
-
-HelpBrowser.new;
-
-s.prepareForRecord; // if you want to start recording on a precise moment in time, you have to call this first.
-s.record; // start recording. This can also be called directly, if it isn't imprtant when precisely you need to start.
-s.pauseRecording; // pausable
-s.record // start again
-s.stopRecording; // this closes the file and deallocates the buffer recording node, etc.

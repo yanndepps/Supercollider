@@ -87,3 +87,6 @@ Ndef(\flanger, {
 }).play;
 )
 
+s.prepareForRecord;
+s.record;
+s.stopRecording;

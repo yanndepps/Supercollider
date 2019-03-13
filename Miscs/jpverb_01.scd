@@ -1,6 +1,8 @@
 s.boot;
 s.options.memSize_(65536 * 4);
 //Quark.gui;
+s.record;
+s.stopRecording;
 
 (
 Routine({

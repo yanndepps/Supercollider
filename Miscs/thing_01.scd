@@ -1,5 +1,5 @@
 (
-f = {
+
 	var rep = [4, 8, 16, 32];
 	var n = rep.choose;
 	var x = [

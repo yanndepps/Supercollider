@@ -27,7 +27,7 @@ t = TempoClock(128/60).permanent_(true);
 t.schedAbs(t.nextBar, {t.beats.postln;1});
 )
 
-t.schedAbs(t.nextBar, {t.tempo_(64/60);nil});
+t.schedAbs(t.nextBar, {t.tempo_(80/60);nil});
 t.stop;
 
 //////// Score Parts ////////
@@ -88,6 +88,31 @@ Pbindef(\myPerc,
 
 Pbindef(\myPerc).stop;
 Pbindef(\myPerc).play;
+
+(
+Pbindef(\myBass,
+	\type, \midi,
+	\midicmd, \noteOn,
+	\midiout, m,
+	\chan, 0,
+	\midinote, Pseq([
+		Pseq([0,\,0,0,\,0,\,0,0,\,0,\,0,\]+39,2),
+		Pseq([0,\,0,0,\,0,\,0,0,\,0,\,0,\]+42,1),
+		Pseq([0,\,0,0,\,0,\,0,0,\,0,\,0,\]+44,1),
+	],inf),
+	\dur, Pseq([
+		Pseq([0.25, Rest(0.5), 0.25, 0.25, Rest(0.25), 0.25, Rest(0.5), 0.25, 0.25, Rest(0.25), 0.25, Rest(0.25), 0.25, Rest(0.25)], 2),
+		Pseq([0.25, Rest(0.5), 0.25, 0.25, Rest(0.25), 0.25, Rest(0.5), 0.25, 0.25, Rest(0.25), 0.25, Rest(0.25), 0.25, Rest(0.25)], 1),
+		Pseq([0.25, Rest(0.5), 0.25, 0.25, Rest(0.25), 0.25, Rest(0.5), 0.25, 0.25, Rest(0.25), 0.25, Rest(0.25), 0.25, Rest(0.25)], 1),
+	],inf),
+    \amp, 0.5,
+    \atk, 0.01,
+    \rel, 1
+).play(t);
+)
+
+Pbindef(\myBass).stop;
+Pbindef(\myBass).play;
 
 //////// Score ////////
 (

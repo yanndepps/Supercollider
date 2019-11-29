@@ -1,0 +1,4 @@
+d1 $ sound "bd sn"
+d1 $ while "t f" (hurry 2) $ n "0 .. 7" # sound "bd sn"
+d1 $ while "t(3,8,<0 2 3 4>)" (hurry 2) $ n "0 .. 7" # sound "drum"
+d1 $ n "[0 6@0.25 1 2@0.5 0.25 3 5@0.25, 8!8]" # sound "drum" # speed 2

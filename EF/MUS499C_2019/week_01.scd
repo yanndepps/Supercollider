@@ -1,7 +1,11 @@
 s.boot;
+s.makeGui;
+s.scope;
 
 // {PinkNoise.ar(0.2!2)}.play
 
+x = {5.squared};
+x.value;
 
 (
 var num;
@@ -88,6 +92,7 @@ a = {
 	sig = sig * mute;
 }.play;
 )
+
 (
 b = {
 	arg mute = 1;
@@ -96,6 +101,7 @@ b = {
 	sig = sig * mute;
 }.play;
 )
+
 (
 c = {
 	arg mute = 1;
@@ -104,6 +110,7 @@ c = {
 	sig = sig * mute;
 }.play;
 )
+
 a.free;
 b.free;
 c.free;
@@ -128,11 +135,9 @@ x = {
 }.play;
 )
 
-x.set(\sawFreq, 3, \ampFreq, 303);
+x.set(\sawFreq, 1, \ampFreq, 55);
 x.free;
 
-
-s.scope;
 
 {LFSaw.ar(4, 0).range(65, 220)}.plot(2);
 {LFSaw.ar(4, 0).exprange(65, 220)}.plot(2);

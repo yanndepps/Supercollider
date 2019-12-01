@@ -1,8 +1,21 @@
-d1 $ sound "bd sn"
-d1 $ while "t f" (hurry 2) $ n "0 .. 7" # sound "bd sn"
-d1 $ while "t(3,8,<0 2 3 4>)" (hurry 2) $ n "0 .. 7" # sound "drum"
-d1 $ n "[0 6@0.25 1 2@0.5 0.25 3 5@0.25, 8!8]" # sound "drum" # speed 2
+d1 $ sound "CL_KICKS:9*2 CL_KICKS:6*3"
+
+d1 $ while "t f" (hurry 2) $ n "0 .. 7" # sound "CL_PERC:60 CL_PERC:62"
+
+d1 $ while "t(3,8,<0 2 3 4>)" (hurry 2) $ n "0 .. 7" # sound "CL_KICKS:11"
+
+d1 $ n "[0 6@0.25 1 2@0.5 0.25 3 5@0.25, 8!8]" # sound "H_DR:25" # speed 2
 
 -----------------------------------------------------------------------
 
-d1 $ zoom (0.25, 0.45) $ sound "CL_SL:22*2 [CL_SL:52*2 CL_SL:128]*2 CL_SL:104"
+d1 $ zoom (0.25, 0.75) $ n "0 .. 3" # sound "CL_LO:40*3 [CL_LO:144 CL_LO:185]/2" # amp 0.2
+
+d1 $ silence
+
+d2 $ sound "CL_KICKS:24/2 CL_KICKS:20*3" # amp 0.5
+
+d2 $ silence
+
+hush
+
+-----------------------------------------------------------------------

@@ -1,4 +1,4 @@
-d1 $ sound "CL_KICKS:9*2 CL_KICKS:6*3"
+d1 $ sound "H_DR:23 AKWF_PW:3*2 AKWF_PW:0" # amp 0.7
 
 d1 $ while "t f" (hurry 2) $ n "0 .. 7" # sound "CL_PERC:60 CL_PERC:62"
 
@@ -8,16 +8,13 @@ d1 $ n "[0 6@0.25 1 2@0.5 0.25 3 5@0.25, 8!8]" # sound "H_DR:25" # speed 2
 
 -----------------------------------------------------------------------
 
-d1 $ zoom (0.25, 0.55) $ n "0 .. 3" # sound "CL_LO:40*3 [CL_LO:144 CL_LO:185]/2" # amp 0.2
+d1 $ zoom (0.25, 0.75) $ n "0 .. 2" # sound "CL_LO:40*3 [CL_LO:144 CL_LO:185]/2" # amp 0.2
 
 d1 $ silence
 
-d2 $ sound "CL_KICKS:24/2 CL_KICKS:26*2" # amp 0.4
-
 d2 $ silence
 
-
-d3 $ n "[0 6@0.25 1 2@0.5 0.25 3 5@0.25, 8!8]" # sound "H_DR:29" # speed 3 # amp 0.15
+d3 $ silence
 
 hush
 
@@ -33,3 +30,17 @@ let d1 = p 1 . (|< orbit 0)
     d8 = p 8 . (|< orbit 7) 
 
 -----------------------------------------------------------------------
+
+setcps(130/60)
+
+setcps(80/60)
+
+d1 $ slow 2 $ sound "H_DR:23 AKWF_PW:3*2 AKWF_PW:0" # amp 0.7
+
+d2 $ slow 2 $ s "H_DR:28(3,8,3)" # amp 0.3
+
+d3 $ every 3 (struct "t(2, 4)") $ slow 16 $ n "0 .. 3" # s "SC:30" # cut 1 # hpf 300
+
+d3 $ silence
+
+hush

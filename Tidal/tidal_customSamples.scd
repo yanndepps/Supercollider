@@ -39,3 +39,4 @@ s.latency = 0.3; // increase this if you get "late" messages
 
 //ServerOptions.outDevices;
 //Server.default.options.outDevice_("Built-in Output");
+s.meter;

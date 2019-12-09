@@ -227,3 +227,189 @@ l.value;
 s.quit;
 
 // --- VERY END
+// --- Rework Part_02
+
+(
+x= {
+	arg freq = 200;
+	var sig;
+	sig = SinOsc.ar(freq, 0, 0.2);
+	// .poll will output any values into the post window
+	sig = sig + SinOsc.ar(MouseX.kr(freq, freq*2).poll, 0, 0.2);
+	//sig = sig * LFPulse.kr(8);
+	sig = sig * SinOsc.kr(4).range(0,1);
+	sig = sig!2;
+}.play;
+)
+
+// 8x each second
+//{LFPulse.kr(8)}.plot(1);
+//{SinOsc.kr(8).range(0,1)}.plot(1);
+
+x.set(\freq, 100);
+
+{ VarSaw.ar(100,0,MouseY.kr(0,1),0.1) * 0.9!2 }.play;
+
+s.scope
+
+// Envelopes : time domain function with a particular shape typically applied
+// to the amplitude of a sound. (phase in and out of the amplitude)
+
+(
+{
+	var sig;
+	sig = PinkNoise.ar(1);
+	sig = BPF.ar(sig, 1000, 0.02) * 10;
+	sig!2;
+}.play;
+)
+
+//e = Env.new([0, 1, 0], [2, 4], 'lin');
+// linear, same as above
+//e = Env.new([0, 1, 0], [2, 4], [0, 0]);
+// bend it, the exponential way
+//e = Env.new([0, 1, 0], [2, 4], [4, 0]);
+// extremely bent
+//e = Env.new([0, 1, 0], [2, 4], [20, 0]);
+// going the oppposite direction
+// positive values : quick at first, slow to the end
+// negative values : slow at first, quick to the end
+//e = Env.new([0, 1, 0], [2, 4], [-6, 6]);
+
+// adding more values to the envelope
+(
+e = Env.new([0, 1, 0.2, 0.2, 0.5, 0], [0.1, 0.1, 3, 0.2, 0.2], [0, 0]);
+e.plot;
+)
+
+(
+{
+	var sig, env;
+	env = EnvGen.kr(
+		Env.new([0, 1, 0], [0.01, 1], [0, -4]), doneAction:2;
+	);
+	sig = PinkNoise.ar(1);
+	sig = BPF.ar(sig, 1000, 0.02) * 10;
+	// don't forget to amply the env to the amplitude
+	sig = sig * env;
+	sig!2;
+}.play;
+)
+
+// a percussive envelope (same as above, shorter)
+Env.perc.plot;
+
+(
+x = {
+	var sig, env;
+	env = EnvGen.kr(
+		Env.perc,
+		doneAction:2;
+	).poll;
+	sig = PinkNoise.ar(1);
+	sig = BPF.ar(sig, 1000, 0.02) * 10;
+	// don't forget to amply the env to the amplitude
+	sig = sig * env;
+	sig!2;
+}.play;
+)
+
+x.free;
+
+// others
+Env.triangle(3.0, 1.0).plot;
+Env.sine.plot;
+Env.adsr.plot;
+
+(
+x = {
+	arg gate = 0;
+	var sig, env;
+	env = EnvGen.kr(
+		Env.adsr(0.01, 0.2, 0.3, 1),
+		gate,
+		doneAction:2
+	).poll;
+	sig = PinkNoise.ar(1);
+	sig = BPF.ar(sig, 1000, 0.02) * 10;
+	// don't forget to amply the env to the amplitude
+	sig = sig * env;
+	sig!2;
+}.play;
+)
+
+s.scope;
+x.set(\gate, 1);
+x.set(\gate, 0);
+
+(
+x = {
+	//t_ creates a trigger type argument
+	arg t_gate=0;
+	var sig, env;
+	env = EnvGen.kr(
+		Env.perc,
+		t_gate,
+		doneAction:0
+	);
+	sig = PinkNoise.ar(1);
+	sig = BPF.ar(sig, 1000, 0.02) * 10;
+	// don't forget to amply the env to the amplitude
+	sig = sig * env;
+	sig!2;
+}.play;
+)
+
+x.set(\t_gate, 1);
+
+// Arrays
+x = [2, 30, 4.5, "hello"];
+x.size;
+x.at(0);
+x[3];
+x[2] = 97;
+
+x = Array.series(20, 5, 5);
+x = Array.geom(10, 2, 3);
+
+// harmonic serie
+x = Array.series(20, 100, 100);
+x[19];
+
+// random order
+x = Array.series(20, 80, 80);
+x = x.scramble;
+
+// pick a random item
+x.choose;
+
+// all the integers from .. to
+(0..100);
+
+// odd values
+(1,3..30);
+
+// Randomness
+// uniform distribution
+rrand(1, 10);
+
+// exponential distribution
+exprand(1, 100).round(0.01);
+
+// using a function to build an array of random values
+{rrand(1,100)}!2;
+
+// Synthesis
+(
+{
+	var sig, freq, env;
+	freq = {exprand(50, 2000).round(50) + rrand(-10,10)}!64;
+	env = EnvGen.kr(
+		Env.new([0,1,0], [2,5], [2,-2]),
+		doneAction:2
+	);
+	sig = SinOsc.ar(freq) * 0.2;
+	//sig.sum!2;
+	sig = Splay.ar(sig) * env;
+}.play;
+)

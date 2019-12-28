@@ -1,0 +1,73 @@
+-- worksheet_12 : operator refresher : dollar, hash & friends
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0) 
+    d2 = p 2 . (|< orbit 1) 
+    d3 = p 3 . (|< orbit 2) 
+    d4 = p 4 . (|< orbit 3) 
+    d5 = p 5 . (|< orbit 4) 
+    d6 = p 6 . (|< orbit 5) 
+    d7 = p 7 . (|< orbit 6) 
+    d8 = p 8 . (|< orbit 7) 
+
+-----------------------------------------------------------------------
+-- DOOLAR
+-- is a Haskell operator that pass whatever's on the right to the function
+-- on the left. we could as well just use parenthesis instead.
+-- dollar is useful because it means that we don't have to worry about
+-- matching ()s together all the time, which can get fiddly with more
+-- complicated patterns.
+-- these do the same :
+
+d1 $ someCycles (0.25 <~) $ every 3 rev $ note "0 3 [2 5]*2 5" # s "H_KEY:89" # legato 2
+
+d1 (someCycles (0.25 <~) (every 3 rev (note "0 3 [2 5]*2 5" # s "H_KEY:90" # legato 2)))
+
+-----------------------------------------------------------------------
+-- this DOESN'T WORK :
+
+d1 s "kick clap:4"
+
+-- if we don't group things together using () or $, the computer will assume
+-- that we are trying to pass *two* input arguments to d1 :
+-- 'sound' being one of them and 'kick clap:4' being the other.
+
+-----------------------------------------------------------------------
+-- this one works because the $ makes clear that the bit on the right
+-- is a single argument to the function on the left. so 'H_ENF:40' get passed
+-- to 'sound' making a control pattern to pass to d1.
+
+d1 $ note "c ~" + s "H_EMF:40" + note "<0 12>" # legato 3
+
+-----------------------------------------------------------------------
+-- the 'every' function takes three inputs : a count, a function and a pattern.
+-- the function gets applied to the pattern every time the cycle count is up :
+
+d1 $ every 3 (fast 2) (note "0 .. 3" # s "H_EMF:40" # legato 1)
+
+-----------------------------------------------------------------------
+-- the dollar trick only works for the *final* argument !
+-- this would still do :
+
+d1 $ every 3 (fast 2) $ note "0 .. 7" # s "H_EMF:40" # legato 1
+
+-----------------------------------------------------------------------
+-- '#' (and its friends |+, +|, |* and so on) - joins together patterns, e.g:
+
+note "0 1" # s "H_EMF:40"
+
+-----------------------------------------------------------------------
+-- the '.' operator composes two functions together, e.g:
+
+every 3 (fast 2 . rev)
+
+-----------------------------------------------------------------------
+-- all together in one complete pattern :
+
+d1 $ every 3 (slow 2 . rev) $ note "1 [0 7] [2 4] 3"
+  # s "H_EMF:54"
+  # legato 1
+
+d1 $ silence
+
+-----------------------------------------------------------------------

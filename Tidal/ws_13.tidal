@@ -1,0 +1,64 @@
+-- worksheet_13 : arpeggios : broken chord.
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0) 
+    d2 = p 2 . (|< orbit 1) 
+    d3 = p 3 . (|< orbit 2) 
+    d4 = p 4 . (|< orbit 3) 
+    d5 = p 5 . (|< orbit 4) 
+    d6 = p 6 . (|< orbit 5) 
+    d7 = p 7 . (|< orbit 6) 
+    d8 = p 8 . (|< orbit 7) 
+
+-----------------------------------------------------------------------
+-- a c major chord :
+
+d1 $ note "c'maj" # s "H_KEY:8" # legato 2
+
+-----------------------------------------------------------------------
+-- broken up, added note :
+
+d1 $ arpeggiate $ note "c'maj'4" # s "H_KEY:8" # legato 2
+
+-----------------------------------------------------------------------
+-- add another chord :
+
+d1 $ arp "updown" $ note "c'maj'4 e'min" # s "H_KEY:9" # legato 2
+
+-----------------------------------------------------------------------
+-- we can pattern the arp if wanted :
+
+d1 $ arp "<updown pinkyup thumbup up down updown downup converge disconverge>"
+  $ note "c'maj'4 e'min" # s "H_KEY:11" # legato 2
+
+-----------------------------------------------------------------------
+-- layer up transpositions :
+
+d1 $ note "<c e f g>" # s "H_KEY:11" # legato 1
+
+-- add a layer on top, offset in time by a quarter of a cycle, transposed up by
+-- 7 notes :
+
+d1 $ off 0.25 (|+ note 7)
+  $ note "<c(3,8) e(3,8,2) f(3,8) g(3,8)>"
+  # s "H_KEY:11"
+  # legato 1
+
+-- add another layer up an octave :
+
+d1 $ off 0.125 (|+ note 12) $ off 0.25 (|+ note 7)
+  $ note "<c(3,8) e(3,8,2) f(3,8) g(3,8)>"
+  # s "H_KEY:11"
+  # legato 1
+
+-- jux rev it :
+
+d1 $ jux rev $ off 0.125 (|+ note 12) $ off 0.25 (|+ note 7)
+  $ note "<c(3,8) e(3,8,2) f(3,8) g(3,8)>"
+  # s "H_KEY:12"
+  # legato 1
+  # gain 1.1
+  
+d1 $ silence
+
+-----------------------------------------------------------------------

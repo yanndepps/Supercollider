@@ -1,0 +1,90 @@
+-- worksheet_11 : combining patterns
+-- how to add up numbers to make people dance
+-- we can treat patterns of numbers like numbers
+-- combining two patterns with simple arithmetic.
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0) 
+    d2 = p 2 . (|< orbit 1) 
+    d3 = p 3 . (|< orbit 2) 
+    d4 = p 4 . (|< orbit 3) 
+    d5 = p 5 . (|< orbit 4) 
+    d6 = p 6 . (|< orbit 5) 
+    d7 = p 7 . (|< orbit 6) 
+    d8 = p 8 . (|< orbit 7) 
+
+-----------------------------------------------------------------------
+-- a simple sequence :
+
+d1 $ note ("0 2 5 7 10 12 5 2") # s "CL_TH:0" # legato 1
+
+-----------------------------------------------------------------------
+-- go up an octave just by adding 12 :
+
+d1 $ note ("0 2 5 7 10 12 5 2" + 12) # s "CL_TH:8" # legato 2
+
+-----------------------------------------------------------------------
+-- alternate between octaces :
+
+d1 $ note ("0 2 5 7 10 12 5 2" + "<0 12>") # s "CL_TH:16" # legato 1
+
+-----------------------------------------------------------------------
+-- more variety :
+
+d1 $ note (every 4 (12 -) "0 2 5 7 10 12 5 2") # s "CL_TH:16" # legato 1
+
+-----------------------------------------------------------------------
+-- what if the numbers don't line up perfectly ?
+-- here, the '12' gets split in half, between the 5 and 2, so we end up
+-- with four notes per cycle in total :
+
+d1 $ note ("0 12 7" + "5 2") # s "CL_TH:20" # legato 1
+
+-----------------------------------------------------------------------
+-- so "0 12 7" plus "5 2" equals "5 [17 14] 9". this sounds exactly the same :
+
+d1 $ note ("5 [17 14] 9") # s "CL_TH:23" # legato 1
+
+-----------------------------------------------------------------------
+-- if we only wanted three notes, we can use |+ to take the structure from
+-- the left :
+-- here the beginning of notes on the left are matched with notes 
+-- on the right. 0 is matched with 5 to make 5, 12 is also matched 
+-- with 5 to make 17, and 7 is matched with 2 to make 9.
+-- 12 matches with 5, because 12 begins one third of the way through
+-- the cycle, which lies within the first half of the cycle, when
+-- 5 is active on the right.
+
+d1 $ note (every 3 (5 -) "0 12 7" |+ "5 2") # s "CL_TH:48" # legato 1
+
+-----------------------------------------------------------------------
+-- if we want two events, we can use +| to take the structure from
+-- the right :
+
+d1 $ note (every 4 (3 -) "0 12 7" +| "5 2") # s "CL_TH:59" # legato 1
+
+-----------------------------------------------------------------------
+-- we can use note names too :
+
+d1 $ note ("c g [e f]" + "<0 12 5 7>") # s "CL_TH:96" # legato 1
+
+-----------------------------------------------------------------------
+-- this works for any numerical pattern :
+
+d1 $ fast "1 2" $ note (every 3 (1+) $ "0 4 [~ 2] 5" + "0 1 [2 4] 3" + "<0 2 4 5>")
+  # s "H_EMF:30"
+  # speed ("2 4 5" * slow 2 sine + 1)
+  # legato 2
+  # pan sine
+
+-----------------------------------------------------------------------
+-- we can add control patterns together in this way too !
+-- here, there are two 'n' control patterns. because they're
+-- combined with + rather than #, the numbers inside matching controls get
+-- added together :
+
+d1 $ fast 2 $ note "c ~" + s "H_EMF:40" + note "<0 12>" # legato 3
+
+d1 $ silence
+
+-----------------------------------------------------------------------

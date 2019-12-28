@@ -1,0 +1,46 @@
+-- worksheet_09 : note vs n
+-- confusingly, the 'sound' and 's' controls are exactly the same.
+-- but 'note' and 'n' sometimes behave differently.
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0) 
+    d2 = p 2 . (|< orbit 1) 
+    d3 = p 3 . (|< orbit 2) 
+    d4 = p 4 . (|< orbit 3) 
+    d5 = p 5 . (|< orbit 4) 
+    d6 = p 6 . (|< orbit 5) 
+    d7 = p 7 . (|< orbit 6) 
+    d8 = p 8 . (|< orbit 7) 
+
+-----------------------------------------------------------------------
+-- using samples, then 'n' means 'pick this sample number from the
+-- given sample set'.
+-- 'notes' will 'pitch up' the sound by x semitones (notes) by playing
+-- it faster.
+
+d1 $ s "H_124:6"
+
+d1 $ s "H_124" # n 6
+
+d1 $ s "H_124:6" # note 6
+
+-----------------------------------------------------------------------
+
+d1 $ s "H_124:6" >| note "0 2 [3 12] [24 7]"
+
+-----------------------------------------------------------------------
+-- or use a synth sound :
+
+d1 $ s "supermandolin" >| note "c e [g g6] a"
+
+-----------------------------------------------------------------------
+-- the higher we pitch a note the shorter it gets
+-- using a synth voice rather than a sample, note and n actually do the same.
+
+d1 $ s "supermandolin" >| note "c e [g g6] a"
+
+d1 $ s "supermandolin" >| n "c e [g g6] a"
+
+d1 $ silence
+
+-----------------------------------------------------------------------

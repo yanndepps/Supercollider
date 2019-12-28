@@ -1,0 +1,86 @@
+-- worksheet_08 : continuous patterns
+-- most often we deal with discrete patterns, those with events
+-- that have a beginning and ending.
+-- there are also continuous patterns, which continuously vary.
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0) 
+    d2 = p 2 . (|< orbit 1) 
+    d3 = p 3 . (|< orbit 2) 
+    d4 = p 4 . (|< orbit 3) 
+    d5 = p 5 . (|< orbit 4) 
+    d6 = p 6 . (|< orbit 5) 
+    d7 = p 7 . (|< orbit 6) 
+    d8 = p 8 . (|< orbit 7) 
+
+-----------------------------------------------------------------------
+-- sine wave :
+-- |< tells tidal to get the structure from the left
+
+d1 $ s "TR_PER:2*16" |< pan sine
+
+-----------------------------------------------------------------------
+-- continuous patterns tend to give numbers between 0 and 1.
+-- change that with 'range' function : e.g. values from 1 to 2 :
+
+d1 $ s "TR_SNA:11*16" |< speed (range 1 2 sine)
+
+-----------------------------------------------------------------------
+
+d1 $ s "TR_PER:3*16" |< speed (sine + 1)
+
+-----------------------------------------------------------------------
+-- triangular wave :
+
+d1 $ s "TR_PER:4*16" |< pan tri
+
+-----------------------------------------------------------------------
+
+d1 $ s "TR_PER:3*16" |< speed (range 1 2 tri)
+
+-----------------------------------------------------------------------
+-- sawtooth wave 
+
+d1 $ s "TR_HAT:3*16" |< pan saw
+
+-----------------------------------------------------------------------
+
+d1 $ s "TR_HAT:6*16" |< speed (range 1 2 saw)
+
+-----------------------------------------------------------------------
+-- these continuous patterns have infinite detail, but we can only hear
+-- them if we 'sample' them.
+-- the >| operator tells tidal to take the structure from the right,
+-- in this case the speed pattern, which is a continuous sawtooth.
+-- we don't hear anything because the result is continuous, its events
+-- don't have a beginning and end to hear.
+
+d1 $ s "TR_HAT:8" >| speed (range 1 2 saw)
+
+-----------------------------------------------------------------------
+-- we can fix it by transforming the sawtooth to make it discrete,
+-- e.g. with the 'segment' function.
+-- this samples the pattern at a fixed rate:
+
+d1 $ s "TR_KIC:20" >| speed (segment 64 $ range 1 3 saw)
+
+-----------------------------------------------------------------------
+-- another way is to use 'struct' to sample it with a boolean 
+-- true/false pattern (the 't' stands for 'true')
+
+d1 $ s "TR_SNA:3" >| speed (struct "t ~ t ~ ~ t t" $ range 1 2 saw)
+
+-----------------------------------------------------------------------
+-- or we can go back to taking the structure from a different part
+-- of the pattern, by switching back to the |< operator.
+
+d1 $ s "TR_KIC:20(5,8,<0 2>)" |< speed (range 1 2 saw)
+
+-----------------------------------------------------------------------
+-- random streams : 'rand' gives a continuous pattern of random numbers :
+
+d1 $ s "TR_KIC:22*4 TR_HAT:9*4" |< speed (range 1 3 rand)
+
+d1 $ silence
+
+-----------------------------------------------------------------------

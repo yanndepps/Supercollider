@@ -49,6 +49,32 @@ d1 $ loopAt 1 $ slice 8 "0 2 1 5 3 4 6*2 7" $ s "CL_SL:124" # speed "0.5"
 -----------------------------------------------------------------------
 -- or pattern it :
 
-d1 $ loopAt 1 $ slice 8 (iter 4 "0 1 2 3 4 5 6 7") $ s "CL_SL:201"
+d1 $ loopAt 2 $ slice 8 (iter 4 "0 1 2 3 4 5 6 7") $ s "SC:37"
+
+-----------------------------------------------------------------------
+-- splice will play the sound at the right speed for the 'slot' we give it.
+-- we don't need the loopAt
+
+d1 $ splice 8 (iter 4 "0 .. 7") $ s "H_124:37"
+
+-----------------------------------------------------------------------
+-- if we vary the duration of events, the slices will 
+-- go faster and slower to match
+
+d1 $ splice 8 "[0 2*2 1 3] [4 5]" $ s "H_124:53"
+
+-----------------------------------------------------------------------
+-- we can also use splice to turn a 4:4 loop into a 3:4 one
+-- e.g. take 8 slices and put them in a six step sequence
+
+d1 $ splice 8 "0 4 2*0 2 2 <6 0*2>" $ s "H_124:5"
+
+-----------------------------------------------------------------------
+-- let's play ...
+
+d1 $ chunk 6 (hurry 0.5) $ iter 3 $ off (5/12) (|* speed 2)
+  $ splice 8 "0 4 2*0 2 2 <6 0*2>" $ s "<H_124:5 H_124:7>"
 
 d1 $ silence
+
+-----------------------------------------------------------------------

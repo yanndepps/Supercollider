@@ -1,0 +1,57 @@
+-- worksheet_03 : everything is a pattern
+-- take a simple sequence, transform it in some way.
+-- repetition, interference, reflection, glitch
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0) 
+    d2 = p 2 . (|< orbit 1) 
+    d3 = p 3 . (|< orbit 2) 
+    d4 = p 4 . (|< orbit 3) 
+    d5 = p 5 . (|< orbit 4) 
+    d6 = p 6 . (|< orbit 5) 
+    d7 = p 7 . (|< orbit 6) 
+    d8 = p 8 . (|< orbit 7) 
+
+-----------------------------------------------------------------------
+-- eight percussive sounds : .. here is filling in the numbers between 0 and 7
+
+d1 $ n "0 .. 7" # s "TR_KIC"
+
+-----------------------------------------------------------------------
+-- make it faster
+
+d1 $ fast 2 $ n "8 .. 15" # s "TR_KIC"
+
+-----------------------------------------------------------------------
+-- make it slower
+
+d1 $ fast 0.5 $ n "15 .. 20" # s "TR_KIC"
+
+-----------------------------------------------------------------------
+-- or switch between them
+
+d1 $ fast "2 0.5" $ n "20 .. 24" # s "TR_KIC"
+
+-----------------------------------------------------------------------
+-- iter starts the sequence at a different point each cycle
+
+d1 $ iter 4 $ n "19 .. 24" # s "TR_KIC"
+
+-----------------------------------------------------------------------
+-- rev plays the sequence backwards
+
+d1 $ rev $ n "0 .. 7" # s "TR_HAT"
+
+-----------------------------------------------------------------------
+-- using every to control when this happens
+
+d1 $ every 3 (rev) $ n "0 .. 7" # s "TR_HAT"
+
+-----------------------------------------------------------------------
+-- jux lets us hear a transformation in one speaker only
+
+d1 $ jux (rev) $ n "0 .. 7" # s "TR_HAT"
+
+d1 $ silence
+
+-----------------------------------------------------------------------

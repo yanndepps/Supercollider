@@ -1,0 +1,65 @@
+-- worksheet_02 : effects
+-- change the way things sound
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0) 
+    d2 = p 2 . (|< orbit 1) 
+    d3 = p 3 . (|< orbit 2) 
+    d4 = p 4 . (|< orbit 3) 
+    d5 = p 5 . (|< orbit 4) 
+    d6 = p 6 . (|< orbit 5) 
+    d7 = p 7 . (|< orbit 6) 
+    d8 = p 8 . (|< orbit 7) 
+
+-----------------------------------------------------------------------
+-- vowel is a filter that adds a vowel sound : a, e, i, o and u
+
+d1 $ n "9 8 9 8" # s "H_124" # vowel "u"
+
+-----------------------------------------------------------------------
+-- create sequences of effects
+
+d1 $ n "10 11 10 11" # s "H_124" # vowel "a o e e"
+
+-----------------------------------------------------------------------
+-- add a non-vowel effect letter to pause the vowel effect
+
+d1 $ n "16 17 16 17" # s "H_124" # vowel "a o p p"
+
+-----------------------------------------------------------------------
+-- Tidal does its best to map patterns across to one another
+
+d1 $ n "22 23 22 23" # s "H_124" # vowel "a o e"
+
+-----------------------------------------------------------------------
+-- the structure comes from the left : try swapping the elements
+
+d1 $ vowel "a [o o] ~ i" # s "H_124" # n "22 23 22 23"
+
+-----------------------------------------------------------------------
+-- gain changes the volume of different sounds
+
+d1 $ n "26 27 26 27" # s "H_124" # gain "1 0.7 0.5"
+
+-----------------------------------------------------------------------
+-- speed can be used to pitch samples. speed affects the speed of playback
+
+d1 $ n "28 29 28 29" # s "H_124" # speed "1 1.5 2 0.5"
+
+-----------------------------------------------------------------------
+-- or take the pattern from the speed parameter
+
+d1 $ speed "42*1 43*2 44*0.5" # s "H_124" 
+
+-----------------------------------------------------------------------
+-- pan allows to create stereo effects : 0=left, 0.5=middle, 1=right
+
+d1 $ n "50 51 50 52" # s "H_124" # pan "0.25 0.5 0.75"
+
+-----------------------------------------------------------------------
+-- shape adds distortion (careful !)
+d1 $ n "53 54 53 55" # s "H_124" # pan "0.25 0.5 0.75" # shape "0 0.78" # gain "0.7"
+
+-----------------------------------------------------------------------
+-- more effects to try : delay, delaytime, delayfeedback, cutoff, resonance, room, size, crush 
+-----------------------------------------------------------------------

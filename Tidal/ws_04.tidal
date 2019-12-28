@@ -1,0 +1,66 @@
+-- worksheet_04 : mini notation part 02
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0) 
+    d2 = p 2 . (|< orbit 1) 
+    d3 = p 3 . (|< orbit 2) 
+    d4 = p 4 . (|< orbit 3) 
+    d5 = p 5 . (|< orbit 4) 
+    d6 = p 6 . (|< orbit 5) 
+    d7 = p 7 . (|< orbit 6) 
+    d8 = p 8 . (|< orbit 7) 
+
+-----------------------------------------------------------------------
+-- <> is similar to [], but gives one event every cycle. compare these :
+
+d1 $ n "<0 1 2 3>" # s "TR_HAT"
+
+d1 $ n "[0 1 2 3]" # s "TR_HAT"
+
+-----------------------------------------------------------------------
+-- what's going on here ?
+
+d1 $ n ("[0 1 2*2 3]" + "<0 1 2 3>") # s "TR_HAT" # pan "0.25 0.5 0.75"
+
+-----------------------------------------------------------------------
+-- instead of grouping subpatterns with [], we can separate them with .
+
+d1 $ n "0*2 1 2 . 2 4 2 4" # s "TR_HAT"
+
+d1 $ n "[0*2 1 2] [2 4 2 4]" # s "TR_HAT"
+
+-----------------------------------------------------------------------
+-- usually, the more events we add to a subsequence, the faster they
+-- go, to fit them all in the cycle or step. However we can 'slow down'
+-- a subsequence with / 
+-- the [1 2 3 4] is slowed down by half using /2. so the first time 
+-- round it'll only play the first half "1 2" and the second time 
+-- round it'll carry on where it left off and play "3 4"
+
+d1 $ n "0*2 [1 2 3 4]/2" # s "TR_HAT" # pan "0.25 0.5 0.75"
+
+-----------------------------------------------------------------------
+-- things get a bit funky if we have number of events that aren't 
+-- divisible by the ratio :
+
+d1 $ n "0*2 [1 2 3 4]/3" # s "TR_KIC"
+
+d1 $ n "0*2 [1 2 3 4]/3 8*4 [5 3*2 2*2]/5" # s "TR_KIC"
+
+-----------------------------------------------------------------------
+-- actually, * is works the same way as /, it is just making a 
+-- subsequence faster, thereby causing it to repeat. we don't have to
+-- give a whole number, we can give the speed as a decimal number or as a ratio :
+
+d1 $ n "0*1.5 3" # s "TR_KIC"
+
+d1 $ n "0*3%2 6" # s "TR_KIC"
+
+-----------------------------------------------------------------------
+-- we can make some unsteady, lilting rhythms this way :
+
+d1 $ s "TR_KIC:6 TR_HAT:0*1.5 [TR_PER:0 TR_PER:1]*2 [TR_SNA:0 TR_SNA:1 TR_HAT:3 TR_HAT:4]*1%3"
+
+d1 $ silence
+
+-----------------------------------------------------------------------

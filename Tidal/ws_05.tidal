@@ -1,0 +1,107 @@
+-- worksheet_05 : chopping part 01
+-- chop samples into bits and make patterns out of those bits
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0) 
+    d2 = p 2 . (|< orbit 1) 
+    d3 = p 3 . (|< orbit 2) 
+    d4 = p 4 . (|< orbit 3) 
+    d5 = p 5 . (|< orbit 4) 
+    d6 = p 6 . (|< orbit 5) 
+    d7 = p 7 . (|< orbit 6) 
+    d8 = p 8 . (|< orbit 7) 
+
+-----------------------------------------------------------------------
+-- let's start with a fairly long sample 
+
+d1 $ slow 2 $ s "CL_SL:0"
+
+-----------------------------------------------------------------------
+-- use the 'begin' and 'end' controls to just trigger
+-- e.g. the second tenth of the sound 
+
+d1 $ s "CL_SL:101" # begin 0.1 # end 0.2
+
+-----------------------------------------------------------------------
+-- Tidal can show us what's going on here 
+-- run that code without the 'd1 $' at the start
+-- and Tidal will print out what's happening in the first cycle
+
+s "CL_SL:101" # begin 0.1 # end 0.2
+
+-----------------------------------------------------------------------
+-- lets try chopping that sound into four bits 
+
+d1 $ chop 4 $ s "CL_SL:130"
+
+-----------------------------------------------------------------------
+-- slow it down
+
+d1 $ slow 4 $ chop 4 $ s "CL_SL:130"
+
+-----------------------------------------------------------------------
+-- chop takes each sound, and plays it the given amount of times 
+-- but with different begin and end values, so we get different bits of sounds
+
+
+-----------------------------------------------------------------------
+-- once we've turned a sound into a pattern of bits of sound, 
+-- we can transform that pattern, e.g. reverse it
+
+d1 $ rev $ chop 16 $ s "CL_SL:120"
+
+-----------------------------------------------------------------------
+-- when we work with tiny fragments of sound like this, this becomes
+-- a kind of sound synthesis technique known as granular synthesis.
+-- the bits of sound are known as sound grains.
+-- if working with with longer samples it might be called 'slicing' 
+-- instead, and the bits are called 'slices'.
+
+d1 $ jux rev $ iter 4 $ chop "<16>" $ s "CL_SL:120" # speed "1.0"
+
+-----------------------------------------------------------------------
+-- doing granular synthesis with tidal becomes super interesting
+-- because it really blurs the line between music composition
+-- and sound synthesis.
+
+
+-----------------------------------------------------------------------
+-- we have to be aware of whether we're adding effects to 
+-- the original sounds or the bits of sound :
+
+d1 $ chop 16 $ s "CL_SL:117" # pan sine
+
+-----------------------------------------------------------------------
+-- the above isn't panning anything. it's because everything to
+-- the right of the dollar sign gets run first, a single value 
+-- gets pulled from the sinewave and combined to the single sound
+-- before the chop. to sample from the sinewave after the chop, 
+-- just add parenthesis : each sound grain will get a different pan value.
+
+d1 $ (chop 16 $ s "CL_SL:117") # pan sine
+
+-----------------------------------------------------------------------
+-- with more than one sound, the grains of each sound are grouped together
+
+d1 $ chop 16 "CL_SL:117 CL_SL:167"
+
+-----------------------------------------------------------------------
+-- 'striate' is similar but the grains get interleaved
+
+d1 $ striate 16 "CL_SL:117 CL_SL:85"
+
+-----------------------------------------------------------------------
+-- 'randslice' chops a sample into the specified number of parts
+-- then plays one back at random each time the sample is triggered
+
+d1 $ randslice 16 "CL_SL:117*8"
+
+-----------------------------------------------------------------------
+-- a lot to explore
+
+d1 $ jux rev $ striate 16 "CL_SL:117 <CL_SL:68 CL_SL:70 CL_SL:75> CL_SL:4"
+  # note "<0 2 7>"
+
+d1 $ silence
+
+-----------------------------------------------------------------------

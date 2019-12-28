@@ -1,0 +1,57 @@
+-- worksheet_01 : mini notation
+-- describe sequences with as little typing as possible
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0) 
+    d2 = p 2 . (|< orbit 1) 
+    d3 = p 3 . (|< orbit 2) 
+    d4 = p 4 . (|< orbit 3) 
+    d5 = p 5 . (|< orbit 4) 
+    d6 = p 6 . (|< orbit 5) 
+    d7 = p 7 . (|< orbit 6) 
+    d8 = p 8 . (|< orbit 7) 
+
+-----------------------------------------------------------------------
+
+d1 $ s "H_ELE:0 H_ELE:1"
+
+-----------------------------------------------------------------------
+-- fit a subpattern into a step with []
+
+d2 $ s "H_DR:2 [H_DR:3 H_DR:4 H_DR:5] ~ H_DR:2"
+
+-----------------------------------------------------------------------
+-- play multiple steps
+
+d2 $ s "H_DR:6*4 H_DR:4*2"
+
+-----------------------------------------------------------------------
+-- euclidean patterns : here, three hits spread as evenly possible over eight steps
+
+d1 $ s "TR_KIC:2(3,8)"
+
+-----------------------------------------------------------------------
+-- fit more than one subpattern into a step separating them with a comma
+
+d1 $ s "[TR_HAT:0 TR_KIC:0 TR_SNA:0, H_ELE:4*2 H_ELE:15]"
+
+-----------------------------------------------------------------------
+-- align the patterns step-wise to create polyrhythms
+
+d1 $ s "{TR_HAT:1 TR_SNA:1 TR_KIC:1, H_124:6*2 H_ELE:32}"
+
+-----------------------------------------------------------------------
+-- enough to do complex sequences
+
+d1 $ s "{H_124:6*6 H_124:7*2 H_124:6 H_124:8, H_124:0 H_124:9*2 H_124:6*3} [H_124:10 H_124:11, H_124:0(3,8)]"
+
+-----------------------------------------------------------------------
+-- it often is easier to pattern the sample set separately from the sample number
+
+d2 $  n "{4*6 5*2 4 6, 9 8*2 4*3} [2 3, 0(3,8)]"
+  # s "H_124"
+  # amp "0.2"
+
+d2 $ silence
+
+-----------------------------------------------------------------------

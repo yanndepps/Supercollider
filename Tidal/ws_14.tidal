@@ -1,0 +1,115 @@
+-- worksheet_14 : chunking patterns
+-- to do things to particular parts of a pattern
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0) 
+    d2 = p 2 . (|< orbit 1) 
+    d3 = p 3 . (|< orbit 2) 
+    d4 = p 4 . (|< orbit 3) 
+    d5 = p 5 . (|< orbit 4) 
+    d6 = p 6 . (|< orbit 5) 
+    d7 = p 7 . (|< orbit 6) 
+    d8 = p 8 . (|< orbit 7) 
+
+-----------------------------------------------------------------------
+-- taking a simple scale :
+
+d1 $ note "0 .. 7" # s "H_LD:17" # legato 1
+
+-----------------------------------------------------------------------
+-- WITHIN :
+-- make the first half of it twice as fast :
+
+d1 $ within (0,0.5) (fast 2) $ note "0 1 2 3 4 5 6 7" # s "H_LD:17" # legato 1
+
+-----------------------------------------------------------------------
+-- note that the second half doesn't continue from the first half.
+-- we just hear what the pattern would have been if it had been 
+-- running at normal speed the whole time.
+
+-----------------------------------------------------------------------
+-- CHUNK :
+-- is kind of similar but we just give it one number, the number of chunks :
+-- the first time around it'll make the first quarter twice as fast.
+-- the second cycle it'll make the the second quarter twice as fast.
+-- and so on until it goes back to the first quarter again.
+
+d1 $ chunk 4 (fast 2) $ note "0 1 2 3 4 5 6 7" # s "H_LD:48" # legato 1
+
+-----------------------------------------------------------------------
+-- chunk is a great way to take a simple sequence and quickly pattern
+-- it to make some lively variety:
+
+d1 $ chunk 4 (hurry 2 . (# crush 8)) $ note "0 1 2 3 . 3 4 2" 
+  # s "H_LD:50"
+  # legato 1
+  # amp 1.2
+
+-----------------------------------------------------------------------
+-- BITE
+-- unlike chunk and within, the 'bite' function isn't about applying 
+-- functions to chunks of pattern, but rearranging the chunks.
+-- back to our scale :
+
+d1 $ note "0 .. 7" # s "H_LD:17" # legato 1
+
+-- lets bite it into 4 chunks, then play those chunks one after another :
+
+d1 $ bite 4 "0 1 2 3 " $ note "0 1 2 3 4 5 6 7" # s "H_LD:17" # legato 1
+
+-- sounds the same.
+-- now change the order of chunks :
+
+d1 $ bite 4 "3 1 3 1" $ note "0 1 2 3 4 5 6 7" # s "H_LD:19" 
+  # legato 1
+  # amp 1.2
+
+-- a funkier rearrangement :
+-- the chunks are 'sped up' to fit into the bite pattern.
+
+d1 $ bite 4 "[3 2] [1 3] 1*3 1" $ note "0 1 2 3 4 5 6 7"
+  # s "H_LD:20"
+  # legato 1
+  # amp 1.2
+
+-----------------------------------------------------------------------
+-- CHEW :
+-- is much the same as bite, but it changes the rate (pitch) of
+-- the sounds, as well as the pattern. compare bite and chew :
+
+d1 $ bite 4 "0 0*2 1 1*4" $ note "0 1 2 3 4 5 6 7"
+  # s "H_LD:20"
+  # legato 1
+  # amp 1.2
+
+d1 $ chew 4 "0 0*2 1 1*4" $ note "0 1 2 3 4 5 6 7"
+  # s "H_LD:20"
+  # legato 1
+  # amp 1.2
+
+-----------------------------------------------------------------------
+-- again a good way to go from a simple sequence :
+
+d1 $ note "0 [1 2] ~ 3 3*2 [4 7] 2 3" 
+  # s "H_LD:21"
+  # legato 1
+  # amp 1.2
+
+-- to something quite different :
+
+d1 $ chew 4 "0 <2 3> 1 3*2" $ note "0 [1 2] ~ 3 3*2 [4 7] 2 3"
+  # s "H_LD:21"
+  # legato 2
+  # amp 1.1
+
+-----------------------------------------------------------------------
+-- we can also pattern the pattern of chunks ...
+
+d1 $ chew 4 (iter 4 "0 <2 3> 1 3*2") $ note "0 [1 2] ~ 3 3*2 [4 7] 2 3"
+  # s "H_LD:24"
+  # legato 2
+  # amp 1.1
+
+d1 $ silence
+
+-----------------------------------------------------------------------

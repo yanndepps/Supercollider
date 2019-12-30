@@ -1,0 +1,38 @@
+-- worksheet_18 : randomness part_02
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0) 
+    d2 = p 2 . (|< orbit 1) 
+    d3 = p 3 . (|< orbit 2) 
+    d4 = p 4 . (|< orbit 3) 
+    d5 = p 5 . (|< orbit 4) 
+    d6 = p 6 . (|< orbit 5) 
+    d7 = p 7 . (|< orbit 6) 
+    d8 = p 8 . (|< orbit 7) 
+
+-----------------------------------------------------------------------
+-- we already met the rand function, which gives us a continuous
+-- stream of random numbers, from 0 to 1 :
+
+d1 $ s "H_MOO:23*4" |< speed (range 1 4 rand)
+  # legato 1
+  # amp 0.5
+
+-----------------------------------------------------------------------
+-- if we run resetCycles a few times while the above is playing,
+-- we'll notice that the random stream is deterministic, always
+-- returning the same values for the same point along the timeline of
+-- cycles.
+
+resetCycles
+
+setcps 0.6
+
+-----------------------------------------------------------------------
+-- we can also loop the first cycle repeatedly with loopFirst :
+
+d1 $ loopFirst $ s "H_MOO:24(5,8)" |< speed (range 1 4 rand)
+  # legato 2
+  # amp 0.4
+
+d1 $ silence

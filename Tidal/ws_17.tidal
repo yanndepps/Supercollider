@@ -11,3 +11,150 @@ let d1 = p 1 . (|< orbit 0)
     d8 = p 8 . (|< orbit 7) 
 
 -----------------------------------------------------------------------
+-- DEGRADE
+-- a complex pattern going on :
+
+d1 $ chunk 4 (hurry 2) $ off "<1%8 1%16>" (# crush 3) $ sound "H_DR:0(5,8) [H_DR:1 H_DR:3]"
+  # legato 1
+  # amp 0.5
+
+-----------------------------------------------------------------------
+-- 'degrade' is a good way to break it down, leaving space in the music to start adding
+-- a new pattern :
+
+d1 $ degrade $ chunk 4 (hurry 2) 
+  $ off "<1%8 1%16>" (# crush 3) 
+  $ sound "H_DR:0(5,8) [H_DR:1 H_DR:3]"
+  # legato 1
+  # amp 0.5
+
+-----------------------------------------------------------------------
+-- we can degrade a little :
+
+d1 $ degradeBy 0.2 $ chunk 4 (hurry 2) 
+  $ off "<1%8 1%16>" (# crush 8) 
+  $ sound "H_DR:0(5,8) [H_DR:1 H_DR:3]"
+  # legato 1
+  # amp 0.6
+
+-----------------------------------------------------------------------
+-- or a lot :
+
+d1 $ degradeBy 0.8 $ chunk 4 (hurry 2) 
+  $ off "<1%8 1%16>" (# crush 8) 
+  $ sound "H_DR:1(5,8) [H_DR:2 H_DR:4]"
+  # legato 1
+  # amp 0.6
+
+-----------------------------------------------------------------------
+-- SOMETIMES / SOMECYCLES
+-- 'sometimes' speed the pattern up :
+
+d1 $ sometimes (hurry 2) $ n "0 1 2 [3 4 5]" # s "H_MOO:15"
+  # legato 1
+  # amp 0.4
+
+-----------------------------------------------------------------------
+-- 'someCycles' is similar but operates on a cycle-by-cycle basis :
+
+d1 $ someCycles (hurry 2) $ n "0 1 2 [3 4 5]" # s "H_MOO:16"
+  # legato 1
+  # amp 0.4
+
+-----------------------------------------------------------------------
+-- if adding an effect, it has to be wrapped in parenthesis :
+
+d1 $ someCycles (fast 2 . rev . chop 8 . (# speed 2))
+  $ n "0 1 2 [3 4 5]" # s "H_MOO:18"
+  # legato 1
+  # amp 0.4
+
+
+-----------------------------------------------------------------------
+-- SHUFFLE and SCRAMBLE
+-- lets start with some numbers :
+
+d1 $ slow 4 $ note "0 .. 7"
+  # s "H_KEY:0"
+  # speed 1.1
+  # legato 2
+  # amp 0.5
+
+-----------------------------------------------------------------------
+-- shuffle the pattern in quarters - as there are eight events per
+-- cycle in the pattern, it'll shuffle pairs of sounds together :
+
+d1 $ slow 4 $ shuffle 4 $ note "0 .. 7"
+  # s "H_KEY:0"
+  # speed 1.1
+  # legato 1
+  # amp 0.5
+
+-----------------------------------------------------------------------
+-- with 'shuffle', each parts will always be played exactly once per
+-- cycle. this isn't true of scramble :
+
+d1 $ slow 4 $ scramble 4 $ note "0 .. 7"
+  # s "H_KEY:6"
+  # speed 1.1
+  # legato 1
+  # amp 0.5
+
+-----------------------------------------------------------------------
+-- 'scramble' sounds less even :
+
+d1 $ scramble 4 $ note "0 .. 7"
+  # s "H_KEY:10"
+  # speed 1.1
+  # legato 2
+  # amp 0.5
+
+d1 $ shuffle 4 $ note "0 .. 7"
+  # s "H_KEY:10"
+  # speed 1.1
+  # legato 2
+  # amp 0.5
+
+-----------------------------------------------------------------------
+-- NON-RANDOM SCRAMBLING
+-- rather than scrambling in arbitrary way, we can scramble a 
+-- pattern just by shifting it by a different amount each time :
+-- this repeats every third cycle :
+
+d1 $ "<0.25 0.5 0.125>" <~ note "0 .. 7"
+  # sound "H_KEY:12"
+  # speed 1.1
+  # legato 2
+  # amp 0.8
+
+-----------------------------------------------------------------------
+-- this has two layers and will repeat only every 12 cycle :
+
+d1 $ "<0.5 0.125 0.75>" <~ ("<0.25 0.5 0.125>" <~ note "0 .. 7"
+  # s "H_KEY:14"
+  # speed 1.1
+  # legato 1
+  # amp 0.7)
+
+-----------------------------------------------------------------------
+-- add more transformations to add more variety :
+-- it is a bit like making our own pseudo-randomness, where we have
+-- more control, more able to strike a balance between 
+-- unpredictability and coherence ...
+
+d1 $ iter 8 $ "<0.5 0.125 0 0.75>" <~ ("0.25 0.5 0.125" <~ note "0 .. 7"
+  # s "H_KEY:16"
+  # speed 1.1
+  # legato 2
+  # amp 0.7)
+
+d1 $ chunk 7 (hurry 2) 
+  $ iter 8 $ "<0.5 0.125 0 0.75>" <~ ("0.25 0.5 0.125" <~ note "0 .. 7"
+  # s "H_KEY:22"
+  # speed 0.9
+  # legato 2
+  # amp 0.6)
+
+d1 $ silence
+
+-----------------------------------------------------------------------

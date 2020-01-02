@@ -1,0 +1,145 @@
+-- worksheet_19 : boolean patterns
+-- are patterns of true/false values, and have a lot of use,
+-- e.g. in blending different patterns together
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0) 
+    d2 = p 2 . (|< orbit 1) 
+    d3 = p 3 . (|< orbit 2) 
+    d4 = p 4 . (|< orbit 3) 
+    d5 = p 5 . (|< orbit 4) 
+    d6 = p 6 . (|< orbit 5) 
+    d7 = p 7 . (|< orbit 6) 
+    d8 = p 8 . (|< orbit 7) 
+
+-----------------------------------------------------------------------
+-- masking :
+-- a break chopped into eight bits :
+
+d1 $ loopAt 1 $ chop 8 $ s "CL_SL:85"
+  # legato 2
+  # amp 0.8
+
+-----------------------------------------------------------------------
+-- we can use mask to only play the first half. we can use 0 & 1 instead of t & f :
+
+d1 $ mask "t f" $ loopAt 1 $ chop 8 $ s "CL_SL:85"
+  # legato 2
+  # amp 0.8
+  # lpf 2000
+  # lpq 0.2
+
+-----------------------------------------------------------------------
+-- a slightly more complex mask :
+
+d1 $ mask "t f [t f] t" $ loopAt 1 $ chop 8 $ s "CL_SL:85"
+  # legato 2
+  # amp 0.8
+  # lpf 1200
+  # lpq 0.7
+
+-----------------------------------------------------------------------
+-- we're not transforming the progression of the underlying break at all,
+-- just changing which bits of it we hear.
+-- the 'inv' function inverts a boolean pattern, so true becomes false,
+-- and false becomes true :
+
+d1 $ mask (inv "t f [t f] t") $ loopAt 1 $ chop 8 $ s "CL_SL:85"
+  # legato 2
+  # amp 0.8
+  # lpf 1200
+  # lpq 0.7
+
+-----------------------------------------------------------------------
+-- we can do that e.g. every other cycle
+
+d1 $ mask (every 2 inv "t f [t f] t") $ loopAt 1 $ chop 8 $ s "CL_SL:112"
+  # legato 2
+  # amp 0.8
+  # lpf 1200
+  # lpq 0.5
+
+-----------------------------------------------------------------------
+-- euclidean syntax works :
+
+d1 $ mask ("t(7,11)") $ loopAt 1 $ chop 8 $ s "CL_LO:8"
+  # legato 2
+  # amp 0.8
+  # lpf 1200
+  # lpq 0.7
+
+-----------------------------------------------------------------------
+-- ... including with 'inv' :
+
+d1 $ mask (every 2 inv "t(3,8)") $ loopAt 1 $ chop 8 $ s "CL_LO:11"
+  # legato 2
+  # amp 0.8
+  # lpf 1200
+  # lpq 0.7
+
+-----------------------------------------------------------------------
+-- SEW AND STITCH
+-- take two fairly simple patterns :
+
+d1 $ chunk 4 (hurry 2) $ note "0 .. 7" # s "CL_LO:11"
+  # legato 2
+  # amp 0.8
+  # lpf 1100
+  # lpq 0.4
+
+d1 $ note "0(5,8,<0 2>)" # s "CL_LO:24"
+  # legato 2
+  # amp 0.8
+  # lpq 0.3
+  # lpf (rand * 2000)
+
+-----------------------------------------------------------------------
+-- 'sew' lets us sew them together, by switching between them :
+
+d1 $ sew "t f"
+  (chunk 4 (hurry 2) $ note "0 .. 7" # s "CL_LO:32" 
+    # legato 2
+    # amp 0.4)
+  (note "0(5,8),<0 2>" # s "CL_LO:24" 
+    # legato 2 
+    # amp 0.8
+    # lpq 0.3
+    # lpf (rand * 2000))
+
+-----------------------------------------------------------------------
+-- lots of fun to be had by patterning the boolean pattern :
+
+d1 $ sew (iter 4 "t f t f")
+  (chunk 4 (hurry 2) $ note "0 .. 7" # s "CL_LO:106"
+    # legato 2
+    # amp 0.4)
+  (note "0(5,8,<0 2>)" # s "CL_LO:45"
+    # legato 2
+    # amp 0.6
+    # lpq 0.3
+    # lpf (rand * 2000))
+
+-----------------------------------------------------------------------
+-- Stitch is similar but the boolean pattern provides the 'structure'
+-- so each 't' triggers a sound in the first one, and each 'f' 
+-- triggers one in the second one. It doesn't really use the structure
+-- of the source pattern, so we may as well keep them simple :
+
+d1 $ stitch "t(5,8) [f t] f"
+  (note "0 .. 7" # s "CL_LO:124" # legato 2)
+  (s "CL_LO:24" # legato 3 # lpq 0.2 # lpf (rand * 2000))
+
+-----------------------------------------------------------------------
+-- this time just stitching the sound :
+
+d1 $ s (stitch (every 3 inv "t*2 [t f] f [f t] t*2 [f t] t f*2") 
+"CL_LO:24" "<CL_LO:45 CL_LO:88>")
+  # legato 2
+  # amp 0.6
+  # lpq 0.2
+  # lpf (rand * 2000)
+  # speed "1.5 2"
+
+d1 $ silence
+
+-----------------------------------------------------------------------

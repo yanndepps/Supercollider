@@ -31,8 +31,87 @@ setcps 0.6
 -----------------------------------------------------------------------
 -- we can also loop the first cycle repeatedly with loopFirst :
 
-d1 $ loopFirst $ s "H_MOO:24(5,8)" |< speed (range 1 4 rand)
+d1 $ loopFirst $ s "H_MOO:27(5,8)" |< speed (range 1 4 rand)
   # legato 2
   # amp 0.4
 
+-----------------------------------------------------------------------
+-- or pick another sample to loop, by shifting the random pattern in time, with <~
+
+d1 $ loopFirst $ s "H_MOO:33(5,11)" |< speed (1 <~ range 1 3 rand) 
+  # legato 2
+  # amp 0.4
+
+-----------------------------------------------------------------------
+-- irand
+-- 'rand' makes floating point (decimal) numbers, whereas 'irand' makes
+-- integral (whole) numbers. e.g. 'irand 8' gives us numbers form 0 to 7.
+
+d1 $ s "H_MOO:54(5,8)" |< note (irand 8)
+  # legato 1
+  # amp 0.8
+
+
+-----------------------------------------------------------------------
+-- if we repeat each cycle twice, it stops sounding random. magic !
+
+
+d1 $ repeatCycles 2 $ s "H_MOO:54(5,8)" |< note (irand 8)
+  # legato 1
+  # amp 0.6
+
+
+-----------------------------------------------------------------------
+-- choose
+-- randomly choose between a particular set of values :
+
+d1 $ s "CL_SL:10(5,8)" |< note (choose[ 0, 7, 12 ])
+  # legato 2
+  # amp 0.6
+  # lpf 3000
+  # lpq 0.3
+  # room 0.2 
+  # sz 0.7
+
+-----------------------------------------------------------------------
+-- cycleChoose
+-- is similar but picks a value once per cycle :
+d1 $ s "CL_SL:10(5,8)" |< note (cycleChoose[ 0, 7, 12 ])
+  # legato 2
+  # amp 0.6
+  # lpf 8000
+  # lpq 0.2
+  # room 0.2 
+  # sz 0.7
+
+-----------------------------------------------------------------------
+-- unwrap
+-- join a pattern of patterns back into a pattern with 'unwrap' :
+
+let foo = "a6 e"
+in 
+d1 $ s "CL_SL:10" >| note (unwrap $ cycleChoose [foo, "c e g a", "c e f g"])
+  # lpf 3000
+  # lpq 0.2
+  # room 0.2
+  # sz 0.7
+  # legato 2
+  # amp 0.6
+
+-----------------------------------------------------------------------
+-- lets pattern that a bit more :
+
+d1 $ jux rev $ arpeggiate $ off 0.125 (|+ note "<12 7 24>")
+  $ s "CL_SL:39" >| note (unwrap $ cycleChoose ["a6 e(3,8)", "c e g a*2", "c e*2 f g"])
+  # lpf 3000 # lpq 0.2 # room 0.2 # sz 0.7 # legato 2 # amp 0.5
+
+-----------------------------------------------------------------------
+-- the trick is finding a nice balance between randomized variety and 
+-- repeating structure around it.
+
+d1 $ note "c cs fs g" # s (choose ["CL_SL:44", "CL_SL:56", "CL_SL:88"]) |+ note "<12 7>" 
+  # lpf 3000 # lpq 0.2 # room 0.2 # sz 0.7 # legato 2 # amp 0.5
+
 d1 $ silence
+
+-----------------------------------------------------------------------

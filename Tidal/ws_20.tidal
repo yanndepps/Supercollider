@@ -1,0 +1,94 @@
+-- worksheet_20 : long form pattern
+-- Tidal was mostly made for live impros.
+-- we can also use it to make longer form patterns though,
+-- including making 'tracks'.
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0) 
+    d2 = p 2 . (|< orbit 1) 
+    d3 = p 3 . (|< orbit 2) 
+    d4 = p 4 . (|< orbit 3) 
+    d5 = p 5 . (|< orbit 4) 
+    d6 = p 6 . (|< orbit 5) 
+    d7 = p 7 . (|< orbit 6) 
+    d8 = p 8 . (|< orbit 7) 
+
+-----------------------------------------------------------------------
+-- CAT
+-- we give 'cat' a list of patterns, and it plays one cycle from each 
+-- one in turn :
+
+d1 $ cat [note "0 3 ~ 4 3 5 2 3" # s "H_281:0" # legato 1,
+          ply "2 3" $ note "0 3 2 4" # s "H_281:1" # legato 1,
+          off 0.125 (# crush 3) $ note "0 3 2 4" # s "H_281:2" # legato 1
+          ]
+
+-----------------------------------------------------------------------
+-- SEQPLOOP
+-- similar to 'cat', but we give a start and stop time for each one.
+-- for example to play each one twice :
+
+d1 $ seqPLoop $ [(0,2, note "0 3 ~ 4 3 5 2 3" # s "H_281:4" # legato 1),
+                  (2,4, ply "2 3" $ note "0 3 2 4" # s "H_281:4" # legato 1),
+                  (4,6, off 0.125 (# crush 3) $ note "0 3 2 4" # s "H_281:4" # legato 1)
+                  ]
+
+-----------------------------------------------------------------------
+-- we can also have the different parts overlap,
+-- lets add a high hat pattern that plays throughout :
+
+d1 $ seqPLoop $ [(0,2, note "0 3 ~ 4 3 5 2 3" # s "H_281:5" # legato 1),
+                  (2,3, ply "2 3" $ note "0 3 2 4" # s "H_281:5" # legato 1),
+                  (4,6, off 0.125 (# crush 3) $ note "0 3 2 4" # s "H_281:5" # legato 1),
+                  (0,6, every 2 (fast 2) $ s "H_281:6" # legato 1)
+                  ]
+
+-----------------------------------------------------------------------
+-- UR
+-- the ur function is more involved. we give names to different
+-- parts, and then make a pattern of them : a pattern of patterns :
+-- ur x : where x is specifies the number of cycles to stretch the 
+-- pattern-of-patterns over :
+
+let pats = [("a", note "0 3 ~ 4 3 5 2 3" # s "H_281:6" # legato 1 # amp 0.4),
+              ("b", ply "2 3" $ note "0 3 2 4" # s "H_281:8" # legato 1 # amp 0.3),
+              ("c", off 0.125 (# crush 3) $ note "0 1" # s "H_281:10" 
+                # legato 1 # amp 0.3),
+              ("h", every 2 (fast 2) $ s "H_281:7" # legato 1 # amp 0.6)
+            ]
+in
+d1 $ ur 6 "[a b c, h]" pats []
+
+-----------------------------------------------------------------------
+-- here's an exemple mixing up the pattern-of-patterns to bring things 
+-- in and out in different ways :
+
+let pats = [("a", note "0 3 ~ 4 3 5 2 3" # s "H_281:13" # legato 1),
+            ("b", ply "2 3" $ note "0 5 [7 ~] 2"
+              # s "H_281:14" # legato 1 # lpf (range 1000 2000 sine) # lpq 0.2 # speed 0.5),
+            ("c", off 0.125 (# crush 3) $ note "0" # s "H_281:7" # legato 1),
+            ("h", every 2 (fast 2) $ s "H_DR:2*8" # legato 1)
+          ]
+in
+d1 $ ur 6 "[b ~ b ~, c a, ~ h ~]" pats []
+
+-----------------------------------------------------------------------
+-- we can also pass 'ur' a list a functions, and use those to add variations to the 
+-- different parts :
+
+let pats = [("a", note "0 3 ~ 4 3 5 2 3" # s "H_281: 15" # legato 1),
+            ("b", ply "2 3" $ note "0 5 [7 ~] 2"
+                # s "H_281:16" # legato 1
+                # lpf (range 1000 2000 sine) # lpq 0.2 # speed 0.5),
+            ("c", off 0.125 (# crush 4) $ note "0 3 2 4" # s "H_281:17" # legato 1),
+            ("h", every 2 (fast 2) $ s "H_DR:9" # legato 1)
+            ]
+    functions = [("faster", hurry 2),
+                  ("crush", (# crush 2))
+                ]
+in
+d1 $ ur 6 "[b ~ b:crush ~, c [a a:faster], ~ h ~]" pats functions
+
+d1 $ silence
+
+-----------------------------------------------------------------------

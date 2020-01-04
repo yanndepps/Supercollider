@@ -1,0 +1,89 @@
+-- worksheet_21 : escaping the grid
+-- beyond algorave : explore life beyond 4:4 techno
+-- Tidal's notion of time is based on cycles rather than beats
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0) 
+    d2 = p 2 . (|< orbit 1) 
+    d3 = p 3 . (|< orbit 2) 
+    d4 = p 4 . (|< orbit 3) 
+    d5 = p 5 . (|< orbit 4) 
+    d6 = p 6 . (|< orbit 5) 
+    d7 = p 7 . (|< orbit 6) 
+    d8 = p 8 . (|< orbit 7) 
+
+-----------------------------------------------------------------------
+-- it's easy to make complex metres :
+
+d1 $ s "H_281:17*3 H_281:18*2" # legato 1 # lpf (range 500 2100 sine) # lpq 0.2 # amp 0.6
+
+-----------------------------------------------------------------------
+-- it's also easy to manipulate time without reference to any grid
+
+d1 $ every 2 (0.14142 <~) $ s "H_281:19*3 H_281:20*2"
+  # legato 1 # lpf (range 500 1800 sine) # lpq 0.2 # amp 0.5
+
+-----------------------------------------------------------------------
+-- we can pattern time shifts to mess up the timeline entirely :
+
+d1 $ "[0.14142 0.3 0.25 0.63 0.1 0.52]/3" <~ (n "0 3 5 2 [~ 1] 5 3 2*2"
+  # s "H_281:21" # legato 1
+  # lpf (range 400 1100 sine) # lpq 0.2 # amp 0.5)
+
+-----------------------------------------------------------------------
+-- keeping the original timeline intact underneath if we want :
+
+d1 $ superimpose ("[0.14142 0.3 0.25 0.63 0.1 0.52]/3" <~) $ n "0 3 5 2 [~ 1] 5 3 2*2"
+  # s "H_281:22" # legato 1
+  # lpf (range 400 2800 sine) # lpq 0.2 # amp 0.6
+
+
+-- d2 $ s "H_DR:17*3 H_DR:18*2" # legato 1 # lpf (range 400 1200 sine) # lpq 0.3 # amp 0.5
+
+-----------------------------------------------------------------------
+-- NUDGE
+-- the 'nudge' control lets us delay playing of events into the 
+-- future, good for adding swing, or making undulating time structures.
+-- a straight pattern :
+
+d1 $ n "23*8" # s "H_281" # legato 1
+
+-----------------------------------------------------------------------
+-- with some swing :
+
+d1 $ n "23*2" # s "H_281" # legato 1
+  # nudge "[0 0.02]*8"
+
+-----------------------------------------------------------------------
+-- a bit more context :
+
+d1 $ note "[0 2 3*2 9 [~ 2] 6 5 5, 8*18]" # s "H_281:50" # legato 1
+  # nudge "[0 0.02]*8"
+
+-----------------------------------------------------------------------
+-- nudging with a sinewave :
+
+d1 $ note "[0 2 3*2 9 [~ 2] 6 5 5, 8*16]" # s "H_281:53" # legato 1
+  # nudge (slow 4 $ range 0 1 sine)
+
+-----------------------------------------------------------------------
+-- fun with chopped sounds :
+
+d1 $ (jux rev $ chop 32 $ n "0 2 3*2 9 [~ 2] 6 5 5" # s "H_281:54" # legato 1)
+  -- # nudge (slow 4 $ range 0 1 sine)
+   # lpf 7200 # lpq 0.2 # amp 0.4
+
+-----------------------------------------------------------------------
+-- CPS
+-- we can also pattern cps changes :
+
+d1 $ n "0 2 3*2 9" # s "H_281:55" # legato 1
+  # cps "<1 0.75 0.5>"
+
+-----------------------------------------------------------------------
+-- cps is global
+-- if we put a cps change on one pattern it'll change all of them
+
+d1 $ silence
+
+-----------------------------------------------------------------------

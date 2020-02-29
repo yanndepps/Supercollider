@@ -16,6 +16,8 @@ let d1 = p 1 . (|< orbit 0)
 
 d1 $ n "9 8 9 8" # s "H_124" # vowel "u"
 
+d1 $ silence
+
 -----------------------------------------------------------------------
 -- create sequences of effects
 

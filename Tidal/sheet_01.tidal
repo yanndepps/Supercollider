@@ -1,0 +1,49 @@
+-- test
+
+let cutmod = (range 20 100 $ slow 16 sine)
+
+d1 $ n "[b5,e5]"
+ # s "midi" 
+ # midichan 0
+ # gain "1"
+ # sustain "[0.1 0.4]/3"
+ # ccn 20
+ # ccv cutmod
+
+d2 $ n "0 7 5 4" 
+  # s "midi" 
+  # midichan 1
+  # gain "[0.85 1]/2"
+
+d1 $ silence
+
+d2 $ silence
+
+-- part 01
+
+do 
+  let pat = "{0@7 0@5 1@10 0 0@3 2 1@7}%16"
+      perf1 = ccn 20
+      perf2 = ccn 21
+      shrand x = (x ~>) rand
+      ccvrand shiftAmount = ccv (range 0 127 $ shrand shiftAmount)
+      ccvCoinFlip shiftAmount = ccv ((shiftAmount ~>) $ choose [10,110])
+  d1 
+    $ stack [
+      n (fmap ([0,-8,-10]!!) $ pat)
+      , perf1 # ccvrand 101
+      , perf2 # ccvCoinFlip 100
+    ]
+    # s "midi" 
+    # midichan 0
+    # gain "1"
+    # cps (180/120/2)
+  d2 
+    $ struct (ascii "<f u>")
+    $ n "gs3"
+    # s "midi"
+    # midichan 1
+
+
+
+hush

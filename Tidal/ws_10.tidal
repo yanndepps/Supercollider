@@ -54,3 +54,11 @@ d1 $ n "c g*8" # s "supermandolin" # legato 4
 d1 $ silence
 
 -----------------------------------------------------------------------
+let freq = pF "freq"
+
+d1 $ s "psin" 
+    # freq "[220, 440]"
+    -- # n "cs4"
+    -- # legato 1
+    # sustain 2
+    -- # width 0.5

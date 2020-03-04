@@ -23,38 +23,46 @@ d2 $ silence
 
 do 
   let pat = "{0@7 0@5 1@10 0 0@3 2 1@7}%16"
+      modpat p = every 3 rev $ p 
       limit p = (|* gain 1.1) $ p
       perf1 = ccn 20
       perf2 = ccn 21
-      perf3 = ccn 22
+      perf3 = ccn 22  -- cutoff on channel 4
+      perf4 = ccn 23  -- res on channel 4
       pad0 = midichan 0 # s "midi"
       pad1 = midichan 1 # s "midi"
       pad2 = midichan 2 # s "midi" 
-      pad3 = midichan 3 # s "midi"
+      pad3 = midichan 3 # s "midi"   
       shrand x = (x ~>) rand
       ccvrand shiftAmount = ccv (range 0 127 $ shrand shiftAmount)
       ccvCoinFlip shiftAmount = ccv ((shiftAmount ~>) $ choose [10,110])
       sb = sometimesBy
+      ssb = someCyclesBy
+      g p = (const $ s "~") $ p
   p "drums"
     $ limit
-    $ stack [
-      midichan (unwrap $ fmap ([2,0,1]!!) $ pat)
+    $ modpat $ stack [
+      ssb 0.33 (stutWith ((5 ~>) $ choose [4,6,8]) ((6 ~>) $ choose [1/16,1/8,3/16,1/4]) (|* gain 0.9))
+      $ midichan (unwrap $ fmap ([2,0,1]!!) $ pat)
       , perf1 # ccvrand 101
       , fast 3 $ perf2 # ccvCoinFlip 100
       , sb 0.09 (# pad0) 
         $ (1 ~>) 
         $ sb 0.25 ((1/16) ~>) 
-        $ struct (ascii "<y a n n>") 
+        $ struct (ascii "<d e p p s>")
         $ pad2
     ]
     # s "midi" 
-    # n "ds3"
+    # n "e3"
     # cps (180/120/2)
   p "synth"
     $ limit
-    $ stack [
+    $ modpat $ stack [
       n (unwrap $ fmap (["fs4","c5","~"]!!) $ pat)
-      , ccv (unwrap $ fmap ([30,110,30]!!) $ pat) # perf3
+      , slow 2 $ stack [
+          ccv (unwrap $ fmap ([30,110,30]!!) $ pat) # perf3
+          , perf4 # ccv (wchoose [(110,4), (64,1), (10,2)])
+      ]
     ] 
     # pad3
 

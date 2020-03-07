@@ -19,7 +19,7 @@ s.waitForBoot {
 	~dirt = SuperDirt(2, s); // two output channels, increase if you want to pan across more channels
 	//~dirt.loadSoundFiles;   // load samples (path containing a wildcard can be passed in)
 	~dirt.loadSoundFiles("/Users/yanndepps/Documents/Musik/samplz/Dirts/*");
-	// ~dirt.postSampleInfo;
+	//~dirt.postSampleInfo;
 	// s.sync; // optionally: wait for samples to be read
 	~dirt.start(57120, [0, 2, 4, 6, 8, 12, 14]);   // start listening on port 57120, create two busses each sending audio to channel 0
 
@@ -34,11 +34,6 @@ s.waitForBoot {
 
 s.latency = 0.3; // increase this if you get "late" messages
 
-// midi client
-MIDIClient.init;
-~midiOut = MIDIOut.newByName("Gestionnaire IAC", "Tidal1");
-~midiOut.latency = 0;
-~dirt.soundLibrary.addMIDI(\midi, ~midiOut);
 );
 
 //-------------

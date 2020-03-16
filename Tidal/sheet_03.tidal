@@ -26,8 +26,10 @@ d1
 d1 
     $ slow 2
     $ stack [
-      struct (ascii "a") $ s "H_BS:1" # legato 1 # orbit 0
-      , struct (inv $ ascii "a") $ s "H_BS:4" # legato 1 # orbit 1
+      struct (ascii "a") $ s "TR_HAT:2" # legato 1 # orbit 0
+      , struct (inv $ ascii "r") $ s "H_TEK:7" # legato 1 # orbit 1
+      , struct (inv $ ascii "u") $ s "TR_HAT:5" # legato 1 # orbit 2
+      , struct (ascii "p a") $ s "TR_PER:2" # legato 1 # orbit 3
     ]
 
 

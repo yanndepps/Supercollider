@@ -13,17 +13,23 @@ let d1 = p 1 . (|< orbit 0)
 
 -----------------------------------------------------------------------
 
-d1 $ s "H_ELE:0 H_ELE:1"
+d1 $ jux rev $ s "H_ELE:17 H_ELE:31*2" # legato 1 # orbit 0
+
+d1 $ silence
+
+hush
 
 -----------------------------------------------------------------------
 -- fit a subpattern into a step with []
 
-d2 $ s "H_DR:2 [H_DR:3 H_DR:4 H_DR:5] ~ H_DR:2"
+d2 $ s "H_DR:2 [H_DR:3 H_DR:4 H_DR:5] ~ H_DR:2" # legato 1 # orbit 1
 
 -----------------------------------------------------------------------
 -- play multiple steps
 
-d2 $ s "H_DR:6*4 H_DR:4*2"
+d2 $ s "H_DR:6*1 H_DR:4*2" # legato 1 # orbit 1
+
+d2 $ silence
 
 -----------------------------------------------------------------------
 -- euclidean patterns : here, three hits spread as evenly possible over eight steps

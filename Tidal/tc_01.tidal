@@ -1,0 +1,44 @@
+-- TidalClub
+-- week 1 lesson 3
+-- sequencing with the mini notation
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0)
+    d2 = p 2 . (|< orbit 1)
+    d3 = p 3 . (|< orbit 2)
+    d4 = p 4 . (|< orbit 3)
+    d5 = p 5 . (|< orbit 4)
+    d6 = p 6 . (|< orbit 5)
+    d7 = p 7 . (|< orbit 6)
+    d8 = p 8 . (|< orbit 7)
+
+-----------------------------------------------------------------------
+
+d1 $ s "AKWF_OV:8 AKWF_OV:9" # legato 1
+
+d1 $ n "29 28" # s "AKWF_OV" # legato 1
+
+-- a musical rest with ~
+d1 $ n "38 ~ 39" # s "AKWF_OV" # legato 1
+
+-- break down a step into subsequence with []
+d1 $ n "38 [42 42] 39" # s "AKWF_OV" # legato 1
+
+d1 $ n "[4 4 4] [1 [7 [8 9]] 1 1]" # s "POOL" # legato 1
+
+--
+d1 $ n "0 4 2 4" |> s "supermandolin" |> n "0 0 0 -24"
+
+-- same as :
+d1 $ n "0 0 0 -24" # s "supermandolin"
+
+-- transpose instead of replace
+d1 $ n "0 4 2 4" # s "supermandolin" |+ n "0 0 0 -24"
+
+-- same as :
+d1 $ n "0 4 2 -20" # s "supermandolin"
+
+
+d1 silence
+
+hush

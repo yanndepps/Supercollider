@@ -1,0 +1,96 @@
+-- tidal club week 2 lesson 2
+-- time to look at time
+-- "music is the time of numbers"
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0)
+    d2 = p 2 . (|< orbit 1)
+    d3 = p 3 . (|< orbit 2)
+    d4 = p 4 . (|< orbit 3)
+    d5 = p 5 . (|< orbit 4)
+    d6 = p 6 . (|< orbit 5)
+    d7 = p 7 . (|< orbit 6)
+    d8 = p 8 . (|< orbit 7)
+
+-----------------------------------------------------------------------
+-- setcps - change global tempo
+-- Let's run two patterns at once:
+
+d1 $ n "0 2 [3 5] [4 7]" # s "H_ITH"
+  # legato 1
+  # orbit 0
+
+d2 $ n "19(3,8) 27*16" # s "H_ITH"
+  # legato 1
+  # orbit 1
+
+-- Changing the cps (cycles per second) changes everything
+
+setcps 0.7
+
+setcps 0.3
+
+-- Time as an effect (!)
+-- You can also set cps as an effect:
+
+
+d2 $ n "45(3,8) 48*16" # s "H_ITH"
+  # legato 1
+  # squiz 5
+  # cps 0.2
+  # orbit 1
+
+
+-- It's still global though - setting it on one pattern will
+-- change it everywhere
+-- However, you can pattern it:
+
+d2 $ n "15(3,8) 15*8" # s "H_SRG"
+  # legato 1
+  # squiz 5
+  # cps "0.5 1"
+  # orbit 1
+
+
+setcps 0.6
+
+-- 'fast' and 'slow' functions
+-- You can speed up / slow down an individual
+-- pattern (or part of one) with "fast" and "slow"
+
+d1 $ slow 2 $ n "0 2 [3 5] [4 7]" # s "H_SRG" # legato 1 # orbit 0
+
+d1 $ fast 2 $ n "0 2 [3 5] [4 7]" # s "H_SRG" # legato 1 # orbit 0
+
+-- You can also pattern this speed factor:
+
+d1 $ slow "0.5 1" $ n "0 2 [3 5] [4 7]" # s "H_NIM" # legato 1 # orbit 0
+
+d2 $ slow "0.5 <1 2>" $ n "0 2 [3 5] [4 7]" # s "H_NIM" # legato 1 # orbit 1
+
+-- When patterning time in this way, you're switching
+-- between different versions of the pattern, running
+-- at different speeds.
+
+-- We've already learned enough to create patterns with a
+-- lot of variety in them, by mixing together several simple
+-- manipulations
+
+d1 $ slow "0.5 <1 2>" $ n "{0 2 [3 5] [4 <7 6>], 0*2 3*3 0}"
+  # s "H_NIM"
+  # legato 1
+  # squiz "<8 1 2>"
+  # orbit 0
+
+-- Note that the 'speed' effect changes the rate of playback
+-- for each sample, but doesn't change the overall speed of the
+-- pattern
+
+d1 $ slow "0.5 <1 2>" $ n "{0 2 [3 5] [4 <7 6>], 0*2 3*3 0}"
+  # s "H_TEK"
+  # legato 1
+  # squiz "<8 1 2>"
+  # speed 2
+  # orbit 0
+ 
+hush

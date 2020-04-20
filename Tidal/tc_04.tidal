@@ -1,0 +1,76 @@
+-- tidal club week 2 lesson 1
+-- patterning effects
+-- Find the full list of effects here: https://tidalcycles.org/index.php/All_effects_and_synths 10
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0)
+    d2 = p 2 . (|< orbit 1)
+    d3 = p 3 . (|< orbit 2)
+    d4 = p 4 . (|< orbit 3)
+    d5 = p 5 . (|< orbit 4)
+    d6 = p 6 . (|< orbit 5)
+    d7 = p 7 . (|< orbit 6)
+    d8 = p 8 . (|< orbit 7)
+
+-----------------------------------------------------------------------
+-- vowel is a filter which adds a vowel sound
+-- try a, e, i, o and u
+
+d1 $ n "0 1 0 [2 4] 2 4 1*2 3" # s "H_GUI" # legato 1
+
+d1 $ n "0 1 0 [2 4] 2 4 1*2 3" # s "H_GUI" # legato 1 # vowel "o"
+
+-- We can use the mini notation to create sequences of effects too:
+
+d1 $ n "0 1 0 [2 4] 2 ~ 1*2 3" # s "H_GUI" # legato 1 # vowel "a o e"
+
+-- Tidal does its best to map patterns across to one another.
+-- You can add a non-vowel letter to pause the vowel effect
+
+d1 $ n "0 1 0 [2 4] 2 ~ 1*2 3" # s "H_GUI" # legato 1 # vowel "i p"
+
+-- 'squiz' is a nice distortion effect
+
+d1 $ n "0 1 0 [2 4] 2 ~ 1*2 3" # s "H_GUI" # legato 1 # squiz "4 1 0 3"
+
+-- With '#' structure comes from the left - try swapping the parameters around
+
+d1 $ squiz "4 1 0 3" # n "0 1 0 [2 4] 2 ~ 1*2 3" # s "H_GUI" # legato 1
+
+-- Now there are only four sounds per cycle, because there's four in the leftmost
+-- 'squiz' pattern
+-- 'gain' changes the volume of different sounds
+
+d1 $ n "22 4 37 18" # s "H_GUI"
+  # legato 1
+  # gain "1 0.7 0.6 0.5"
+  # orbit 0
+
+d1 $ s "[H_ISO:18*16, H_ISO:21 H_ISO:32 [~ H_ISO:32] H_ISO:4]"
+  # legato 1
+  # gain "[1 1.2]*8"
+  # orbit 0
+
+-- speed can be used to pitch samples
+-- speed changes the speed of playback,
+-- e.g. 2 = play the sample twice as fast - which moves the note up an octave
+
+d1 $ s "[H_ISO:30, H_ISO:40 H_ISO:41 H_ISO:42 H_ISO:43]"
+  # legato 1
+  # speed "1 1.5 2 0.5"
+  # gain "0.7 0.8 0.8 0.9 0.9"
+  # orbit 0
+
+-- Or we can take the pattern from the speed parameter
+
+d1 $ speed "1*2 2*2 4*6" # s "H_ISO:44" # legato 1 # orbit 0
+
+ -- pan allows us to create stereo effects - 0 = left, 0.5 = middle, 1 = right
+
+d1 $ s "H_ISO:42 H_ISO:43 H_ISO:42" # legato 1 # pan "0 0.5 1" # orbit 0
+
+-- shape adds distortion (but be careful - it also makes the sound much louder)
+
+d1 $ s "H_ISO:40 H_ISO:36" # legato 1 # shape "0 0.98" # orbit 0
+
+hush

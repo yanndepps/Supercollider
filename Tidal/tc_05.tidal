@@ -16,12 +16,17 @@ let d1 = p 1 . (|< orbit 0)
 -- setcps - change global tempo
 -- Let's run two patterns at once:
 
-d1 $ n "0 2 [3 5] [4 7]" # s "H_ITH"
+d1 $ n "0 2 [3 5] [4 7]" # s "H_KEY"
+  # speed 0.2
   # legato 1
-  # orbit 0
+  # orbit 1
+
+hush
 
 d2 $ n "19(3,8) 27*16" # s "H_ITH"
   # legato 1
+  # squiz 1
+  # cps 0.3
   # orbit 1
 
 -- Changing the cps (cycles per second) changes everything

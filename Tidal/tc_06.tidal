@@ -1,0 +1,92 @@
+-- tidal club week 2 lesson 3
+-- combining patterns with arithmetic + the hurry function
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0)
+    d2 = p 2 . (|< orbit 1)
+    d3 = p 3 . (|< orbit 2)
+    d4 = p 4 . (|< orbit 3)
+    d5 = p 5 . (|< orbit 4)
+    d6 = p 6 . (|< orbit 5)
+    d7 = p 7 . (|< orbit 6)
+    d8 = p 8 . (|< orbit 7)
+
+-----------------------------------------------------------------------
+
+d1 $ n "20 21 20 [24 14] 24 14 21*2 13"
+  # s "H_MOO"
+  # legato 1
+  # speed "1 2"
+  # orbit 0
+
+d1 $ speed "1 2 0.5"
+  # s "{ H_MOO:24, H_MOO:27 }"
+  # legato 1
+  # orbit 0
+
+-- structure from the left, values from the right
+
+d1 $ speed "1 2 0.5"
+  # s "{ H_MOO:24, H_MOO:27 }"
+  # speed "0.6 0.8"
+  # legato 1
+  # orbit 0
+
+-- # is a shorthand for |>
+-- change the direction the values are coming from
+
+d1 $ speed "1 2 0.5"
+  # s "{ H_MOO:24, H_MOO:27 }"
+  -- |> speed "0.6 0.8"
+  |< speed "0.6 0.8"
+  # legato 1
+  # orbit 0
+
+d2 $ speed "1 2 0.5"
+  # s "{ H_MOO:24, H_MOO:27 }"
+  |> speed "0.6 0.8"
+  -- |< speed "0.6 0.8"
+  # legato 1
+  # orbit 1
+
+-- we can move the pipe |
+-- means where the structure is coming from : >|
+
+d2 $ speed "1 2 0.5"
+  # s "{ H_MOO:24, H_MOO:25 }"
+  >| speed "0.5 0.6"
+  # legato 1.5
+  # orbit 1
+
+d2 $ speed "1 2 0.5"
+  # s "{ H_MOO:24, H_MOO:25 }"
+  |* speed "0.5 2.0"
+  # legato 1.5
+  # orbit 1
+
+d2 $ speed "1 2 0.5"
+  # s "{ H_MOO:24, H_MOO:25 }"
+  *| speed "[ 0.5 1.0 ]/2"
+  # legato 1.5
+  # orbit 1
+
+d2 $ speed "1 2 0.5"
+  # s "{ H_MOO:24(3,8), [ H_MOO:25*2 H_MOO:27 ] }"
+  |* speed "[ 0.5 1.0 0.3 ]/3"
+  # legato 1.5
+  # orbit 1
+
+-- hurry speed both the pattern and playback rate of the sample
+
+d1 $ fast 0.5 $ n "0 1 0 [2 4] 2 4 1*2 3"
+  # s "H_LD"
+  # legato 1
+  # speed 0.5
+  # orbit 0
+
+d1 $ hurry "<2 [1 0.5] 1.5>" $ n "0 1 0 [2 4] 2 4 1*2 3"
+  # s "H_GUI"
+  # legato 1.2
+  # orbit 0
+
+hush

@@ -1,0 +1,13 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+bubble_sort	SPi/bubble_sort_01.rb	/^def bubble_sort arr$/;"	f
+bubble_sort	SPi/bubble_sort_02.rb	/^def bubble_sort arr$/;"	f
+make-melody	CL/start.lisp	/^(defun make-melody (time n &optional (offset 0))$/;"	f
+saw-synth	CL/start.lisp	/^(defsynth saw-synth ((note 60) (dur 4.0))$/;"	f
+sine-wave	CL/start.lisp	/^(defsynth sine-wave ((note 60))$/;"	f
+sorted	SPi/bubble_sort_01.rb	/^def sorted arr$/;"	f
+sorted	SPi/bubble_sort_02.rb	/^def sorted arr$/;"	f

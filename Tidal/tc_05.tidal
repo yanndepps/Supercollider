@@ -91,11 +91,18 @@ d1 $ slow "0.5 <1 2>" $ n "{0 2 [3 5] [4 <7 6>], 0*2 3*3 0}"
 -- for each sample, but doesn't change the overall speed of the
 -- pattern
 
-d1 $ slow "0.5 <1 2>" $ n "{0 2 [3 5] [4 <7 6>], 0*2 3*3 0}"
-  # s "H_TEK"
+d2 $ slow "0.5 <1 2>" $ n "{0 2 [3 5] [4 <7 6>], 0*2 3*3 0}"
+  # s "H_ELE"
   # legato 1
   # squiz "<8 1 2>"
-  # speed 2
+  # speed 0.2
   # orbit 0
  
 hush
+
+-- overlap patterns
+
+d1 $ n "{22 ~ 28 ~, ~ 28 ~, ~ ~ 33 33 ~ 13}" # s "H_ELE"
+  # legato 1
+  # speed 0.2
+  # orbit 1

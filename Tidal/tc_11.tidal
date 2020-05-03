@@ -1,0 +1,158 @@
+-- tidal club week 4 lesson 1
+-- continuous patterns - sine, square, tri, saw & random functions
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0)
+    d2 = p 2 . (|< orbit 1)
+    d3 = p 3 . (|< orbit 2)
+    d4 = p 4 . (|< orbit 3)
+    d5 = p 5 . (|< orbit 4)
+    d6 = p 6 . (|< orbit 5)
+    d7 = p 7 . (|< orbit 6)
+    d8 = p 8 . (|< orbit 7)
+
+-----------------------------------------------------------------------
+-- 'Continuous functions' provide different kinds of waveforms.
+-- There's a nice graphic showing sine, square, triangle and sawtooth
+-- waves here: https://en.wikipedia.org/wiki/Waveform
+
+-- Here's what the sine waveform sounds like applied to sample playback
+-- speed:
+
+d1 $ s "AKWF_OV:0*32"
+  # speed sine
+  # legato 1
+  # orbit 0
+
+-- and to panning:
+
+d1 $ s "AKWF_OV:9*128"
+  # pan sine
+  # orbit 0
+
+-- and to waveshape distortion (gets loud):
+
+d1 $ s "AKWF_OV:13*128"
+  # shape sine
+  # legato 1
+  # orbit 0
+
+
+-- You can manipulate continuous patterns just like other kinds of
+-- patterns, for example slowing down:
+
+d1 $ s "AKWF_OV:14*128"
+  # shape ( slow 2 sine )
+  # legato 1
+  # orbit 0
+
+-- The waveforms all move between 0 and 1. So at its lowest point, sine
+-- will be 0, and at its highest point it will be 1. Having a value
+-- near 0 can be problematic with 'speed', as you can end up with
+-- sounds played very slowly that take a long time to complete.
+
+-- To get around this you can add to the sine:
+
+d1 $ s "AKWF_OV:22*128"
+  # speed ( sine + 0.5 )
+  # legato 1
+  # orbit 0
+
+
+-- Or use the 'range' function:
+
+d1 $ s "AKWF_OV:30*128"
+  # speed ( range 0.2 1.5 sine)
+  # legato 1
+  # orbit 0
+
+-- Lets listen to triangle, sawtooth and square waves:
+
+d1 $ s "AKWF_OV:31*128"
+  # speed ( range 0.5 1.5 tri )
+  # legato 1
+  # orbit 0
+
+d1 $ s "AKWF_OV:38*128"
+  # speed ( range 0.5 1.5 saw )
+  # legato 1
+  # orbit 0
+
+d1 $ s "AKWF_OV:40*128"
+  # speed ( range 0.5 1.5 square )
+  # legato 1
+  # orbit 0
+
+-- What happens if you put the continuous pattern on the left?
+-- Remember that with '#', the rhythmic structure comes from the
+-- left. Try this:
+
+d1 $ speed ( range 0.5 1.5 square ) # s "AKWF_OV:40*128" # legato 1 # orbit 0
+
+-- Silence! Why's that?
+-- It's because continuous functions don't actually contain any
+-- events. They have values which continually change, without
+-- triggering anything.
+
+-- If we want to trigger events in a continuous pattern, we have
+-- to explicitly sample values from it. One way to do that is with
+-- the 'segment' function:
+
+d1 $ speed (segment 128 $ range 0.5 2.5 sine)
+  # s "AKWF_OV:40"
+  # legato 1
+  # orbit 0
+
+
+-- The above samples 128 values per cycle, generating discrete
+-- events from them.
+
+-- Another way to do this is with 'binary' or 'boolean' patterns,
+-- using the 'struct' function:
+
+d1 $ speed (struct "t(3,8)" $ slow 2 $ range 0.5 2.5 sine)
+  # s "H_EMF:82"
+  # legato 1
+  # orbit 0
+
+-- 't' stands for 'true'. So that euclidean rhythm is used to sample
+-- events from the continuous sine function.
+
+-- You can also add or multiply continous patterns together:
+
+d1 $ s "H_EMF:83*32" # speed (range 0.5 2.5 (sine + (slow 2 saw)))
+  # legato 1
+  # orbit 0
+
+d1 $ s "AKWF_OV:18*128" # speed (range 0.5 2.5 (sine * (slow 2 saw)))
+  # legato 1
+  # orbit 0
+ 
+-- I slowed the 'saw' down in the above patterns, so you end
+-- up with a sine wave that rises in pitch over two cycles.
+
+-- In Tidal, random functions are also often continous.
+-- For example, rand works like sine, saw etc, but returns random
+-- values:
+
+d1 $ s "H_DR:30(5,8)" # speed (range 1 3 rand)
+  # legato 1
+  # orbit 0
+
+-- Perlin is similar, but returns 'perlin noise'. In Tidal, this
+-- means that the pattern smoothly transitions between random values,
+-- every cycle:
+
+d1 $ s "H_DR:30(5,8)" # speed (range 0.5 1.5 perlin)
+  # legato 1
+  # orbit 0
+
+-- Lets try that with some reverb:
+
+d1 $ s "H_DR:0(7,16)"
+  # room 0.7
+  # sz (range 0.4 1 $ slow 4 perlin)
+  # legato 1
+  # orbit 0
+
+hush

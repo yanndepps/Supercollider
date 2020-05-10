@@ -1,0 +1,188 @@
+-- tidal club week 4 lesson 2
+-- random marathon
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0)
+    d2 = p 2 . (|< orbit 1)
+    d3 = p 3 . (|< orbit 2)
+    d4 = p 4 . (|< orbit 3)
+    d5 = p 5 . (|< orbit 4)
+    d6 = p 6 . (|< orbit 5)
+    d7 = p 7 . (|< orbit 6)
+    d8 = p 8 . (|< orbit 7)
+
+-----------------------------------------------------------------------
+
+-- Let's start with a look at the 'rand' waveform that we
+-- met in the last lesson:
+
+d1 $ n "123*2" # s "CL_LO"
+  # speed (range 1 4 rand)
+  # legato 1
+  # orbit 0
+
+-- The 'resetCycles' resets the cycle count to '0', as
+-- though you'd just started Tidal:
+
+resetCycles
+
+-- If you run resetCycles while the above pattern is running,
+-- you'll notice that you also reset the random stream. You
+-- will always get the same 'random' numbers every time you
+-- start or reset Tidal.
+
+-- You can apply rand to any numerical effect, but might have
+-- to adjust the range. For example with the low pass filter
+-- that cuts out frequencies higher than the given amount:
+
+d1 $ s "CL_SL:26(5,8,<0 4>)"
+  # lpf (range 200 8000 rand)
+  # lpq 0.2
+  # legato 1
+  # orbit 0
+
+-- 'irand' is similar to 'rand', but creates integers, or
+-- whole numbers, from 0 up to (and not including) the given
+-- number. This is particularly useful for the 'n' and
+-- 'note' controls:
+
+d1 $ s "CL_SL(5,8)" # n (irand 32)
+  # room 0.3 # sz 0.5
+  # legato 1
+  # orbit 0
+
+-- There are a couple of ways of doing random things in the
+-- mininotation too. To randomly choose between subsequences,
+-- put a | (vertical bar) between them
+
+-- The second step in this sequence is a randomly pick from
+-- four subsequences:
+
+d1 $ n "0 [0|1*3|2*8|3 4 5] 2 3" # s "H_EMF"
+  # speed 1.5
+  # lpf (range 200 8000 rand)
+  # lpq 0.2
+  # legato 1
+  # orbit 0
+
+-- Also, ? randomly 'drops' an event. In the following the
+-- second step has a 50-50 chance of being played.
+
+d1 $ n "4 80? 2" # s "H_EMF"
+  # lpf (range 200 8000 rand)
+  # lpq 0.2
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # speed 1.5
+  # legato 1
+  # orbit 0
+
+-- You can adjust the probability of ? working with a decimal
+-- (floating point) number. For example, to have an 80% chance
+-- of dropping that clap (and therefore 20% chance of playing
+-- it)
+
+d1 $ n "34 45?0.8 32" # s "H_EMF"
+  # lpf (range 200 8000 rand)
+  # lpq 0.2
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # speed 1.5
+  # legato 1
+  # orbit 0
+
+-- If you apply ? to a subsequence, it'll work individually
+-- on each value in the subsequence
+
+d1 $ n "0 [4 5 9]? 0 1" # s "H_EMF"
+  # lpf (range 200 8000 rand)
+  # lpq 0.2
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # speed 1.5
+  # legato 1
+  # orbit 0
+
+d1 $ s "H_DR:1*8? H_BS:4"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # room 0.3 # sz 0.5
+  # legato 1
+  # orbit 0
+
+-- Ok, onward to functions, starting with scramble. scramble
+-- takes a number, which is the number of parts to equally
+-- divide a pattern into. It'll then play those parts at
+-- random.
+
+d1 $ scramble 4 $ n "0 1 2 3 4 5 6 7" # s "H_GUI"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # room 0.3 # sz 0.5
+  # legato 1
+  # orbit 0
+
+-- The above is divided into four parts, and there are
+-- eight events in them, so they are played in pairs. This
+-- means that 0 is always followed by 1, 2 is always followed
+-- by 3, and so on.
+
+-- Whereas scramble picks part at random, shuffle plays the
+-- parts in random order. The difference is that with shuffle,
+-- every cycle, you'll hear each part exactly once. With
+-- scramble, there's a (small) chance that you'll hear only
+-- one part, played four times.
+
+d1 $ shuffle 4 $ n "0 1 2 3 4 5 6 7" # s "H_EMF"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # room 0.3 # sz 0.5
+  # legato 1
+  # orbit 0
+
+-- You can maybe hear this better if you play a clap at the
+-- same time, to mark the start of the cycle. Then you can
+-- hear that parts aren't repeating within the cycle.
+
+d2 $ s "TR_KIC:3/4"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # room 0.3 # sz 0.5
+  # legato 1
+  # orbit 1
+
+-- The "choose" function is for when you want to pick between
+-- single values. It produces a continuous stream, with no
+-- structure, so the following won't produce any events:
+
+d1 $ sound (choose ["H_DR:0", "H_BS:0", "H_SRG:0"])
+  # legato 1
+  # orbit 0
+
+-- You'll need to provide some structure, with a function like
+-- 'segment', which in this case picks 8 values per cycle:
+
+d1 $ s (segment 8 $ choose ["H_DR:0", "H_BS:0", "H_SRG:0"])
+  # legato 1
+  # orbit 0
+
+-- Or 'struct', which picks values according to a binary pattern:
+
+d1 $ s (struct "t t ~ t" $ choose ["H_DR:0", "H_BS:0", "H_SRG:0"])
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+d1 $ s (struct "t(5,8)" $ choose ["H_DR:3", "H_BS:3", "H_LD:4"])
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- Or by combining it with a pattern that *does* have structure:
+
+d1 $ squiz "0*2 4 2 5 0 6*2 4 7"
+  # s (choose ["H_DR:3", "H_BS:3"])
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- Another 'gotcha' - the parameters to choose are a list of values,
+-- *not*, patterns, so you can't normally use mininotation there.
+
+
+
+
+hush

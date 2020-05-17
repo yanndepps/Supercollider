@@ -16,10 +16,12 @@ let d1 = p 1 . (|< orbit 0)
 -- Let's start with a look at the 'rand' waveform that we
 -- met in the last lesson:
 
-d1 $ n "123*2" # s "CL_LO"
+d1 $ n "123*2" # s "H_RAW"
   # speed (range 1 4 rand)
   # legato 1
-  # orbit 0
+  # orbit 1
+
+hush
 
 -- The 'resetCycles' resets the cycle count to '0', as
 -- though you'd just started Tidal:
@@ -65,6 +67,8 @@ d1 $ n "0 [0|1*3|2*8|3 4 5] 2 3" # s "H_EMF"
   # legato 1
   # orbit 0
 
+  hush
+
 -- Also, ? randomly 'drops' an event. In the following the
 -- second step has a 50-50 chance of being played.
 
@@ -87,7 +91,9 @@ d1 $ n "34 45?0.8 32" # s "H_EMF"
   # delay 0.3 # delaytime (1/3) # delayfb 0.8
   # speed 1.5
   # legato 1
-  # orbit 0
+  # orbit 1
+
+hush
 
 -- If you apply ? to a subsequence, it'll work individually
 -- on each value in the subsequence
@@ -174,7 +180,7 @@ d1 $ s (struct "t(5,8)" $ choose ["H_DR:3", "H_BS:3", "H_LD:4"])
 -- Or by combining it with a pattern that *does* have structure:
 
 d1 $ squiz "0*2 4 2 5 0 6*2 4 7"
-  # s (choose ["H_DR:3", "H_BS:3"])
+  # s (choose ["H_RAW:6", "H_RAW:13"])
   # delay 0.3 # delaytime (1/3) # delayfb 0.8
   # legato 1
   # orbit 0
@@ -182,7 +188,91 @@ d1 $ squiz "0*2 4 2 5 0 6*2 4 7"
 -- Another 'gotcha' - the parameters to choose are a list of values,
 -- *not*, patterns, so you can't normally use mininotation there.
 
+-- There is a workaround, which is to use the 'innerJoin' function. Then you
+-- can choose between patterns:
 
+d1 $ squiz "0*2 4 2 5 0 6*2 4 7"
+  #s (innerJoin $ choose ["H_RAW:13*5", "H_RAW:6", "H_RAW:18 H_RAW:16"])
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
 
+-- You can use choose with any parameter.
+-- For example:
+
+d1 $ s "H_RAW:22(3,8)"
+  # speed (choose [ 2,1,0.5 ])
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- The following example is a bit different to the above, because
+-- a new value is chosen only once per cycle:
+
+d1 $ s "H_RAW:24(3,8)"
+  # speed "[2[1|0.5]]"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- You could get the same behaviour from choose with 'segment'ing it
+-- by a cycle:
+
+d1 $ s "H_RAW:26(3,8)"
+  # speed (segment 1 $ choose [2,1,0.5])
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- The 'wchoose' function is like 'choose', but you can give
+-- a 'weighting' for each possibility. So something with a weighting
+-- of '4' would be twice as likely to be chosen as one with a weighting
+-- of '2', for example:
+
+-- Here I've weighted things so you get a lot of kicks, occasional
+-- claps, and rarer snares:
+
+d1 $ squiz ("1 4*8 8*2 0.3")
+  # s (wchoose [("H_RAW:27", 8), ("H_RAW:28", 0.5), ("H_RAW:29", 1)])
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- Ok one more thing! In Tidal, randomness is "deterministic". At
+-- a certain cycle time, you will always get the same number. We
+-- saw this at the start of the lesson, with resetCycles. That
+-- resets the cycle count, as if you just started Tidal up. You
+-- can then hear that the 'random' numbers are the same.
+
+-- This can result in unexpected results.
+-- Listen to this:
+
+d1 $ s "H_RAW:30*2" 
+  # speed (range 0.1 2 rand) 
+  # pan rand 
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- You can hear that on the left speaker, the 'speed' of the
+-- sound is always low, and when it pans to the right, it's
+-- always high. Strange! This is because the same 'random'
+-- number stream is used for both the speed and the pan, so
+-- they get the same numbers, and seem to interact.
+
+-- This can be nice! But if you don't want this effect, you can
+-- avoid it by manipulating the timeline of one of the random
+-- patterns. For example:
+
+d1 $ s "H_RAW:31*2"
+  # speed (range 0.1 2 rand)
+  # pan (slow 1.001 rand)
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- I only slowed that 'rand' down by a tiny amount, but that's
+-- enough to end up with totally different numbers.. So now
+-- you're as likely to get lower speeds on the left as on the right.
 
 hush

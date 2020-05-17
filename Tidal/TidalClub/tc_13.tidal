@@ -1,0 +1,229 @@
+-- tidal club week 4 lesson 3
+-- randcat, stripe, degrade, sometimes, someCycles, randslice & more
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0)
+    d2 = p 2 . (|< orbit 1)
+    d3 = p 3 . (|< orbit 2)
+    d4 = p 4 . (|< orbit 3)
+    d5 = p 5 . (|< orbit 4)
+    d6 = p 6 . (|< orbit 5)
+    d7 = p 7 . (|< orbit 6)
+    d8 = p 8 . (|< orbit 7)
+
+-----------------------------------------------------------------------
+-- randcat
+
+-- randcat is a variant of cat, which we haven't actually looked at
+-- yet, so lets start with that..
+
+d1 $ s (cat ["H_RAW:30 H_RAW:29 [~ H_RAW:30] H_RAW:16", "H_RAW:30 H_RAW:29 . H_RAW:33(5,8)"])
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- So you can hear that cat 'concatenates' patterns - it plays them
+-- one after the other, in order.
+-- randcat on the other hand, plays them in random order:
+
+d1 $ s (randcat ["H_RAW:30 H_RAW:29 [~ H_RAW:30] H_RAW:16", "H_RAW:30 H_RAW:29 . H_RAW:33(5,8)"])
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- You can give it as many patterns to choose from as you like:
+
+d1 $ s (randcat ["H_RAW:30 H_RAW:29 [~ H_RAW:30] H_RAW:16",
+                 "H_RAW:30 H_RAW:29 . H_RAW:33(5,8)",
+                 "H_RAW:35(5,16)"])
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- You can use it to randomise control patterns other than sound,
+-- e.g. the vowel effect:
+
+d1 $ vowel (randcat ["a e*2 i o", "e o u", "o*8"])
+  # s ("H_RAW:35 H_RAW:34 H_RAW:33")
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- wrandcat is to randcat, what wchoose is to choose. That is,
+-- You can give the choices relative probabilities:
+
+d1 $ s (wrandcat [("H_RAW:35 H_RAW:30(3,8)", 1),
+                  ("H_RAW:29 H_RAW:28", 0.5),
+                  ("H_RAW:33(5,8)", 0.1)])
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- stripe is a weird one. Lets start with a rhythm
+
+d1 $ n "0 24*2 ~ 24 2 24 2 ~"
+  # s "H_RAW"
+  # squiz 2
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- 'fast 2' would squeeze that into two cycles:
+
+d1 $ fast 2 $ n "0 24*2 ~ 24 22 24 22 ~"
+  # s "H_RAW"
+  # squiz 2
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- stripe is similar, but the cycles are random durations,
+-- although still fit the cycle:
+
+d1 $ stripe 2 $ n "0 24*2 ~ 24 22 24 22 ~"
+  # s "H_RAW"
+  # squiz 2
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- It sounds random, but against a straight clap, you can hear
+-- every other repetition still perfectly aligns with the cycle:
+
+d2 $ s "TR_KIC:3"
+  # legato 1
+  # orbit 1
+
+-- degrade - remember the ? mininotation modifier in the previous
+-- video? It drops events at random:
+
+d1 $ s "TR_KIC:3*8?"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- Degrade is a function that does the same:
+
+d1 $ degrade $ s "TR_KIC:5*8"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- Just like this:
+
+d1 $ s "TR_KIC:5*8?0.6"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- You can specify a probability, by using 'degradeBy'. E.g.,
+-- to give each event a 60% chance of being 'lost':
+
+d1 $ degradeBy 0.6 $ s "TR_KIC:6"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- 'sometimes' applies a function to a pattern, but only sometimes.
+-- lets hurry this rhythm, but only sometimes:
+
+d1 $ sometimes (hurry 2) $ n "0 ~ 3 1 5 2 ~ 5"
+  # s "H_RAW"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- Here's the original, which sounds pretty boring in comparison:
+
+d1 $ n "0 ~ 3 1 5 2 ~ 5"
+  # s "H_RAW"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- You can use it to apply effects as well.
+
+d1 $ sometimes (# crush 4) $ n "0 ~ 3 1 5 2 ~ 5" 
+  # s "H_RAW"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- There's also a 'sometimesBy' variant, for specifying a
+-- probability:
+
+d1 $ sometimesBy 0.3 (# crush 4) $ n "0 ~ 3 1 5 2 ~ 5"
+  # s "H_RAW"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- There's some aliases for different probabilities:
+
+{-
+sometimes = sometimesBy 0.5
+often = sometimesBy 0.75
+rarely = sometimesBy 0.25
+almostNever = sometimesBy 0.1
+almostAlways = sometimesBy 0.9
+-}
+
+-- So you can do this:
+
+d1 $ rarely (# crush 4) $ n "0 ~ 3 1 5 2 ~ 5"
+  # s "H_RAW"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- somecycles is similar to sometimes, but works on whole
+-- cycles at a time, rather than individual events:
+
+d1 $ somecycles (hurry 2) $ n "0 ~ 3 1 5 2 ~ 5"
+  # s "H_RAW"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- Again, there's a 'somecyclesBy' variant for being specific
+-- about that probability. To apply the squiz, 90% of the time:
+
+d1 $ someCyclesBy 0.9 (# squiz 4) $ n "0 ~ 3 1 5 2 ~ 5"
+  # s "H_RAW"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- randslice is a bit like 'slice' that we met a couple of lessons
+-- ago:
+
+d1 $ slice 4 "0 1 2 3 4" $ s "H_RAW:33"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- Instead of taking a pattern of slices though, it picks slices at
+-- random. So to play a random quarter of this break:
+
+d1 $ randslice 4 $ s "H_RAW:33"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- We can use 'loopAt' to fit them to a cycle, just like we saw before
+-- with 'chop' and 'striate':
+
+d1 $ loopAt 1 $ randslice 4 $ s "H_RAW:33"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+-- We could also do the same sort of thing by giving 'slice' or 'splice'
+-- a random pattern:
+
+d1 $ splice 4 (segment 4 $ irand 4) $ s "H_RAW:33"
+  # delay 0.3 # delaytime (1/3) # delayfb 0.8
+  # legato 1
+  # orbit 0
+
+hush

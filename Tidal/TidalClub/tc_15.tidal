@@ -1,0 +1,247 @@
+-- tidal club week 5 lesson 2
+-- chords, arpeggios 
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0)
+    d2 = p 2 . (|< orbit 1)
+    d3 = p 3 . (|< orbit 2)
+    d4 = p 4 . (|< orbit 3)
+    d5 = p 5 . (|< orbit 4)
+    d6 = p 6 . (|< orbit 5)
+    d7 = p 7 . (|< orbit 6)
+    d8 = p 8 . (|< orbit 7)
+
+-----------------------------------------------------------------------
+-- Ok chords! We can play a 'major' chord like this:
+
+d1 $ note "'maj"
+  # legato 1 
+  # s "midi" 
+  # midichan 0
+  # amp 0.6
+
+-- The default is c major, you can choose others like this, e.g. to
+-- play c then e major:
+
+d1 $ note "c'maj e'maj"
+  # legato 1 
+  # s "midi" 
+  # midichan 0
+  # amp 0.6
+
+d1 $ note "<g'maj b'maj c'maj c'min>"
+  # octave "<4 4 5 5>"
+  # legato 1 
+  # s "midi" 
+  # midichan 0
+  # amp 0.5
+
+-- and strum it a bit with struct:
+
+d1 
+  $ qtrigger 1 
+  -- $ jux ((|- note "12") . rev) 
+  $ struct "t(5,8,<0 4>)" 
+  $ note "<g'maj b'maj c'maj c'min>" 
+  --  # octave "<4 4 5 5>"
+  # legato 2 
+  # s "midi" 
+  # midichan 1
+  # amp 0.5
+
+d1 
+  $ qtrigger 1 
+  -- $ jux ((|- n "12") . rev) 
+  $ struct "t(5,8,<0 4>)" 
+  $ note "<g'maj b'maj c'maj c'min>" 
+  # s "H_RAW:26"
+  # octave 4
+  # room 0.6 # sz 0.9
+  # gain "0.5"
+  # legato 1
+  # orbit 0
+
+-- You can get a list of all the chords like this:
+import Sound.Tidal.Chords
+
+chordList
+
+-- Here's the raw data:
+chordTable
+
+-- Try some out:
+d1 $ note "c'sevenFlat9 a'm9sharp5" 
+  # s "H_RAW:26"
+  # octave 5
+  # room 0.6 # sz 0.9
+  # gain "0.5"
+  # legato 1
+  # orbit 0
+
+d1 $ note "c'sevenFlat9 a'm9sharp5" 
+  # s "midi" 
+  # midichan 0
+  # amp 0.2
+  # octave 4
+  # legato 1
+
+
+-- Again, this all ends up being turned into plain note numbers. These
+-- two patterns are the same:
+
+d1 $ note "c'sevenFlat9 a'm9sharp5" 
+  # s "midi" 
+  # midichan 0
+  # amp 0.2
+  # octave 4
+  # legato 1
+
+d1 $ note "[0,4,7,10,13] [9,10,23]" 
+  # s "midi" 
+  # midichan 0
+  # amp 0.2
+  # octave 4
+  # legato 1
+
+-- You can say how many notes you want in a chord, with another ' and
+-- the number of notes you want.
+-- If you ask for more notes than exist in the basic chord, it will go
+-- up the octaves to find more notes, sounding more and more impressive:
+
+d1 
+  -- $ note "c'maj'5" 
+  $ note "[0,3,12]"
+  # s "midi" 
+  # midichan 0
+  # amp 0.4
+  # octave 4
+  # legato 1
+
+-- This is clearer when we start doing.. ARPEGGIOS
+-- These are 'broken' chords, where instead of playing the notes at
+-- once, they're played one after another:
+
+d1 $ arpeggiate $ n "c'min'12"
+  # s "midi" 
+  # midichan 0
+  # amp 0.4
+  # octave 3
+  # legato 1
+
+-- The arpeggio happens within the 'step' that the chord occupies:
+
+d1 $ arpeggiate $ n "c'maj'4 e'min7'4"
+  # s "midi" 
+  # midichan 0
+  # amp 0.4
+  # octave 4
+  # legato 1
+
+-- Above, you can hear major chords have three notes, and minor 7
+-- chords have four. You can modify that with ' so they have the same
+-- number.
+-- "arpeggiate" has a shorter, but more flexible cousin "arp", that
+-- allows you to specify a different way of breaking up the chord:
+
+d1 
+  $ arp "updown thumbup" 
+  $ n "<c'maj'4 e'min7'4>"
+  # s "midi" 
+  # midichan 0
+  # amp 0.4
+  # octave 4
+  # legato 1
+
+-- Here's the list of currently available arp styles to explore:
+-- up, down, updown, downup, converge, diverge, disconverge, pinkyup,
+-- pinkyupdown, thumbup thumbupdown
+
+d1 
+  $ arp "disconverge" 
+  $ n "<c'maj'4 e'min7'4>"
+  # s "midi" 
+  # midichan 0
+  # amp 0.4
+  # octave 4
+  # legato 1
+
+-- Lots of fun
+d1 
+  -- $ jux rev 
+  $ arp "<updown thumbup pinkyupdown converge diverge>"
+  $ note "<c4'maj'6 e4'min7'8 g5'maj'5 a5'maj'4>" 
+  # s "midi" 
+  # midichan 0
+  # amp 0.4
+  # octave 4
+  # legato 1
+
+-- inversions :
+
+d1 
+  $ note "e'min'3ii" 
+  # s "midi" 
+  # midichan 0
+  # amp 0.4
+  # octave 4
+  # legato 1
+
+-- scale 
+
+scaleTable
+
+d1 
+  $ n (toScale [0,2,4,5,7,9,10] "0 1 2 3 4 5 6 7") 
+  # s "midi" 
+  # midichan 0
+  # amp 0.4
+  # octave 4
+  # legato 1
+
+d1 
+  $ arp "converge"
+  $ n (scale "kumai" "<c'maj'4i e'min7'4>") 
+  # s "midi"
+  # midichan 0
+  # amp 0.2
+  # octave 3
+  # legato 1
+
+-- You can collide the melodic pattern with a rhythmic pattern using struct 
+
+d1 
+  $ struct "t([5 6],16,<0 [0 2]>)" 
+  $ n (toScale [0.0,3.0,5.0,7.0,10.0] "0 1 2 3 4 5 6 7") 
+  # s "midi" 
+  # midichan 0
+  # amp 0.5
+  # octave 3
+  # legato 1
+
+-- |+2 will transpose the sequence 2 semitones up :
+
+d1 
+  $ struct "t([5 6],4,<0 [0 2]>)" 
+  $ n (toScale [0.0,1.0,4.0,7.0,9.0] "0 1 2 3 4 5 6 7") |+2
+  # s "midi" 
+  # midichan 1
+  # amp 0.5
+  # octave 5
+  # legato 1
+
+-- creating a list of chords from scratch
+
+mychords = inhabit [("hola", "[0,4,2]" :: Pattern Double),
+                    ("hello", "[0,5,7,12]")
+                   ] 
+
+d1 
+  $ arp "<updown converge>"
+  $ n (mychords "hello hola")
+  # s "midi" 
+  # midichan 0
+  # amp 0.7
+  # octave 4
+  # legato 1
+
+hush

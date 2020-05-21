@@ -1,0 +1,48 @@
+-- tidal club : function of the week 01
+-- iter
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0)
+    d2 = p 2 . (|< orbit 1)
+    d3 = p 3 . (|< orbit 2)
+    d4 = p 4 . (|< orbit 3)
+    d5 = p 5 . (|< orbit 4)
+    d6 = p 6 . (|< orbit 5)
+    d7 = p 7 . (|< orbit 6)
+    d8 = p 8 . (|< orbit 7)
+
+-----------------------------------------------------------------------
+-- iter divides a pattern into a given number of parts, and plays the parts -- in order, but shifting forward through the pattern by one part each cycle.
+
+d1 $ iter 4 $ s "H_SYX H_SUB H_SYX H_SUB" 
+  # n (irand 6) |+ (irand 35)
+  # orbit 0
+
+-- Note that where a pattern repeats over more than one cycle,
+-- it will take longer to repeat. Consider this example of the same
+-- iter 4 applied to the numbers 0 to 7, which have been spread over
+-- two cycles with slow:
+
+
+d1 $ iter 4 $ slow 2 $ n "0 1 2 3 4 5 6 7" 
+  # s "H_SYX"
+  # orbit 0 
+
+-- iter 4 shifts one quarter of a cycle per cycle, but because the pattern
+-- repeats every two cycles, it takes eight cycles to get back to where it started.
+-- chopping up long samples. For example, one that normally loops over eight cycles:
+
+d1 $ iter 4 $ slow 2 $ loopAt 8 $ chop 32 $ s "CL_SA:504 CL_SA:502"
+  # amp 0.7
+  # orbit 0
+
+-- iter' does the same as iter, but in the other direction.
+
+d1 
+  $ iter' 4 
+  $ loopAt 8
+  $ chop 16
+  $ s "CL_SA:132 CL_SA:137"
+  # orbit 0
+
+hush

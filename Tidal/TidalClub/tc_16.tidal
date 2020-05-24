@@ -57,12 +57,93 @@ d2
   # gain 0.5
   # orbit 1
 
+cfmn = pF "cfmin"
+cfmx = pF "cfmax"
+lsf = pF "lsf"
+ldb = pF "ldb"
+
 d2 
-  $ arp "<converge thumbdown>" 
+  $ slow 2
+  $ arp "<updown updown>" 
   $ n "<e'min7'4 e'7sus4>"
-  # octave 3
-  # s "acid309"
+  # octave "<4 5>"
+  # s "bpfsaw"
+  # cfmn 150
+  # cfmx 1600
+  # lsf 800
+  # ldb 12
   # gain 0.7
   # orbit 1
 
+h_a = pF "a"
+h_b = pF "b"
+ts = pF "ts"
+
+d2 
+  $ slow 2
+  $ arp "<down up>" 
+  $ n "<e'min7'4 e'7sus4>"
+  # octave "<4 5>"
+  # s "henonc"
+  # h_a 1.3
+  # h_b 0.1
+  # ts 0.8
+  # gain 0.7
+  # orbit 1
+
+fb = pF "fb"
+
+d2 
+  $ slow 2
+  $ struct "t([6 5],4,<4 [6 0]>)" 
+  $ n (toScale [0.0,1.0,4.0,7.0,9.0] "0 7 5 7 3") |+2
+  # octave 4
+  # s "sinfb"
+  # fb 0.4
+  # gain 0.7
+  # orbit 1
+
+f = pF "f"
+
+d2
+  $ fast 128
+  $ s "ring1"
+  # f 50
+  # gain 0.7
+  # orbit 1
+
+rate = pF "rate"
+pos = pF "pos"
+sus = pF "sus"
+
+d2
+  $ rate "<1 0.5 2>(3,8)"
+  # s "envbplay"
+  # pos 0.6
+  # sus 4
+  # n "c3"
+  # gain 0.7
+  # orbit 1
+
+deg = pF "deg"
+
+d2
+  $ fast 64
+  $ s "scalebplay"
+  # pos 0.8
+  # deg 0 
+  # gain 0.7
+  # orbit 1
+
+f = pF "freq"
+w = pF "width"
+
+ d2
+  $ fast 128
+  $ s "sinfb3"
+  # f 40
+  # w 0.1
+  # fb 1
+  # gain 0.8
+  
 hush

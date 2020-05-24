@@ -1,0 +1,181 @@
+-- tidal club : week 6 lesson 1 
+-- canons with off
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0)
+    d2 = p 2 . (|< orbit 1)
+    d3 = p 3 . (|< orbit 2)
+    d4 = p 4 . (|< orbit 3)
+    d5 = p 5 . (|< orbit 4)
+    d6 = p 6 . (|< orbit 5)
+    d7 = p 7 . (|< orbit 6)
+    d8 = p 8 . (|< orbit 7)
+
+-----------------------------------------------------------------------
+
+cfmin = pF "cfmin"
+cfmax = pF "cfmax"
+lsf = pF "lsf"
+ldb = pF "ldb"
+
+
+d1 $ n "c gs" # s "bpfsaw"
+  # cfmax 1200
+  # cfmin 300
+  # lsf 300
+  # ldb 8
+  # gain 1
+  # orbit 0
+
+-- what does off do ?
+
+d1 
+  $ off 0.25 (# crush 4)
+  $ n "cs4 gs5" # s "bpfsaw"
+  # cfmax 1200
+  # cfmin 300
+  # lsf 300
+  # ldb 8
+  # gain 1
+  # orbit 0
+
+-- 'off' takes three inputs; a number, a function and a pattern.
+-- What it does is leave the original pattern as is, but adds a copy of
+-- it on top. That copy is offset in time by the number given in the first
+-- input - the number. The copy also has the function applied to it.
+-- So we end up with a version of the pattern that 'follows' the original
+-- in time, and is transformed. In this case, it is distorted.
+
+-- Instead of using the bitcrush effect, lets add to the 'n' note, instead.
+
+d1 
+  $ off 0.25 (|+ n 5)
+  $ n "cs4 f5" # s "bpfsaw"
+  # cfmax 1400
+  # cfmin 300
+  # lsf 200
+  # ldb 12
+  # gain 0.9
+  # orbit 0
+
+-- Now we hear a simple 'canon' - it sounds like one voice following another.
+-- We can swap '0.25' for the shorthand 'q', which stands for a *q*uarter of a
+-- cycle.
+
+d1 
+  $ off "q" (|+ n 5)
+  $ n "cs4 bf5" # s "bpfsaw"
+  # cfmax 1400
+  # cfmin 300
+  # lsf 200
+  # ldb 12
+  # gain 0.9
+  # orbit 0
+
+-- Lets change that for 'e', which stands for an eighth of a cycle.
+
+d1 
+  $ off "e" (|+ n 7)
+  $ n "cs4 gs5" # s "bpfsaw"
+  # cfmax 1400
+  # cfmin 300
+  # lsf 200
+  # ldb 12
+  # gain 0.9
+  # orbit 0
+
+-- Here's the current list of shorthands available:
+-- w = 1 (whole)
+-- h = 0.5 (half)
+-- q = 0.25 (quarter)
+-- e = 0.125 (eighth)
+-- s = 0.0624 (sixteenth)
+-- t = 1/3 (third)
+-- f = 0.2 (fifth)
+
+-- You can have multiples of these shorthands by prefixing them with a
+-- number, for example:
+
+d1 
+  $ off "2f" (|+ n 5)
+  $ n "cs4 gs5 bf5 f5" # s "bpfsaw"
+  # cfmax 1400
+  # cfmin 300
+  # lsf 200
+  # ldb 12
+  # gain 0.9
+  # orbit 0
+
+-- For a 32nd, you could do 0.5s:
+
+d1 
+  $ off "0.5s" (|+ n 7)
+  $ n "cs4 gs5 bf5 f5" # s "bpfsaw"
+  # cfmax 1400
+  # cfmin 300
+  # lsf 200
+  # ldb 12
+  # gain 0.9
+  # orbit 0
+
+-- Let's try with a more complex pattern:
+
+d1 
+  $ off "e" (|+ n 5) 
+  $ n (slow 2 "cs4(3,8) gs5(3,8) bf4(5,8) f5*2")
+  # sound "bpfsaw"
+  # cfmax 1400
+  # cfmin 300
+  # lsf 200
+  # ldb 12
+  # gain 0.9
+  # orbit 0
+
+-- The notes are getting very short now, to match the shorter 'step' sizes
+-- within this denser pattern. To make them proportionally longer we can
+-- use legato, for example to make them all twice as long:
+
+d1 
+  $ off "e" (|+ n 5) 
+  $ n (slow 2 "cs4(3,8) gs5(3,8) bf4(5,8) f5*2")
+  # sound "bpfsaw"
+  # cfmax 1400
+  # cfmin 300
+  # lsf 320
+  # ldb 12
+  # gain 0.9
+  # legato 2
+  # orbit 0
+
+-- Or alternatively we can use sustain for a duration in seconds:
+
+d1 
+  $ off "h" (|+ n 7) 
+  $ n (slow 4 "cs4(3,8) gs5(3,8) bf4(5,8) f5*2")
+  # sound "bpfsaw"
+  # cfmax 1400
+  # cfmin 300
+  # lsf 320
+  # ldb 12
+  # gain 0.9
+  # sustain 2.5
+  # orbit 0
+
+-- We can pattern the 'n' of the transformed version of the pattern:
+
+d1 
+  $ off "h" (|+ n "<7 12 -5>") 
+  $ n (slow 4 "cs4(3,8) gs5(3,8) bf4(5,8) f5*2")
+  # sound "bpfsaw"
+  # cfmax 1400
+  # cfmin 300
+  # lsf 320
+  # ldb 12
+  # gain 0.9
+  # sustain 2
+  # orbit 0
+
+
+
+
+hush

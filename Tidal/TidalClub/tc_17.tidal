@@ -164,7 +164,7 @@ d1
 -- We can pattern the 'n' of the transformed version of the pattern:
 
 d1 
-  $ off "h" (|+ n "<7 12 -5>") 
+  $ off "q" (|+ n "<7 12 -5>") 
   $ n (slow 4 "cs4(3,8) gs5(3,8) bf4(5,8) f5*2")
   # sound "bpfsaw"
   # cfmax 1400
@@ -175,7 +175,51 @@ d1
   # sustain 2
   # orbit 0
 
+-- In the above the 7 - 12 - -5 pattern repeats every third cycle, and the
+-- c a f e one repeats every two cycles (due to the slow 2). The combination
+-- of (or interference between) them repeats lasts six cycles.
 
+-- Lets add another 'off', this time offset by a sixteenth of a cycle, and
+-- dropping the octave.
+
+d1 
+  $ off "s" (|+ n (-12)) 
+  $ off "e" (|+ n "<7 12 -5>") 
+  $ n (slow 4 "cs4(3,8) gs5(3,8) bf4(5,8) f5*2")
+  # sound "bpfsaw"
+  # cfmax 1400
+  # cfmin 300
+  # lsf 500
+  # ldb 6
+  # gain 0.9
+  # sustain 1.5
+  # orbit 0
+
+-- Note that negative numbers have to be in parenthesis, otherwise Haskell
+-- gets confused and things you're trying to do a subtraction!
+-- This isn't the case in the mininotation, so an alternative is to put
+-- all negative numbers in double quotes:
+
+d1 
+  $ off "s" (|+ note "-12") 
+  $ off "e" (|+ note "<7 12 -5>") 
+  $ note (slow 2 "cs4 gs5 bf4 f5")
+  # sound "CL_SL:29"
+  # gain 0.7
+  # sustain 2
+  # orbit 0
+
+-- The same principles can be applied to percussion, for example:
+
+d1 
+  $ off "<s q e>" (# squiz 2) 
+  $ n "{0 1 [~ 2] 3*2, 5 ~ 3 6 4}"
+  # sound "TR_HAT"
+  # sustain 0.5
+  # orbit 0
+
+-- Notice the offset is patterned in the above, so the 'following'
+-- pattern shifts forwards and backwards.
 
 
 hush

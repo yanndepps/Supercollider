@@ -1,0 +1,123 @@
+-- tidal club : function of the week 02
+-- tidal 1.5.0 release
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0)
+    d2 = p 2 . (|< orbit 1)
+    d3 = p 3 . (|< orbit 2)
+    d4 = p 4 . (|< orbit 3)
+    d5 = p 5 . (|< orbit 4)
+    d6 = p 6 . (|< orbit 5)
+    d7 = p 7 . (|< orbit 6)
+    d8 = p 8 . (|< orbit 7)
+
+-----------------------------------------------------------------------
+-- ** Export drawLineSz
+
+drawLine "x(3,8)"
+
+drawLineSz 80 "x(3,8)"
+
+d2 $ asccolour "red" # ascspeed "<0 13>" # s "<HBH:303 HBH:66>"
+  # orbit 1
+
+-- ** tidal-parse additions (bite, splice, pickF, select, squeeze; fixed slice)
+-- Now usable in 'minitidal' here: https://intramuros.mcmaster.ca/
+-- ** New, more efficient pseudorandom number generator
+
+d1 $ sound "TR_HAT:0*16" # speed (rand + 1)
+  # gain 0.7
+  # sustain 0.1
+  # orbit 0
+
+-- ** Pattern first someCyclesBy param
+
+d1 
+  $ someCyclesBy "<0 1>" (# crush 3) 
+  $ sound "HBH:227*8"
+  # gain 0.7
+  # sustain 0.25
+  # orbit 0
+
+d1 
+  $ someCyclesBy "<0.1 0.9>" (# crush 3) 
+  $ sound "HBH:238*8"
+  # note "g4"
+  # gain 0.7
+  # sustain 0.25
+  # orbit 0
+
+-- Name a pattern of strings with setS
+
+setS "hello" $ chunk 4 (fast 2) "HBH(3,8) HBH*2"
+
+-- Name a pattern of (floating point) numbers with setF
+
+setF "bing" $ iter 4 "32 30 35 38*2"
+
+-- Name a pattern of boolean (binary) values with setB
+
+setB "metre" $ "t(3,8,<0 2>)"
+
+-- The named patterns can then be used in mininotation prefixed by ^
+
+d1 $ struct "^metre" $ n "^bing" # sound "HBH:245 ^hello"
+  # gain 0.7
+  # sustain 0.25
+  # orbit 0
+
+-- You can use the same name in more than one pattern
+
+d2 $ n (every 3 (fast 2) "^bing") # sound "CL_SA"
+  # gain 0.6
+  # sustain 0.25
+  # orbit 1
+
+-- Then change the named pattern and all those using it will update
+
+-- ** Pattern first parameter of splice
+
+d1 $ splice "8 16 4" "0 .. 7" $ sound "CL_LO:62"
+  # gain 0.6
+  # orbit 0
+
+-- Pattern first parameter of chew
+
+d1 $ chew "4 16" "3 .. 7" $ n "62 .. 67" # sound "CL_LO"
+  # gain 0.6
+  # sustain 0.5
+  # orbit 0
+
+-- Add'x' fraction alias for 1/6
+
+d1 $ n "0 .. 7" # sound "TR_HAT"
+  # gain 0.7
+  # delay 0.6
+  # delayt "x"
+  # delayfb 0.5
+  # orbit 0
+
+-- add dfb alias for delayfeedback param, dt for delaytime
+
+d1 $ n "4 .. 7" # sound "TR_SNA"
+  # gain 0.7
+  # delay 0.6
+  # dt "x"
+  # dfb 0.5
+  # orbit 0
+
+-- add unmuteAll and only to BootTidal.hs
+
+hush
+
+--code for sharing a random seed:
+
+do x <- randomRIO (0, 9999)
+   setR "seed" $ pure $ toRational x
+
+d1 
+  $ (loopFirst $ ("^seed") <~ (sound "CL_TH:23*8" # speed rand))
+  # squiz 3 
+  # room 0.2 # sz 0.6
+  # orbit 0
+

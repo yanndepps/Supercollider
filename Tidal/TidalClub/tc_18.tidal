@@ -1,0 +1,127 @@
+-- tidal club : week 6 lesson 2 
+-- musical scales
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0)
+    d2 = p 2 . (|< orbit 1)
+    d3 = p 3 . (|< orbit 2)
+    d4 = p 4 . (|< orbit 3)
+    d5 = p 5 . (|< orbit 4)
+    d6 = p 6 . (|< orbit 5)
+    d7 = p 7 . (|< orbit 6)
+    d8 = p 8 . (|< orbit 7)
+
+-----------------------------------------------------------------------
+-- To use a different scale, we can use the "scale" function for converting
+-- numbers from a different scale to 12-TET.
+
+d1 $ note (scale "ritusen" $ "0 [7 2] 3 2" |+ (irand 3))
+  # sound "HBH:8"
+  # sustain 1
+  # orbit 0
+
+-- There's quite a few available:
+
+scaleList
+
+-- It's fun to use waveforms to pick notes from a scale. For example,
+-- use a smooth sinewave to select notes from a minor scale:
+
+d1 $ segment 8 
+  $ note (scale "minor" $ floor <$> (range 2 6 sine))
+  # sound "supersaw"
+  # legato 1
+  # lpf 1000 # lpq 0.1
+  # orbit 0
+
+-- Remember that waveforms don't have structure, so don't produce
+-- events until you use something like 'segment', which in the example
+-- above picks 16 notes per cycle.
+
+-- There's also a complication that waveforms produce 'floating point'
+-- decimal numbers, but scale only accepts 'integers' - whole numbers.
+-- The 'floor <$>' bit converts from decimal to whole numbers.  The
+-- "range 0 14" bit converts from the usual range of 0 to 1 to the
+-- given range of 0 to 14.
+
+-- We can make this more exciting by patterning the range:
+
+d1 $ segment 16 $ n (scale "minor" $ floor <$> (range "<0 4 -8>" "<12 14 13 -13>" sine))
+  # sound "HBH:84"
+  # legato 1
+  # lpf 1000 # lpq 0.1
+  # orbit 0
+
+-- And maybe even more exciting by using 'struct' to pattern the
+-- rhythm using Euclidean syntax.. Taking the opportunity to pattern
+-- the lpf (low pass filter) as well:
+
+d1 $ struct "t(<9 7>,16)"
+  $ n (scale "minor"
+        $ floor <$> (range "<0 4 -8>" "<12 14 13 -13>" sine)
+      )
+  # sound "supersaw"
+  # legato 0.5
+  # lpf (range 400 5000 saw) # lpq 0.1
+  # orbit 0
+
+-- Using scales in this way allows us to play with movement while
+-- still making tunes that make 'sense'. Here I add together
+-- waveforms to create some longer-form movement:
+
+d1 $ segment 16 $
+  n (scale "minor"
+      $ floor <$> (slow 2 $ (slow 2 sine + slow 3 cosine) * "<6 -3>"
+                  )
+    )
+  # sound "supersaw"
+  # legato 0.5
+  # lpf (range 400 5000 saw) # lpq 0.1
+  # orbit 0
+
+-- Back with the struct:
+
+d1 $ struct "t(<9 7>,16)" $
+  n (scale "minor"
+      $ floor <$> (slow 2 $ (slow 2 sine + slow 3 cosine) * "<6 -3>"
+                  )
+    )
+  # sound "supersaw"
+  # legato 0.5
+  # lpf (range 400 5000 saw) # lpq 0.1
+
+-- And with an 'off' going up an octave:
+
+d1 $ off 0.25 (|+ n 12) $ struct "t(<9 7>,16)" $ segment 16 $
+  n (scale "minor"
+      $ floor <$> (slow 2 $ (slow 2 sine + slow 3 cosine :: Pattern Double) * "<6 -3>"
+                  )
+    )
+  # sound "supersaw"
+  # legato 0.5
+  # lpf (range 400 5000 saw) # lpq 0.1
+
+-- Note that in the above the 'off' is outside of the 'scale'
+-- function, So we're back in 12-TET land, so add '12' to go up an
+-- octave, rather than the number of notes in the minor scale (7)
+
+d1 $ segment 16 $ note (scale "minor"
+                     $ floor <$> (range 0 14 sine :: Pattern Double)
+                    )
+  # sound "HBH:10"
+  # legato 0.5
+  # lpf 1000 # lpq 0.1
+  # orbit 0
+
+
+d1 $ off 0.25 (|+ note 12) $ struct "t(<9 7>,16)" $ segment 16 $
+  note (scale "minor"
+      $ floor <$> (slow 2 $ (slow 2 sine + slow 3 cosine :: Pattern Double) * "<6 -3>"
+                  )
+    )
+  # sound "SC:13"
+  # legato 1
+  # lpf (range 400 5000 saw) # lpq 0.1
+  # orbit 0
+
+hush

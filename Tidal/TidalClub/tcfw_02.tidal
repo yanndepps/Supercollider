@@ -121,3 +121,46 @@ d1
   # room 0.2 # sz 0.6
   # orbit 0
 
+
+setcps (160/120/2)
+
+-- circling the A L G O C L A V E
+
+-- #by bernard gray
+
+ d1 $ note " < [0 [~ 0] ~ 0] [~ 0 0 ~] >" # s "TR_HAT:0"
+  # legato 1
+  # orbit 0
+
+-- writing ethan hein's supplied binary pattern out with rests:
+
+d1 $ fast 8 $ note " < 0 ~ ~ 0 ~ ~ 0 ~ ~ ~ 0 ~ 0 ~ ~ ~ > " # s "TR_HAT:0"
+
+-- less typing ~ ~ ~ waves with "@", thanks to kindohm, check:
+-- https://youtu.be/SDR3A82Ucdg?t=1268
+
+d1 $ fast 8 $ n " < 0@3 0@3 0@4 0@2 0@4 > " # s "TR_HAT:1"
+  # legato 1
+  # orbit 0
+
+
+-- from ethan hein's blog
+-- https://www.ethanhein.com/wp/2013/why-is-son-clave-so-awesome/
+
+d1 $ fast 8 $ s "TR_SNA:0" # gain "<1 0 0 1 0 0 1 0 0 0 1 0 1 0 0 0>"
+  # legato 1
+  # orbit 0
+
+d1 $ slow 2 $ s "TR_HAT:1(5,16)"
+  # legato 1
+  # orbit 0
+
+-- here's (5,16) written out in a gain pattern:
+
+d1 $ fast 8 $ s "TR_HAT:3" # gain "<1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 0>"
+
+-- "The beats in the resulting rhythms are as equidistant as possible", see:
+-- https://en.wikipedia.org/wiki/Euclidean_rhythm
+
+hush
+

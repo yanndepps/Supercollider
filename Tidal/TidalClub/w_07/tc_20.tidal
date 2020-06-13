@@ -48,7 +48,7 @@ d1 $ overlay (fast "1 2 3 4" $ sound "HBH:45" # gain 0.9 # legato 1 # orbit 0)
 
 d1 $ stack [(fast "1 2 3 4" $ s "HBH:45" # gain 0.9 # legato 1 # orbit 0),
             (s "HBH:4(3,8)" # speed 2 # gain 0.7 # legato 1 # orbit 1),
-            s "[HBH:92(5,8), HBH:83(7,16,3)]" # gain 0.4 # legato 1 # orbit 2
+            s "[HBH:92(5,8), HBH:113(7,16,3)]" # gain 0.6 # legato 1 # orbit 2
            ]
 
 -- 

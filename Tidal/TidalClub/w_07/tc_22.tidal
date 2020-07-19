@@ -1,0 +1,44 @@
+-- tidal club : week 7 lesson 3 
+-- composing tracks with the ur function 
+----------------------------------------------------------------------- 
+-- 7.20 paused
+
+let d1 = p 1 . (|< orbit 0)
+    d2 = p 2 . (|< orbit 1)
+    d3 = p 3 . (|< orbit 2)
+    d4 = p 4 . (|< orbit 3)
+    d5 = p 5 . (|< orbit 4)
+    d6 = p 6 . (|< orbit 5)
+    d7 = p 7 . (|< orbit 6)
+    d8 = p 8 . (|< orbit 7)
+
+-----------------------------------------------------------------------
+
+d1 $ ur 16 "atypo" 
+  [( "atypo", s "HBH:104 [~ HBH:105] HBH:104 HBH:105")]
+  []
+  # legato 1
+  # speed 1.0
+  # delay 0.8 # dt "t" # dfb 0.4
+  # orbit 0
+
+-----------------------------------------------------------------------
+
+d1 $ ur 4 "[atypo atopy, bass]"  
+  [( "atypo", s "HBH:104 [~ HBH:105] HBH:104 HBH:105" 
+    # legato 1
+    # speed "[1.0 1.0]"
+    # delay 0.8 # dt "t" # dfb 0.4
+    # orbit 0
+  ),
+   ( "atopy", s "HBH:23 HBH:22" 
+    # legato 1
+    # speed "[1.0 1.0]"
+    # delay 0.8 # dt "t" # dfb 0.4
+    # orbit 1
+    )
+  ]
+  []
+
+
+hush

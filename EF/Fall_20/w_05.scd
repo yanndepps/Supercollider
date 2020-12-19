@@ -1,3 +1,6 @@
+// register a keyboard macro using the following command: :qa vap C-c C-c q.
+// the macro is stored in @a. Type @a to summon it.
+
 s.boot;
 
 s.quit;

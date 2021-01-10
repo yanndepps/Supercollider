@@ -11,7 +11,7 @@ Using Blackhole 16 channels as outputs
 s.options.numBuffers = 1024 * 512; // increase this if you need to load more samples
 s.options.memSize = 8192 * 64; // increase this if you get "alloc failed" messages
 s.options.maxNodes = 1024 * 32; // increase this if you are getting drop outs and the message "too many nodes"
-s.options.outDevice_("BlackHole 16ch");
+//s.options.outDevice_("BlackHole 16ch");
 //s.options.outDevice_("Built-in Output");
 s.options.numOutputBusChannels = 16; // set this to your hardware output channel size, if necessary
 s.options.numInputBusChannels = 2; // set this to your hardware output channel size, if necessary
@@ -19,7 +19,7 @@ s.options.numInputBusChannels = 2; // set this to your hardware output channel s
 s.waitForBoot {
 	~dirt = SuperDirt(2, s); // two output channels, increase if you want to pan across more channels
 	//~dirt.loadSoundFiles;   // load samples (path containing a wildcard can be passed in)
-	~dirt.loadSoundFiles("/Users/yanndepps/Documents/Musik/samplz/Dirts/*");
+	~dirt.loadSoundFiles("/home/depps/Musique/Samplz/Dirts/CL_FL/");
 	//~dirt.postSampleInfo;
 	// s.sync; // optionally: wait for samples to be read
 	~dirt.start(57120, [0, 2, 4, 6, 8, 12, 14]);   // start listening on port 57120, create two busses each sending audio to channel 0

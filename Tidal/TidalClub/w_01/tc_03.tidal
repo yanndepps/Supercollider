@@ -19,7 +19,7 @@ let d1 = p 1 . (|< orbit 0)
 
 -----------------------------------------------------------------------
 
-d1 $ s "H_281:6(5,7)" # legato 1.25 # orbit 0
+d1 $ s "CL_FL:67(4,7)" # legato 2 # orbit 0
 
 -- drawLine $ "x(5,7)"
 
@@ -47,15 +47,16 @@ d1 $ s "H_281:6(5,7)" # legato 1.25 # orbit 0
 -- (11,24,14) : A rhythm necklace of the Aka Pygmies of Central Africa.
 -- (13,24,5) : Another rhythm necklace of the Aka Pygmies of the upper Sangha.
 
-d1 $ s "H_281:14(<3 5>,7)"
-  # legato 1
+d1 $ s "CL_FL:230(<3 5>,7)"
+  # note "0 3 0"
+  # legato 2
   # orbit 0
 
-d1 $ s "H_281:38(7,8)"
-  # note "0 3 0"
-  # legato 1
-  # gain 0.7
-  # orbit 0
+d2 $ s "CL_FL:283(7,8)"
+  # note "0 3 -2"
+  # legato 1.5
+  # gain 0.9
+  # orbit 1
 
 -- the third parameter will shift the pattern
 

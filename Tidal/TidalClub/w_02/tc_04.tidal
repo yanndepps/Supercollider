@@ -16,26 +16,27 @@ let d1 = p 1 . (|< orbit 0)
 -- vowel is a filter which adds a vowel sound
 -- try a, e, i, o and u
 
-d1 $ n "0 1 0 [2 4] 2 4 1*2 3" # s "H_GUI" # legato 1
+d1 $ n "0 1 0 [2 4] 2 4 1*2 3" # s "HBH" # legato 1
 
-d1 $ n "0 1 0 [2 4] 2 4 1*2 3" # s "H_GUI" # legato 1 # vowel "o"
+d1 $ n "0 39 0 [2 42] 2 4 1*2 3" # s "HBH" # legato 1 # vowel "o"
+
 
 -- We can use the mini notation to create sequences of effects too:
 
-d1 $ n "0 1 0 [2 4] 2 ~ 1*2 3" # s "H_GUI" # legato 1 # vowel "a o e"
+d1 $ n "0 1 0 [2 4] 2 ~ 1*2 3" # s "HBH" # legato 1 # vowel "a o e"
 
 -- Tidal does its best to map patterns across to one another.
 -- You can add a non-vowel letter to pause the vowel effect
 
-d1 $ n "0 1 0 [2 4] 2 ~ 1*2 3" # s "H_GUI" # legato 1 # vowel "i p"
+d1 $ n "0 1 0 [2 4] 2 ~ 1*2 3" # s "HBH" # legato 1 # vowel "i p"
 
 -- 'squiz' is a nice distortion effect
 
-d1 $ n "0 1 0 [2 4] 2 ~ 1*2 3" # s "H_GUI" # legato 1 # squiz "4 1 0 3"
+d1 $ n "0 1 0 [2 4] 2 ~ 278*2 375" # s "HBH" # legato 1 # squiz "4 1 0 3"
 
 -- With '#' structure comes from the left - try swapping the parameters around
 
-d1 $ squiz "4 1 0 3" # n "0 1 0 [2 4] 2 ~ 1*2 3" # s "H_GUI" # legato 1
+d1 $ squiz "4 1 0 8" # n "0 1 0 [2 4] 2 ~ 1*2 3" # s "HBH" # legato 1
 
 -- Now there are only four sounds per cycle, because there's four in the leftmost
 -- 'squiz' pattern
@@ -55,7 +56,7 @@ d1 $ s "[H_ISO:18*16, H_ISO:21 H_ISO:32 [~ H_ISO:32] H_ISO:4]"
 -- speed changes the speed of playback,
 -- e.g. 2 = play the sample twice as fast - which moves the note up an octave
 
-d1 $ s "[H_ISO:30, H_ISO:40 H_ISO:41 H_ISO:42 H_ISO:43]"
+d1 $ s "[HBH:30, HBH:40 HBH:41 HBH:42 HBH:43]"
   # legato 1
   # speed "1 1.5 2 0.5"
   # gain "0.7 0.8 0.8 0.9 0.9"
@@ -63,14 +64,14 @@ d1 $ s "[H_ISO:30, H_ISO:40 H_ISO:41 H_ISO:42 H_ISO:43]"
 
 -- Or we can take the pattern from the speed parameter
 
-d1 $ speed "1*2 2*2 4*6" # s "H_ISO:44" # legato 1 # orbit 0
+d1 $ speed "1*2 2*2 4*12" # s "HBH:5" # legato 1 # orbit 0
 
  -- pan allows us to create stereo effects - 0 = left, 0.5 = middle, 1 = right
 
-d1 $ s "H_ISO:42 H_ISO:43 H_ISO:42" # legato 1 # pan "0 0.5 1" # orbit 0
+d1 $ s "HBH:42 HBH:43 HBH:51" # legato 1 # pan "0 0.5 1" # orbit 0
 
 -- shape adds distortion (but be careful - it also makes the sound much louder)
 
-d1 $ s "H_ISO:40 H_ISO:36" # legato 1 # shape "0 0.98" # orbit 0
+d1 $ s "HBH:40 HBH:36" # legato 1 # shape "0 0.98" # orbit 0
 
 hush

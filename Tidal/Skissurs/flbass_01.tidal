@@ -1,0 +1,23 @@
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0)
+    d2 = p 2 . (|< orbit 1)
+    d3 = p 3 . (|< orbit 2)
+    d4 = p 4 . (|< orbit 3)
+    d5 = p 5 . (|< orbit 4)
+    d6 = p 6 . (|< orbit 5)
+    d7 = p 7 . (|< orbit 6)
+    d8 = p 8 . (|< orbit 7)
+
+-----------------------------------------------------------------------
+
+d1 $ stack [
+    struct "t*4" $ s "h2ogmcy:2" # nudge (range "-0.02" 0.05 (slow 32 sine)) # cutoff (range 6000 12000 (slow 7 sine)), struct "t" $ s "h2ogmhh:3", whenmod 8 6 (ghost) $ struct "~ t" $ s "h2ogmsn:2"
+] # room 0.4 # gain 0.8 # orbit 0
+
+d2 $ stack [
+    note (scale "ionian" "<0!4 <-2 3> <-4 [5 4]>>") # s "flbass" |< n "<0 ~ 0 ~ 0 [3 0]>", whenmod 16 14 (off 0.125 (# n "13")) $ 
+    note "[5 <4!3 <[4 9]!3 [4 9 16]>>]*2" # s "flbass:12"
+] # room 0.4 # sz 0.4 # gain 0.7 # orbit 1
+
+hush

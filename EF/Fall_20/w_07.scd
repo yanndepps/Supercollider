@@ -22,11 +22,9 @@ s.plotTree;
 // a buffer only contains floats.
 // most often they are used to hold audio samples.
 ~oval_1 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/OVAL/Scatter.wav");
-~oval_2 = Buffer.read(s, "./Musique/Samplz/Dirts/OVAL/Rhitmik.wav");
-~oval_3 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/OVAL/Pinkertonn.wav");
 
 // did it work ?
-~oval_3.play;
+~oval_1.play;
 
 // how many channels does have our sound file ?
 ~oval_1.numChannels;
@@ -61,7 +59,7 @@ s.plotTree;
 ~oval_1.bufnum;
 
 // free a buffer from the server :
-~oval_3.free;
+~oval_1.free;
 
 // free all buffers
 Buffer.freeAll;
@@ -71,7 +69,7 @@ Buffer.freeAll;
 
 // ~path = PathName.new(thisProcess.nowExecutingPath) +/+ "./audio/00015_HBH.wav";
 
-~oval_1 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/HBH/00003_HBH.wav");
+~oval_1 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/HBH/00033_HBH.wav");
 ~oval_2 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/HBH/00013_HBH.wav");
 ~oval_3 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/HBH/00094_HBH.wav");
 
@@ -80,7 +78,9 @@ Buffer.freeAll;
 ~oval_1.play;
 
 // show if there is sth in the buffer :
-~oval_2.plot;
+~oval_1.plot;
+
+~oval_1.numFrames;
 
 // ---
 // unit generators : PlayBuf & BufRd
@@ -90,7 +90,7 @@ Buffer.freeAll;
 	var sig;
 	sig = PlayBuf.ar(
 		2,
-		~oval_2.bufnum,
+		~oval_1.bufnum,
 		1, // 0.5 -> an octave down
 		doneAction:2
 	);
@@ -109,8 +109,8 @@ Buffer.freeAll;
 	var sig;
 	sig = PlayBuf.ar(
 		2,
-		~oval_2.bufnum,
-		BufRateScale.ir(~oval_2.bufnum).poll; // scale it to the correct rate
+		~oval_1.bufnum,
+		BufRateScale.ir(~oval_1.bufnum), // scale it to the correct rate
 		doneAction:2
 	);
 	sig = sig * 0.5;
@@ -124,8 +124,8 @@ Buffer.freeAll;
 	var sig;
 	sig = PlayBuf.ar(
 		2,
-		~oval_2.bufnum,
-		BufRateScale.ir(~oval_2.bufnum) * 0.5; // multiply it by the rate wanted 
+		~oval_1.bufnum,
+		BufRateScale.ir(~oval_1.bufnum) * 0.5, // multiply it by the rate wanted 
 		doneAction:2
 	);
 	sig = sig * 0.5;
@@ -142,8 +142,8 @@ Buffer.freeAll;
 	var sig;
 	sig = PlayBuf.ar(
 		2,
-		~oval_2.bufnum,
-		BufRateScale.ir(~oval_2.bufnum) * 1.midiratio; 
+		~oval_1.bufnum,
+		BufRateScale.ir(~oval_1.bufnum) * 1.midiratio, 
 		doneAction:2
 	);
 	sig = sig * 0.5;
@@ -158,10 +158,10 @@ x = {
 	var sig;
 	sig = PlayBuf.ar(
 		2,
-		~oval_2.bufnum,
-		BufRateScale.ir(~oval_2.bufnum) * 0.midiratio; 
+		~oval_1.bufnum,
+		BufRateScale.ir(~oval_1.bufnum) * 0.midiratio, 
 		t_trig,
-		13000,
+		53000,
 		doneAction:0
 	);
 	sig = sig * 0.5;
@@ -185,12 +185,12 @@ x = {
 	var sig;
 	sig = PlayBuf.ar(
 		2,
-		~oval_2.bufnum,
-		BufRateScale.ir(~oval_2.bufnum) * 0.midiratio; 
+		~oval_1.bufnum,
+		BufRateScale.ir(~oval_1.bufnum) * 0.midiratio, 
 		Impulse.kr(4), // 4 impulses per second
 		// turn it into an oscillator
 		// Impulse.ar(30),
-		13000, // drastically change the timbre by cycling to a different chunk of audio
+		3000, // drastically change the timbre by cycling to a different chunk of audio
 		doneAction:0
 	);
 	sig = sig * 0.5;
@@ -206,10 +206,10 @@ a = a.add(
 		var sig;
 		sig = PlayBuf.ar(
 			2,
-			~oval_2.bufnum,
-			BufRateScale.ir(~oval_2.bufnum) * 0.midiratio; 
+			~oval_1.bufnum,
+			BufRateScale.ir(~oval_1.bufnum) * 0.midiratio,
+			300, 
 			loop:1,
-			13000, 
 			doneAction:0 // when loop is 1, doneAction is ignored
 		);
 		sig = sig * 0.5;
@@ -226,10 +226,9 @@ x =	{
 	var sig;
 	sig = PlayBuf.ar(
 		2,
-		~oval_2.bufnum,
-		BufRateScale.ir(~oval_2.bufnum) * 0.midiratio; 
-		loop,
-		13000, 
+		~oval_1.bufnum,
+		BufRateScale.ir(~oval_1.bufnum) * 5.midiratio,
+		loop:loop,
 		doneAction:2 // doneAction is triggered if we set the loop arg to 0 
 	);
 	sig = sig * 0.5;

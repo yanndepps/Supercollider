@@ -55,9 +55,9 @@ x.free;
 // ---
 
 (
-~oval_1 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/HBH/00033_HBH.wav");
+~oval_1 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/HBH/00233_HBH.wav");
 ~oval_2 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/HBH/00213_HBH.wav");
-~oval_3 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/HBH/00094_HBH.wav");
+~oval_3 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/HBH/00294_HBH.wav");
 )
 
 ~oval_1.bufnum;
@@ -116,8 +116,8 @@ x.free;
 x = 5.collect({
   arg n;
   Synth.new(\pb, [
-    \buf, ~oval_3, 
-    \spos, ~oval_3.numFrames * 0.0, 
+    \buf, ~oval_1, 
+    \spos, ~oval_1.numFrames * 0.9, 
     \loop, 1,
     \rate, ( n/10 ).midiratio,
     \amp, 0.2
@@ -133,7 +133,7 @@ x.do({ arg n; n.free });
 r = Routine.new({
   loop{
     Synth.new(\pb, [
-      \buf, [ ~oval_3, ~oval_2 ].choose, 
+      \buf, [ ~oval_3, ~oval_1 ].choose, 
       \spos, 0, 
       \loop, 0,
       \da, 2,
@@ -190,20 +190,20 @@ r = Routine.new({
   loop{
     Synth.new(\pbenv, [
       \buf, ~oval_3, 
-      \spos, rrand( ~oval_3.numFrames * 0.2, ~oval_3.numFrames * 0.3 ), 
-      \atk, 0.001, // 0.2
+      \spos, rrand( ~oval_3.numFrames * 0.4, ~oval_3.numFrames * 0.5 ), 
+      \atk, 0.2, // 0.2
       \sus, 0,
-      \rel, 0.08, // 0.2
+      \rel, 0.2, // 0.2
       \rate, semi.midiratio,
       \amp, 0.2
     ]);
-    semi = semi + 1;
-    if (
-      semi > 0,
-      { semi = rrand( -12, -2 ) }
-    );
-    wait([ 0.4, 0.2, 0.1 ].choose);
-    // wait(rrand(0.05, 0.3));
+    // semi = semi + 1;
+    // if (
+    //   semi > 0,
+    //   { semi = rrand( -12, -2 ) }
+    // );
+    // wait([ 0.4, 0.2, 0.1 ].choose);
+    wait(rrand(0.05, 0.3));
   }
 }).play;
 )

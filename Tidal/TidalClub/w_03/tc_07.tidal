@@ -23,20 +23,22 @@ d1 $ note (scale "minor" $ snowball 4 (+) (slow 2) $ (run 3))
 -- function as one of its inputs.
 -- Let's say we had a simple pattern like this:
 
-d1 $ s "H_ISO:40 H_ISO:23 ~ H_ISO:4"
+d1 $ s "HBH:40 HBH:88 ~ HBH:43"
   # legato 1
   # orbit 0
 
+hush
+
 -- ... and we wanted to speed it up like this:
 
-d1 $ fast 2 $ s "H_ISO:40 H_ISO:23 ~ H_ISO:4"
+d1 $ fast 2 $ s "HBH:420 HBH:403 ~ HBH:404"
   # legato 1
   # orbit 0
 
 -- ... but only one cycle out of three.
 -- Here's how we'd use 'every' to do that:
 
-d1 $ every 3 (fast 2) $ s "H_ISO:40 H_ISO:23 ~ H_ISO:4"
+d1 $ every 3 (fast 2) $ s "HBH:420 HBH:403 ~ HBH:404"
   # legato 1
   # orbit 0
 
@@ -51,13 +53,15 @@ d1 $ every 3 (fast 2) $ s "H_ISO:40 H_ISO:23 ~ H_ISO:4"
 -- input (and returns a transformed version as output). For example,
 -- we can use 'hurry' instead of fast:
 
-d1 $ every 3 (hurry 2) $ s "H_ISO:33 H_ISO:34 [~ H_ISO:10] [H_ISO:11 H_ISO:10*2]"
+hush
+
+d1 $ every 3 (hurry 2) $ s "HBH:33 HBH:34 [~ HBH:30] [HBH:38 HBH:30*2]"
   # legato 1
   # orbit 0
 
 -- Or use 'rev':
 
-d1 $ every 3 (rev) $ s "H_ISO:33 H_ISO:34 [~ H_ISO:10] [H_ISO:11 H_ISO:10*2]"
+d1 $ every 3 (rev) $ s "HBH:113 HBH:114 [~ HBH:110] [HBH:111 HBH:110*2]"
   # legato 1
   # orbit 0
 
@@ -66,17 +70,19 @@ d1 $ every 3 (rev) $ s "H_ISO:33 H_ISO:34 [~ H_ISO:10] [H_ISO:11 H_ISO:10*2]"
 -- Here's a trick with using effects as functions..
 -- Lets look at this:
 
-d1 $ s "H_MOO:21 H_MOO:10 [~ H_MOO:21] [H_ISO:19 H_MOO:21*2]"
+d1 $ s "HBH:21 HBH:10 [~ HBH:21] [HBH:19 HBH:21*2]"
   # squiz 5
   # legato 1
   # orbit 0
+
+hush
 
 
 -- We can treat the '# squiz 5' bit as a function. If you think about
 -- it, it does something to a pattern, just like 'fast 2' does.
 
 
-d1 $ every 3 (# squiz 5) $ s "H_MOO:22 H_MOO:23 [~ H_ELE:39*2]"
+d1 $ every 3 (# squiz 5) $ s "HBH:22 HBH:23 [~ HBH:39*2]"
   # legato 1
   # orbit 0
 
@@ -84,16 +90,18 @@ d1 $ every 3 (# squiz 5) $ s "H_MOO:22 H_MOO:23 [~ H_ELE:39*2]"
 -- different periods for their first input, to create longer form
 -- variety:
 
-d1 $ every 2 (hurry 2) $ every 3 (# squiz 5) $ s "H_ELE:1 [~ H_ELE:10]"
+d1 $ every 2 (hurry 2) $ every 3 (# squiz 5) $ s "HBH:22 [~ HBH:23]"
   # legato 1
   # orbit 0
 
 -- keep going..
 
 d1 $ every 4 rev $ every 2 (hurry 2) $ every 3 (# squiz 5)
-  $ s "POOL:3 [~ POOL:2]"
+  $ s "HBH:23 [~ HBH:22]"
   # legato 1
   # orbit 0
+
+hush
 
 -- In Tidal, the pattern that a function is manipulating is generally
 -- its final input, which makes it easy to 'chain together' functions

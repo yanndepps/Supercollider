@@ -1,0 +1,87 @@
+-- skissur_02 
+-- tidal 1.7 releae
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0) 
+    d2 = p 2 . (|< orbit 1) 
+    d3 = p 3 . (|< orbit 2) 
+    d4 = p 4 . (|< orbit 3) 
+    d5 = p 5 . (|< orbit 4) 
+    d6 = p 6 . (|< orbit 5) 
+    d7 = p 7 . (|< orbit 6) 
+    d8 = p 8 . (|< orbit 7) 
+
+-----------------------------------------------------------------------
+
+d1 $ s "HBH:127(4,9)" 
+  # legato 2 
+  # squizbus 1 "0 1.5 0 1.5"
+  # lpfbus 2 "400 2000 3000"
+  # lpq 0.2
+  # orbit 0
+
+
+-----------------------------------------------------------------------
+-- A simple sound
+
+d1 $ s "HBH:129" # legato 1
+
+-- This doesn't do anything different
+
+d1 $ s "HBH:129" # legato 1 # squiz "0 1.5 0 1.5"
+
+-- A workaround is to chop up the sounds into parts:
+
+d1 $ chop 4 $ s "HBH:129" # legato 1 # squiz "0 1.5 0 1.5"
+
+-- But now you can use a bus to change a single sound while it plays:
+
+d1 $ s "HBH:129" # legato 1 # squizbus 1 "0 1.5 0 1.5"
+
+-- You can add a bus to most things but have to take care to give each thing a different bus number:
+
+d1 $ s "HBH:129" 
+  # legato 1 
+  # squizbus 1 "0 1.5 0 1.5"
+  # lpfbus 2 "400 2000 3000"
+  # lpq 0.3
+
+-- You can pattern things within bus patterns:
+
+d1 $ s "HBH:135" 
+  # legato 1 
+  # squizbus 1 (chunk 4 (fast 4) "0 1.5 0 1.5")
+  # lpfbus 2 "400 2000 3000"
+  # lpq 0.2
+
+-- A big limitation is that bus patterns are monophonic. So if you do some patterning that layers them up, you'll be disappointed with the results:
+
+d1 $ jux rev $ s "HBH:129" # ampbus 1 ("[1 0 [1 0] 1]*6") # legato 1  
+
+-- A workaround is to add 1 to the bus number, and 0 to the value: 
+
+d1 $ jux (rev . (|+ ampbus 1 0)) $ s "HBH:135" # ampbus 1 ("[1 0 [1 0] 1]*6") # legato 1
+
+-- Or replace the control using a different bus number with `#`
+
+d1 $ jux (rev . (# ampbus 2 "1 0 1 0")) $ s "HBH:135" 
+  # ampbus 1 ("[1 0 [1 0] 1]*6") 
+  # legato 1
+
+-----------------------------------------------------------------------
+
+-- Syncopation with press
+-- a --> [ ~ a ]
+
+d1 $ jux press $ sound "HBH:135*2 HBH:136*3 HBH:138*2" # legato 1
+
+d1 $ stack [every 4 (fast 2) $ s "HBH:138*4" # squiz 1.3 # speed 2, 
+  every 2 press $ s "HBH:135*2 HBH:249*3" 
+  -- # lpfbus 2 "800 200 1000"
+  -- # lpq 0.2
+] # legato 1
+
+-----------------------------------------------------------------------
+
+hush
+

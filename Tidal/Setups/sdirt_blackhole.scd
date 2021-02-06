@@ -1,9 +1,6 @@
-//-------------
-
-/*
-Using Blackhole 16 channels as outputs
-*/
-
+//--------------
+// Tidal Startup
+//--------------
 
 (
 // configure the sound server: here you could add hardware specific options

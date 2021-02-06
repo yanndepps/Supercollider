@@ -85,3 +85,75 @@ d1 $ stack [every 4 (fast 2) $ s "HBH:138*4" # squiz 1.3 # speed 2,
 
 hush
 
+-----------------------------------------------------------------------
+-- Tidal Club #10
+
+d1 $ slow 16 $ n "c a f e" # sound "supermandolin"
+  # legato 4
+  # gain 1.5
+  -- # lpfbus 1 "[3000 1000]*64"
+  # lpfbus 1 (segment 128 $ "[3000 1000 500]*128" * saw)
+  # lpq 0.2 
+
+-----------------------------------------------------------------------
+-- drone music with tidal ...
+
+d1 $ trigger 1 $ slow 32 $ n "[c4,a3]" # s "superzow"
+  # lpfbus 1 300
+  # lpqbus 2 0.1 
+  # coarsebus 3 0
+  # squizbus 4 0
+  # roombus 5 0.2
+  # sizebus 6 0.7
+  # panbus 7 0
+  # cut 4
+  # gain 0.8
+
+-----------------------------------------------------------------------
+-- control the above pad with another pattern:
+
+d2 $ lpfbus 1 (every 3 (fast 2) $ slow 2 $ segment 16 $ range 400 1000 saw)
+  # lpqbus 2 (segment 32 $ range 0.2 0.3 sine)
+  # roombus 5 0.8
+  # sizebus 6 0.9
+  # panbus 7 "1"
+
+panic
+
+-----------------------------------------------------------------------
+-- press : pushes everything into an offbeat
+
+d1 $ n "0 3 [4 2] 6" # sound "HBH" # legato 2
+
+d1 $ every 2 press $ n "0 3 [4 2] 6" # sound "HBH" # legato 2
+
+drawLine $ "a b [c d] e"
+
+drawLine $ press $ "a b [c d] e"
+
+d1 $ jux press $ n "0 3 [4 2] 6" # sound "HBH" # legato 2
+
+d1 $ every 4 press $ n "0 3 [4 2] 6 3" # sound "HBH" # legato 2
+
+-----------------------------------------------------------------------
+-- pressBy : pushes everything into an offbeat by x amonut
+
+d1 $ pressBy (2/3) $ n "0 3 [4 2] 6 0 2 6 3" # sound "HBH" # legato 1
+
+d1 $ jux (pressBy (2/3)) $ n "0 3 [4 2] 6 0 2 6 3" # sound "HBH" # legato 1
+
+-----------------------------------------------------------------------
+-- ply repeats each event x times
+
+d1 $ ply "<3 4>" $ s "HBH:130 [HBH:135, HBH:138]" # legato 1
+
+-- non integer wokrs too
+
+d1 $ ply 2.5 $ s "HBH:130 HBH:135" # legato 1
+
+-----------------------------------------------------------------------
+-- paused 25.00
+
+hush
+
+-----------------------------------------------------------------------

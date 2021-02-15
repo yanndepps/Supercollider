@@ -13,73 +13,86 @@ let d1 = p 1 . (|< orbit 0)
 
 -----------------------------------------------------------------------
 
-d1 $ s "HBH:127(4,9)" 
+d1 $ s "nonono:11(3,8)" 
   # legato 2 
   # squizbus 1 "0 1.5 0 1.5"
   # lpfbus 2 "400 2000 3000"
   # lpq 0.2
   # orbit 0
 
+hush
+
 
 -----------------------------------------------------------------------
 -- A simple sound
 
-d1 $ s "HBH:129" # legato 1
+d1 $ s "Strega:0" # legato 1 # orbit 0
 
 -- This doesn't do anything different
 
-d1 $ s "HBH:129" # legato 1 # squiz "0 1.5 0 1.5"
+d1 $ s "Strega:0" # legato 1 # squiz "0 1.5 0 1.5" # orbit 0
 
 -- A workaround is to chop up the sounds into parts:
 
-d1 $ chop 4 $ s "HBH:129" # legato 1 # squiz "0 1.5 0 1.5"
+d1 $ chop 4 $ s "Strega:0" # legato 1 # squiz "0 1.5 0 1.5" # orbit 0
 
 -- But now you can use a bus to change a single sound while it plays:
 
-d1 $ s "HBH:129" # legato 1 # squizbus 1 "0 1.5 0 1.5"
+d1 $ s "Strega:0" # legato 1 # squizbus 1 "0 1.5 0 1.5" # orbit 0
 
 -- You can add a bus to most things but have to take care to give each thing a different bus number:
 
-d1 $ s "HBH:129" 
+d1 $ s "Strega:0" 
   # legato 1 
   # squizbus 1 "0 1.5 0 1.5"
-  # lpfbus 2 "400 2000 3000"
+  # lpfbus 2 "400 5000 3000"
   # lpq 0.3
+  # orbit 0
 
 -- You can pattern things within bus patterns:
 
-d1 $ s "HBH:135" 
+d1 $ s "Strega:4" 
   # legato 1 
   # squizbus 1 (chunk 4 (fast 4) "0 1.5 0 1.5")
   # lpfbus 2 "400 2000 3000"
   # lpq 0.2
+  # orbit 0
 
 -- A big limitation is that bus patterns are monophonic. So if you do some patterning that layers them up, you'll be disappointed with the results:
 
-d1 $ jux rev $ s "HBH:129" # ampbus 1 ("[1 0 [1 0] 1]*6") # legato 1  
+d1 $ jux rev $ s "Strega:20"
+  # ampbus 1 ("[1 0 [1 0] 1]*6") 
+  # legato 1  
+  # orbit 0
 
 -- A workaround is to add 1 to the bus number, and 0 to the value: 
 
-d1 $ jux (rev . (|+ ampbus 1 0)) $ s "HBH:135" # ampbus 1 ("[1 0 [1 0] 1]*6") # legato 1
+d1 $ jux (rev . (|+ ampbus 1 0)) $ s "Strega:18" 
+  # ampbus 1 ("[1 0 [1 0] 1]*6") 
+  # legato 1
+  # orbit 0
 
 -- Or replace the control using a different bus number with `#`
 
-d1 $ jux (rev . (# ampbus 2 "1 0 1 0")) $ s "HBH:135" 
-  # ampbus 1 ("[1 0 [1 0] 1]*6") 
+d1 $ jux (rev . (# ampbus 2 "1 0 1 0")) $ s "Strega:13" 
+  # ampbus 1 ("[1 0 [1 0] 1]*3") 
   # legato 1
+  # orbit 0
 
 -----------------------------------------------------------------------
 
 -- Syncopation with press
 -- a --> [ ~ a ]
 
-d1 $ jux press $ sound "HBH:135*2 HBH:136*3 HBH:138*2" # legato 1
+d1 $ jux press $ sound "Strega:12*2 Strega:9*3 Strega:13*2" 
+  # legato 1
+  # orbit 0
 
-d1 $ stack [every 4 (fast 2) $ s "HBH:138*4" # squiz 1.3 # speed 2, 
-  every 2 press $ s "HBH:135*2 HBH:249*3" 
-  -- # lpfbus 2 "800 200 1000"
-  -- # lpq 0.2
-] # legato 1
+d1 $ stack [every 4 (fast 2) $ s "Strega:17*4" # squiz 1.3 # speed 2, 
+  every 2 press $ s "Strega:8*2 Strega:4*3" 
+   # lpfbus 2 "800 200 1000"
+   # lpq 0.2
+] # legato 1 # orbit 0
 
 -----------------------------------------------------------------------
 
@@ -152,7 +165,42 @@ d1 $ ply "<3 4>" $ s "HBH:130 [HBH:135, HBH:138]" # legato 1
 d1 $ ply 2.5 $ s "HBH:130 HBH:135" # legato 1
 
 -----------------------------------------------------------------------
--- paused 25.00
+
+d1 $ s "HBH:130*8" # speed (range 1 2 rand) # legato 1
+
+d1 $ s "HBH:130*8" # speed ((irand 4) + 1) # legato 1
+
+d1 $ sew (brand) (sound "HBH:135*8") (n "0..7" # sound "HBH" # speed 2) # legato 1
+
+d1 $ bite 4 "0 1*2 3 2*8" $ n "0 .. 7" # sound "HBH" # legato 1
+
+d1 $ chew 4 "0 1*2 3 2*8" $ n "0 .. 7" # sound "HBH" # legato 1
+
+d1 $ bite "<4 3>" "0 1*2 3 2*8" $ n "0 .. 7" # sound "HBH" # legato 1
+
+setB "metre" "1(5,8,<2 0>)"
+
+d1 $ struct "^metre" $ n "0 1 2 3" # sound "HBH" # legato 2
+
+d1 $ chunk 4 (hurry 2) $ jux rev $ struct "^metre" $ n "0 .. 7" # sound "HBH" # legato 2
+
+hush
+
+-----------------------------------------------------------------------
+
+d1 $ (jux rev $ off 0.25 (|+ n 12) $ slow 4 $ n "c(3,8) a(3,8) f(5,8) e*3" # sound "[flbass, sally]"
+  |+ n 32)
+  # lpfbus 1 (segment 128 $ slow 4 $ range 400 2000 sine)
+  # lpqbus 2 (segment 128 $ slow 4 $ range 0 0.2 sine)
+  # legato 2
+
+-----------------------------------------------------------------------
+
+d1 $ whenmod 4 1.5 (hurry 2) $ n "0 ..7" # sound "HBH:133" # legato 2
+
+d1 $ while "<t t f>" (hurry 2) $ n "0 .. <9 7>" # sound "sally" # legato 3
+
+-----------------------------------------------------------------------
 
 hush
 

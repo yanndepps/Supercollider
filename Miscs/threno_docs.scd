@@ -1,10 +1,10 @@
-s.boot;
-ThrenoScope.new(2);
+"SC_JACK_DEFAULT_OUTPUTS".setenv("REAPER");
 
-// introduction to the threnoscope
+// Placing drones in multichannel space
+s.boot;
+ThrenoScope.new(8);
 
 // ---
-// Here we have removed the harmonics view and are now drawing the chosen scale. We then choose the "chromatic" scale (every halfnote in the octave, 12 notes) and then set the tuning to "just" intonation. We change the scale to a minor scale and set the tuning back to equal tempered 12-tone tuning.
 ~drones.drawHarmonics = false
 ~drones.drawScale = true
 
@@ -41,3 +41,52 @@ ThrenoScope.new(2);
 ~dom7.tonic_(1, 4)
 ~dom7.harmonics_(10, 4)
 ~drones.chords // see all the available chords
+
+// ---
+~drones.scale = \chromatic
+~drones.createChord(\tri, [1, 3, 5, 11], tonic: 4, name: \ixi)
+~ixi.kill
+~drones.createDrone(\sine, 2, degree: 1, name:\tonic)
+~drones.createDrone(\sine, 2, degree: 3, name:\third)
+~drones.createDrone(\sine, 2, degree: 5, name:\fifth)
+~drones.defineChord(\dog, \tonic, \third, \fifth)
+~dog.tonic = 4 // move the new chord up to the 4rth octave
+
+// ---
+// satellites : a larger cluster of drones moving in space
+~drones.createSatellites(\saw, \minor, 8, name: \ooo)
+~ooo.num = 40
+~ooo.tonic=2
+~ooo.speed=10
+~ooo.speed={rrand(-20, 30)} // pass a function so each satellite gets a different speed
+
+// ---
+// tunings & scales
+// let's look at the scale view for tunings
+~drones.drawHarmonics = false
+~drones.drawScale = true
+// we move to the chromactic scale (all 12 notes) to see the different tunings
+~drones.scale = \chromatic
+~drones.tuning = \just
+~drones.tuning = \mean6
+~drones.tuning = \et12 // the standard western equal tempered tuning
+~drones.tuning = \wcSJ // Wendy Carlos' Super Just Tuning
+~drones.scale = \minor
+~drones.tuning = \et12
+
+// let's try some Scala scales/tunings
+~drones.scale = \mean19
+~drones.scale = \safi_arabic
+~drones.scale = \safi_rahevi
+~drones.scale = \solar
+~drones.scale = 'bohlen-p' // because of the hyphen we need quotation marks
+~drones.scale = 'bohlen-p_9'
+
+// ---
+// GUI & automation
+~drones.createDrone(\eliane, 2, degree: 5, name: \oxo)
+~oxo.setParam(\tonic, 1, 10) // the argument and its low and high values
+~oxo.recParam(\harmonics, 1, 10) // move the mouse around to record. On release it will play
+
+// ---
+

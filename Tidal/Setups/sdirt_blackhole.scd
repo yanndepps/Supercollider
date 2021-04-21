@@ -2,6 +2,8 @@
 // Tidal Startup
 //--------------
 
+"SC_JACK_DEFAULT_OUTPUTS".setenv("REAPER");
+
 (
 // configure the sound server: here you could add hardware specific options
 // see http://doc.sccode.org/Classes/ServerOptions.html

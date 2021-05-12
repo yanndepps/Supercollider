@@ -1,0 +1,38 @@
+-- dubby snippets
+
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0) 
+    d2 = p 2 . (|< orbit 1) 
+    d3 = p 3 . (|< orbit 2) 
+    d4 = p 4 . (|< orbit 3) 
+    d5 = p 5 . (|< orbit 4) 
+    d6 = p 6 . (|< orbit 5) 
+    d7 = p 7 . (|< orbit 6) 
+    d8 = p 8 . (|< orbit 7) 
+
+-----------------------------------------------------------------------
+
+do
+  setcps (120/60/8)
+  resetCycles;
+  let startCycle = 8 -- Start from Cycle 8
+  let startMargin = 0.5 -- Start from Cycle 7.5 (8 - 0.5)
+  d1
+    $ rotL startCycle
+    $ rotR startMargin
+    $ seqP [
+      (4, 48,
+        n "<[fs ~ ~ fs cs6 cs6 fs fs ~ ~ cs6 cs6 cs6 ~ cs6 cs6] [cs ~ ~ cs gs gs cs cs ~ ~ gs gs gs ~ gs gs]>"
+        # sustain "[0.6 ~ ~ 0.3] [0.3 0.3 0.3 0.3] [~ ~ 0.3 0.3] [0.4 ~ 0.3 0.3]"
+      )
+    ]
+    # octave 3
+    # nudge "[0 0.02 0 0.02]*4"
+    # gain "0.9"
+    # s "midi"
+    # midichan 0
+    # orbit 0
+
+hush
+-----------------------------------------------------------------------

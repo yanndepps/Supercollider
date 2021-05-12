@@ -39,14 +39,12 @@ s.latency = 0.3; // increase this if you get "late" messages
 
 //-------------
 
-ServerOptions.outDevices;
-
-//-------------
-
 MIDIClient.init;
 
-~midiOut = MIDIOut.newByName("Gestionnaire IAC", "Tidal1");
+~midiOut = MIDIOut.newByName("Midi Through", "Midi Through Port-0");
 
 ~midiOut.latency = 0;
 
 ~dirt.soundLibrary.addMIDI(\midi, ~midiOut);
+
+//-------------

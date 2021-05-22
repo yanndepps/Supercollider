@@ -2,6 +2,14 @@
 
 s.boot;
 
+// ---
+
+s.recSampleFormat = "int24";  // default to 32
+s.recHeaderFormat = "wav";    // default to aiff
+s.recChannels;
+
+// ---
+
 (
 Routine({
 	// s.record("/home/depps/Musique/Samplz/sc-rec/snd.wav", duration:4);
@@ -17,17 +25,12 @@ Routine({
 		sig = Splay.ar(sig);
 	}.play(fadeTime:0);
 }).play;
+
 )
 
 x.release(1);
 
 s.stopRecording;
-
-// ---
-
-s.recSampleFormat = "int24";  // default to 32
-s.recHeaderFormat = "wav";    // default to aiff
-s.recChannels;
 
 // ---
 

@@ -1,6 +1,8 @@
 // register a keyboard macro using the following command: :qa vap C-c C-c q.
 // the macro is stored in @a. Type @a to summon it.
 
+"SC_JACK_DEFAULT_OUTPUTS".setenv("REAPER");
+
 s.options.numBuffers = 1024 * 64; // increase if you need to load more samples
 
 s.boot;
@@ -55,23 +57,27 @@ x.free;
 // ---
 
 (
-~oval_1 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/HBH/00233_HBH.wav");
-~oval_2 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/HBH/00213_HBH.wav");
-~oval_3 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/HBH/00294_HBH.wav");
+// mono
+~snd_01 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/ESTU/h2ogmcy/Bell-Hard.wav");
+// stereo
+~snd_02 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/HBH/Subforsub/12345.wav");
+~snd_03 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/HBH/Subforsub/1234.wav");
 )
 
-~oval_1.bufnum;
+~snd_02.bufnum;
 
 (
 x = {
   var sig;
   sig = PlayBuf.ar(
-    2,
-    ~oval_3.bufnum,
-    BufRateScale.ir(~oval_3.bufnum),
+    1,
+    ~snd_01.bufnum,
+    BufRateScale.ir(~snd_01.bufnum),
+    0, 
+    0,
     doneAction:2
   );
-  sig = sig * 0.3!2;
+  sig = sig * 0.8!2;
 }.play;
 )
 
@@ -83,7 +89,7 @@ SynthDef.new(\pb, {
   arg buf=0, rate=1, t_trig=1, spos=0, loop=0, da=2, out=0, amp=0.5;
   var sig;
   sig = PlayBuf.ar(
-    2, // 1.
+    2, // a.
     buf, 
     BufRateScale.ir(buf) * rate,
     t_trig,
@@ -96,15 +102,61 @@ SynthDef.new(\pb, {
 }).add;
 )
 
-Synth.new(\pb, [\buf, ~oval_3, \rate, 0.60]);
+Synth.new(\pb, [\buf, ~snd_02]);
 
-// 1. we can't dynamically modulate the number of channels at runtime !
+// a. we can't dynamically modulate the number of channels at runtime !
 // we really should create two synthDef, one for stereo files, one for monos.
+// mono
 
 (
-x = Synth.new(\pb, [
-  \buf, ~oval_3, 
-  \spos, ~oval_3.numFrames * 0.0, 
+SynthDef.new(\pb1, {
+  arg buf=0, rate=1, t_trig=1, spos=0, loop=0, da=2, out=0, amp=0.5;
+  var sig;
+  sig = PlayBuf.ar(
+    1, // a.
+    buf, 
+    BufRateScale.ir(buf) * rate,
+    t_trig,
+    spos,
+    loop,
+    da
+  );
+  sig = sig * amp!2; // channel expansion because mono
+  // sig = sig!2;
+  Out.ar(out, sig);
+}).add;
+)
+
+// stereo
+
+(
+SynthDef.new(\pb2, {
+  arg buf=0, rate=1, t_trig=1, spos=0, loop=0, da=2, out=0, amp=0.5;
+  var sig;
+  sig = PlayBuf.ar(
+    2, // a.
+    buf, 
+    BufRateScale.ir(buf) * rate,
+    t_trig,
+    spos,
+    loop,
+    da
+  );
+  sig = sig * amp;
+  Out.ar(out, sig);
+}).add;
+)
+
+Synth.new(\pb1, [\buf, ~snd_01]);
+Synth.new(\pb2, [\buf, ~snd_02]);
+
+// ---
+// loop, rate on and start position
+
+(
+x = Synth.new(\pb2, [
+  \buf, ~snd_02, 
+  \spos, ~snd_02.numFrames * 0.9, 
   \loop, 1,
   \rate, 0.5
 ]);
@@ -112,12 +164,16 @@ x = Synth.new(\pb, [
 
 x.free;
 
+// ---
+// drift out of phase
+// by a 10th of a semi tone
+
 (
 x = 5.collect({
   arg n;
-  Synth.new(\pb, [
-    \buf, ~oval_1, 
-    \spos, ~oval_1.numFrames * 0.9, 
+  Synth.new(\pb2, [
+    \buf, ~snd_02, 
+    \spos, ~snd_02.numFrames * 0.0, 
     \loop, 1,
     \rate, ( n/10 ).midiratio,
     \amp, 0.2
@@ -125,15 +181,69 @@ x = 5.collect({
 });
 )
 
+// even more resonance
+
+(
+x = 12.collect({
+  arg n;
+  Synth.new(\pb2, [
+    \buf, ~snd_02, 
+    \spos, ~snd_02.numFrames * 0.0, 
+    \loop, 1,
+    \rate, ( n/30 ).midiratio,
+    \amp, 0.2
+  ]);
+});
+)
+
 x.do({ arg n; n.free });
 
-// use wait() if using a looping process !
+// Routines are function that basically allow us to wait 
+// whenever we are in a loop, we MUST wait !
 
 (
 r = Routine.new({
   loop{
-    Synth.new(\pb, [
-      \buf, [ ~oval_3, ~oval_1 ].choose, 
+    var buf;
+    // buf = [~snd_01, ~snd_02, ~snd_03].choose;
+    buf = [~snd_01, ~snd_02, ~snd_03].wchoose([0.45, 0.1, 0.45]);
+    if(
+      buf.numChannels == 2,
+      { 
+        Synth.new(\pb2, [
+          \buf, buf, 
+          \spos, 0, 
+          \loop, 0,
+          \da, 2,
+          \rate, rrand(-12.0, 5.0).midiratio,
+          \amp, 0.25
+        ]);
+      }
+      {
+        Synth.new(\pb1, [
+          \buf, buf, 
+          \spos, 0, 
+          \loop, 0,
+          \da, 2,
+          \rate, rrand(-12.0, 5.0).midiratio,
+          \amp, 0.25
+        ]);
+      }
+    );
+    wait(1/3);
+  }
+}).play;
+)
+
+// avoiding conditional but same as above
+(
+r = Routine.new({
+  loop{
+    var buf, def;
+    buf = [~snd_01, ~snd_02, ~snd_03].wchoose([0.45, 0.1, 0.45]);
+    def = ("pb" ++ (buf.numChannels.asString)).asSymbol;
+    Synth.new(def, [
+      \buf, buf, 
       \spos, 0, 
       \loop, 0,
       \da, 2,
@@ -163,7 +273,7 @@ SynthDef.new(\pbenv, {
     doneAction:2
   );
   sig = PlayBuf.ar(
-    2, // 1.
+    2, 
     buf, 
     BufRateScale.ir(buf) * rate,
     t_trig,
@@ -179,8 +289,8 @@ SynthDef.new(\pbenv, {
 
 (
 x = Synth.new(\pbenv, [
-  \buf, ~oval_3, 
-  \spos, ~oval_3.numFrames * 0.0, 
+  \buf, ~snd_02, 
+  \spos, ~snd_02.numFrames * 0.0, 
 ]);
 )
 
@@ -189,8 +299,8 @@ var semi = -24;
 r = Routine.new({
   loop{
     Synth.new(\pbenv, [
-      \buf, ~oval_3, 
-      \spos, rrand( ~oval_3.numFrames * 0.4, ~oval_3.numFrames * 0.5 ), 
+      \buf, ~snd_02, 
+      \spos, rrand( ~snd_02.numFrames * 0.2, ~snd_02.numFrames * 0.6 ), 
       \atk, 0.2, // 0.2
       \sus, 0,
       \rel, 0.2, // 0.2
@@ -217,10 +327,10 @@ r.stop;
   var sig;
   sig = TGrains.ar(
     2,
-    Impulse.ar(60),
-    ~oval_3.bufnum,
-    BufRateScale.ir(~oval_3) * MouseX.kr(-12, 12, 0).midiratio,
-    MouseY.kr(0, ~oval_3.duration, 0),
+    Impulse.ar(9),
+    ~snd_03.bufnum,
+    BufRateScale.ir(~snd_03) * MouseX.kr(-12, 12, 0).midiratio,
+    MouseY.kr(0, ~snd_03.duration, 0),
     0.08,
     0,
     0.8,
@@ -228,5 +338,14 @@ r.stop;
   );
 }.play;
 )
+
+// BufRd : phase can be any audio rate signal
+{BufRd.ar(2, ~snd_03, SinOsc.ar(0.5 / ~snd_03.duration).range(0, ~snd_03.numFrames-1))}.play;
+
+{BufRd.ar(2, ~snd_03, Line.ar(0, ~snd_03.numFrames - 1, ~snd_03.duration, doneAction:2))}.play;
+
+{BufRd.ar(2, ~snd_02, XLine.ar(1, ~snd_02.numFrames - 1, ~snd_02.duration, doneAction:2))}.play;
+
+{BufRd.ar(2, ~snd_03, Line.ar(~snd_03.numFrames - 1, 0, ~snd_03.duration, doneAction:2))}.play;
 
 // ---

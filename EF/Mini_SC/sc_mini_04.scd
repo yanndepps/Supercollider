@@ -2,6 +2,18 @@
 
 s.boot;
 
+MIDIClient.init;
+
+~midiOut = MIDIOut.newByName("Midi Through", "Midi Through Port-0");
+
+~midiOut.latency = 0;
+
+a = Pbind(\degree, Prand([1, 2, 3, [0, 5]], inf), \bend, Pwhite(0, 76, inf));
+
+// chain a midi event into the pattern and play it (see Pchain)
+
+(a <> (type: \midi, midiout: ~midiOut)).play;
+
 (
 // use a stream derived from a pattern to control the number of repeats
 ~reps = Pseries(1, 1, inf).asStream;
@@ -11,13 +23,15 @@ p = Pbind(
     Pxrand([51, 53, 55, 58], ~reps),
     Pxrand([72, 75, 77, 79], 4)
   ], inf),
-  \sustain, 0.02,
+  \sustain, 0.8,
   \dur, 0.15,
   \amp, 0.5,
 );
 
-q = p.play;
+// q = p.play;
 )
+
+(p <> (type: \midi, midiout: ~midiOut)).play;
 
 q.stop;
 ~reps.reset;

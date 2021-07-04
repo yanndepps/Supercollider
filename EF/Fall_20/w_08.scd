@@ -60,8 +60,8 @@ x.free;
 // mono
 ~snd_01 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/ESTU/h2ogmcy/Bell-Hard.wav");
 // stereo
-~snd_02 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/HBH/Subforsub/12345.wav");
-~snd_03 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/HBH/Subforsub/1234.wav");
+~snd_02 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/HBH/strega/strega_02.wav");
+~snd_03 = Buffer.read(s, "/home/depps/Musique/Samplz/Dirts/HBH/strega/strega_00.wav");
 )
 
 ~snd_02.bufnum;
@@ -102,7 +102,7 @@ SynthDef.new(\pb, {
 }).add;
 )
 
-Synth.new(\pb, [\buf, ~snd_02]);
+Synth.new(\pb, [\buf, ~snd_03, \amp, 0.9]);
 
 // a. we can't dynamically modulate the number of channels at runtime !
 // we really should create two synthDef, one for stereo files, one for monos.
@@ -148,15 +148,15 @@ SynthDef.new(\pb2, {
 )
 
 Synth.new(\pb1, [\buf, ~snd_01]);
-Synth.new(\pb2, [\buf, ~snd_02]);
+Synth.new(\pb2, [\buf, ~snd_02, \loop, 1]);
 
 // ---
-// loop, rate on and start position
+// loop, rate and start position
 
 (
 x = Synth.new(\pb2, [
   \buf, ~snd_02, 
-  \spos, ~snd_02.numFrames * 0.9, 
+  \spos, ~snd_02.numFrames * 0.8, 
   \loop, 1,
   \rate, 0.5
 ]);
@@ -187,11 +187,11 @@ x = 5.collect({
 x = 12.collect({
   arg n;
   Synth.new(\pb2, [
-    \buf, ~snd_02, 
-    \spos, ~snd_02.numFrames * 0.0, 
+    \buf, ~snd_03, 
+    \spos, ~snd_03.numFrames * 0.0, 
     \loop, 1,
     \rate, ( n/30 ).midiratio,
-    \amp, 0.2
+    \amp, 0.1
   ]);
 });
 )
@@ -290,19 +290,19 @@ SynthDef.new(\pbenv, {
 (
 x = Synth.new(\pbenv, [
   \buf, ~snd_02, 
-  \spos, ~snd_02.numFrames * 0.0, 
+  \spos, ~snd_02.numFrames * 0.7, 
 ]);
 )
 
 (
-var semi = -24;
+var semi = -12;
 r = Routine.new({
   loop{
     Synth.new(\pbenv, [
-      \buf, ~snd_02, 
-      \spos, rrand( ~snd_02.numFrames * 0.2, ~snd_02.numFrames * 0.6 ), 
+      \buf, ~snd_03, 
+      \spos, rrand( ~snd_03.numFrames * 0.2, ~snd_03.numFrames * 0.6 ), 
       \atk, 0.2, // 0.2
-      \sus, 0,
+      \sus, 0.5, // 0.0
       \rel, 0.2, // 0.2
       \rate, semi.midiratio,
       \amp, 0.2

@@ -65,3 +65,12 @@ play{tanh(ar(f=CombN,c=ar(RLPF,ar(a=SinOscFB,ar(Demand,t=Impulse ar:5,0,Dseq(mid
 
 // 20.06.21
 n=play{|z|ar(SinOsc,[3,2],z)/6};w=plot(o=Image(384,256),\,12@8*99);r{do(inf,{|i|o.pixels=Int32Array.fill(1e5,{|j|c=asInteger(sin(j*sin(i/1e4)*sin(i/4e3)+(x=j%385/50))/cos(i/(x+0.1))%256);248<<24+(c<<16)+(c<<8)+c});w.refresh;0.05.wait;set(n,\z,c)})}.play(AppClock)
+
+// 06.07.21
+play{kr(Out,0,l=ar(BPF,ar(SoundIn),1.1**(50..99),e=0.01));l.sum!2};w=plot(o=Image(50,150));r{do(inf,{o.pixels=(z=o.pixels).overWrite(z[..7450],50).overWrite(z.class.with(*asInteger(s.getControlBusValues(0,50).abs*1e6)+(1<<31)));w.refresh;e.wait;})}.play(AppClock)
+
+// 06.07.21
+play{ar(Saw,a=kr(In,0,e=32),a/d=255).sum.sin/4!2};w=plot(o=Image(e,d),\,12@6*99);r{do(inf,{|i|0.asBus.setn(l={|j|sin(i+j/d)+sin(i/e+j)*127%d}!e);o.pixels=(z=o.pixels).overWrite(z,e).overWrite(z.class.with(*d<<16+div(l,1)<<8));w.refresh;wait(4/d)})}.play(AppClock)
+
+// 07.07.21
+n=play{|a|ar(Blip,[0,1]+e=255,a+3,a)};w=plot(o=Image(c=888,33),\,c);fork({do(inf,{|i|o.pixels=(z=o.pixels).overWrite(z,c).overWrite(z.class.with(*a=(b=div(e*f=sin(i/c),1))!c;{|j|a[c**sin(j/e+f)]=e-b}!e;set(n,\a,a@1/e);e<<8+a<<16));w.refresh;0.01.wait})},AppClock)

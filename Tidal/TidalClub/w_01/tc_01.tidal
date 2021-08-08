@@ -15,14 +15,16 @@ let d1 = p 1 . (|< orbit 0)
 -----------------------------------------------------------------------
 -- The more you add, the faster it goes - the 'cycle' stays constant
 
-d1 $ s "OVAL:5 OVAL:3" # legato 2
+d1 $ s "h:0 h:4" # legato 2
+
+hush
 
 -- If they're all from the same folder, it's easier to pattern
 -- the sounds using a separate "n" pattern, like this:
 
-d1 $ n "10 1 0 2" # s "OVAL" # legato 1
+d1 $ n "4 0 4 2" # s "h" # legato 1
 
-d2 $ n "29 28" # s "OVAL" # legato 1
+d2 $ n "0 3 2" # s "h" # legato 1
 
 -- `#` combines together patterns of different kinds, in this case a 'sound'
 -- and an 'n' pattern.
@@ -30,21 +32,21 @@ d2 $ n "29 28" # s "OVAL" # legato 1
 d3 $ n "33 38 ~ 39 ~ 45 ~" # s "OVAL" # legato 2
 
 -- break down a step into subsequence with []
-d3 $ n "38 [42 42] 39" # s "OVAL" # legato 2
+d3 $ n "0 [2 2] 0" # s "h" # legato 2
 
-d3 $ n "[4 4 4] [1 [7 [8 9]] 11 1]" # s "OVAL" # legato 2
+d3 $ n "[1 2 1] [0 [2 [5 2]] 1 2]" # s "h" # legato 2
 
 --
-d1 $ n "0 4 2 4" |> s "supermandolin" |> n "0 0 0 -24"
+d1 $ n "0 4 2 4" |> s "h" |> n "0 0 0 -24" # legato 2
 
 -- same as :
-d1 $ n "0 0 0 -24" # s "supermandolin"
+d1 $ n "0 0 0 -24" # s "h" # legato 2
 
 -- transpose instead of replace
-d1 $ n "0 4 2 4" # s "supermandolin" |+ n "0 0 0 -24"
+d1 $ n "0 4 2 4" # s "h" |+ n "0 0 0 -24" # legato 2
 
 -- same as :
-d1 $ n "0 4 2 -20" # s "supermandolin"
+d1 $ n "0 4 2 -20" # s "h" # legato 2
 
 
 d1 silence

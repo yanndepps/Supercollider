@@ -1,4 +1,4 @@
-// a simple fm synth to work through the Tidal Patterning tutorials
+// a simple fm synth with a percussive env, to work through the Tidal Patterning tutorials
 
 (
 SynthDef(\simplefm, {

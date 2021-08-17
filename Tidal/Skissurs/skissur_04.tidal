@@ -11,6 +11,7 @@ let d1 = p 1 . (|< orbit 0)
     d8 = p 8 . (|< orbit 7)
 
 -----------------------------------------------------------------------
+-- fm synth parameters ( tdsyndef_03.scd )
 
 let fmfreq = pF "fmfreq"
     fmamt = pF "fmamt"

@@ -1,0 +1,315 @@
+-- Tidal Patterning Part 1
+-----------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0)
+    d2 = p 2 . (|< orbit 1)
+    d3 = p 3 . (|< orbit 2)
+    d4 = p 4 . (|< orbit 3)
+    d5 = p 5 . (|< orbit 4)
+    d6 = p 6 . (|< orbit 5)
+    d7 = p 7 . (|< orbit 6)
+    d8 = p 8 . (|< orbit 7)
+
+-----------------------------------------------------------------------
+
+let fmfreq = pF "fmfreq"
+    fmamt = pF "fmamt"
+
+-----------------------------------------------------------------------
+-- use fractions instead of decimals
+
+d1
+  $ off ( 3 / ( 64 * 4 ) ) ( |* speed "2" )
+  $ every 4 ( fast 2 )
+  $ iter 6
+  $ sound "ha:1 hb:8 hc:2 hd:2"
+  # legato 2
+  # orbit 0
+
+hush
+
+-----------------------------------------------------------------------
+-- use of the Haskell function identity ( id ) which does nothing
+-- but helps to fit a couple dollar signs in
+
+d1
+  $ fast 2
+  $ stack [ id
+  $ sound "ha:0 hd:2"
+  , id
+  $ sound "hb:4 hb:1 hb:12" ]
+  # legato 2
+  # gain 0.8
+  # speed 1.2
+  # orbit 0
+
+d2
+  $ fast 2
+  $ stack [ id
+  $ sound "sc:1 sc:6"
+  , id
+  $ sound "sc:6 sc:3 sc:9" ]
+  # legato 2
+  # gain 0.8
+  # speed 0.5
+  # orbit 1
+
+d1 $ silence
+
+-----------------------------------------------------------------------
+-- stack takes a list of patterns and combines it into a single pattern, 
+-- so that one can apply transformation either to single patterns inside
+-- the list or to the whole stack.
+-- stack lets one combine patterns that may be completely different and
+-- unrelated to each other.
+-- here we are playing a pattern against an iterated version of itself :
+
+d1 
+  $ fast 2
+  $ stack [ id
+  $ sound "hb:5 hb:8 ~ hb:0"
+  , id
+  $ iter 8
+  $ sound "hb:5 hb:8 ~ hb:0"
+  , id
+  $ sound "hc:0*2" ]
+  # gain 0.8
+  # legato 2
+  # orbit 0
+
+-----------------------------------------------------------------------
+-- use 'let' whenever we want to write something multiple times
+
+let pat = sound "hb:10 hb:8 ~ hb:0"
+in
+d1
+  $ fast 2
+  $ stack [ id
+  $ pat
+  , id
+  $ iter 8
+  $ pat 
+  , id
+  $ sound "hc:1*2" ]
+  # gain 0.8
+  # legato 2
+  # orbit 0
+
+-----------------------------------------------------------------------
+-- however, 'let' is not the only way to accomplish this.
+-- 'superimpose ( iter 8 )' makes a copy of a pattern, applies 'iter 8' to it
+-- and stacks the pattern with its copy.
+-- the other benefit being that it is easy to apply the effect to the whole
+-- stack if we want to.
+
+d1 
+  $ fast 2
+  $ stack [ id
+  $ superimpose ( iter 8 )
+  $ sound "hb:10 hb:8 ~ hb:0"
+  , id
+  $ sound "hc:1*2"]
+  # gain 0.8
+  # legato 2
+  # orbit 0
+
+d1 
+  $ fast 2
+  $ superimpose ( iter 8 )
+  $ stack [ id
+  $ sound "hb:10 hb:8 ~ hb:0"
+  , id
+  $ sound "hc:1*2"]
+  # gain 0.8
+  # legato 2
+  # orbit 0
+
+-----------------------------------------------------------------------
+-- this is another reason why "one dollar per line" is a good rule :
+-- to change a function's position in the function chain, we only need
+-- to cut-and-paste the line where that function is.
+-- 'superimpose' takes only one function as argument, but functions can
+-- be composed with the dot operator.
+
+d1
+  $ fast 2
+  $ stack [ id
+  $ sound "hb:10 hb:4 ~ hb:0"
+  , id
+  $ superimpose ( iter 8 . ( |* speed 2.5 ) )
+  $ sound "hc:2*2" ]
+  # gain 0.8
+  # legato 2
+  # orbit 0
+
+-----------------------------------------------------------------------
+-- 'superimpose' is just a special case of a much more powerful function
+-- here we have a note pattern and replicate it a perfect fifth 
+-- ( seven semitones ) above.
+
+d1
+  $ superimpose ( |+ note 7 )
+  $ note "50 ~ ~ 50 ~ ~ 48 ~"
+  # sound "simplefm"
+  # sustain 0.5
+  # gain 0.8
+  # fmamt 2
+  # orbit 0
+
+-----------------------------------------------------------------------
+-- 'off' does the same as 'superimpose' but it also shifts the copy
+-- further in time by a specified number of cycles.
+-- the number doesn't have to be positive. 
+-- 'off 0' is the same as 'superimpose'
+
+d1
+  $ off ( 1/8 ) ( |+ note 7 )
+  $ note "50 ~ ~ 50 ~ ~ 48 ~"
+  # sound "simplefm"
+  # sustain 0.75
+  # gain 0.8
+  # fmamt 2
+  # orbit 0
+
+-----------------------------------------------------------------------
+-- 'stutWith' will superimpose multiple copies and offset them slightly
+-- 'stutWith' creates n-1 copies of the original pattern, offsets them
+-- by a specified cycle count, and applies a function to them.
+
+d1
+  $ stutWith 3 ( - 1/8 ) ( |+ note 7 )
+  $ note "50 ~ ~ 50 ~ ~ 48 ~"
+  # sound "simplefm"
+  # sustain 0.75
+  # gain 0.8
+  # fmamt 2
+  # orbit 0
+
+-----------------------------------------------------------------------
+-- through the power of function composition, we can use stutWith to build
+-- rather complex patterns
+-- here we're stacking perfect fifths, with higher notes becoming 
+-- progressively sharper in timbre and shorter in duration.
+
+d1
+  $ fast ( 3/2 )
+  $ stutWith 5 ( 1/8 ) ( id
+  . ( |+ note 7 )
+  . ( |* sustain ( 3/4 ))
+  . ( |* fmamt ( 7/8 ) ))
+  $ note "50 ~ ~ 50 ~ ~ 48 ~"
+  # sound "simplefm"
+  # sustain 0.75
+  # gain 0.8
+  # fmamt 2
+  # orbit 0
+
+-----------------------------------------------------------------------
+-- simple functions being special cases of more powerful functions is 
+-- something that happens often in Tidal.
+-- note that if you are often using a specific case of a very powerful
+-- function, it might be useful to define that case as its own, more
+-- specific function.
+-- for example, use of stutWith to create copies of a pattern at 0 delay
+-- with higher pitch :
+
+let superLayer copies pitch = stutWith copies 0 ( |+ note pitch )
+
+d1
+  $ fast ( 3/2 )
+  $ superLayer 4 7
+  $ note "50 ~ ~ 50 ~ ~ 48 ~"
+  # sound "simplefm"
+  # sustain 0.75
+  # gain 0.8
+  # fmamt 2
+  # orbit 0
+
+-----------------------------------------------------------------------
+-- Patterning Functions
+-- the parameters of most functions are patternable. we can replace an
+-- argument of any type with a pattern of the same type. for example :
+-- fast 2 can become fast "<2 4>" or even fast ( range 2 4 $ slow 2 $ sine ).
+-- sometimes, we will prefer a very dull base pattern, while the functions
+-- that we are applying to it are very intricate in their temporal -development 
+
+d1
+  $ fast "<[ 8 4 8 6 ] [ 8!2 [ 16 [ 32 64 ] ] 12 ]>"
+  -- $ sound "sc:6 sc:10"
+  $ sound "hb:4 hb:5"
+  # legato 2
+  # gain 0.8
+  # orbit 0
+
+-----------------------------------------------------------------------
+-- in the first example, stack is used to add another version of the pattern;
+-- this one has a fixed rhythm, so it provides a more stable baseline while
+-- the first one does weirder things.
+-- in the second example, we are using stutWith to create copies of the
+-- pattern, dividing the values by 2 each time we make a copy.
+
+d1
+  $ fast ( id
+  $ stack [ id
+  $ "<[ 8 4 8 6 ] [ 8!2 [ 16 [ 32 64 ] ] 12 ]>"
+  , id
+  $ "<4 4>" ])
+  $ sound "hb:4 hb:8"
+  # legato 2
+  # gain 0.8
+  # orbit 0
+
+d1
+  $ fast ( id
+  $ stutWith 3 0 ( |/ 2 )
+  $ "<[ 8 4 8 6 ] [ 8!2 [ 16 [ 32 64 ] ] 12 ]>" )
+  $ sound "hb:4 hb:8"
+  # legato 2
+  # gain 0.8
+  # orbit 0
+
+-----------------------------------------------------------------------
+-- arpeggiate and its sibling arp were designed to be used with chords, but
+-- their power goes much beyond that
+-- basic intended use :
+
+d1
+  $ arpeggiate
+  $ note ( "[ 50, 53, 57, 62 ]" )
+  # sound "simplefm"
+  # sustain 0.65
+  # gain 0.8
+  # fmamt 2
+  # orbit 0
+
+-----------------------------------------------------------------------
+-- use arp to control the order of the notes :
+
+d1
+  $ arp "<up down converge diverge>"
+  $ note ( "[ 50, 53, 57, 62, 65, 69, 74 ]" )
+  # sound "simplefm"
+  # sustain 0.65
+  # gain 0.8
+  # fmamt 2
+  # orbit 0
+
+-----------------------------------------------------------------------
+-- arpeggiate spreads out events when there are multiple events happening at
+-- exactly the same time, by taking the timespan between the moment in which
+-- the events would occur and the moment when the next event should occur, 
+-- spreading them evenly in this timespan.
+
+d1
+  $ arpeggiate
+  $ stack [ id
+  $ sound "hb:4*8"
+  , id
+  $ sound "hb:11*8" ]
+  # legato 3
+  # gain 0.8
+  # orbit 0
+
+-----------------------------------------------------------------------
+
+hush

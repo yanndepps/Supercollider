@@ -164,5 +164,103 @@ x = {
 
 x.free;
 
-// --- 16 --- //
+// Lesson 6 - Polyphony
+// define a synth
+(
+SynthDef('coolsynth', {
+  arg freq=220, amp=0.1;
+  var snd;
+  snd=SinOsc.ar(freq:[freq, freq*2, freq*4], mul:[amp, amp/2, amp/8]);
+  snd=Mix.ar(snd);
+  snd=Splay.ar(snd);
+  Out.ar(0, snd);
+}).add;
+)
 
+// create multiple instances of it
+(
+x = Synth('coolsynth', [\freq, 60.midicps]);
+y = Synth('coolsynth', [\freq, 62.midicps]);
+z = Synth('coolsynth', [\freq, 65.midicps]);
+)
+
+// each can be set later
+(
+x.set(\freq, 58.midicps);
+y.set(\freq, 62.midicps);
+z.set(\freq, 67.midicps);
+)
+
+(
+x.set(\freq, 60.midicps);
+y.set(\freq, 62.midicps);
+z.set(\freq, 65.midicps);
+)
+
+// free them all
+(
+x.free;
+y.free;
+z.free;
+)
+
+// Lesson 7 - Additive Synthesis
+// you can treat UGens like numbers
+// add them together and make a new oscillator
+
+(
+SynthDef('coolsynth', {
+  arg freq=119, amp=0.1;
+  var snd;
+  // mix directly
+  snd=Mix.ar(SinOsc.ar(freq:[freq, freq*2, freq*4], mul:[amp, amp/2, amp/8]));
+  // add some harmonic from a saw wave
+  snd=snd+(0.1*Mix.ar(Saw.ar(freq:[freq, freq*2, freq*3, freq*4], mul:[amp, amp/2, amp/3, amp/4])));
+  snd=Splay.ar(snd);
+  Out.ar(0, snd);
+}).add;
+)
+
+// another and more versatile way of doing the same :
+
+(
+SynthDef('coolsynth', {
+  arg freq=119, amp=0.1;
+  var snd;
+  // mix directly
+  snd=Mix.ar(Array.fill(4, {arg i; SinOsc.ar(freq:freq*(2**i), mul:amp/(2**i))}));
+  // add some harmonic from a saw wave
+  snd=snd+(0.1*Mix.ar(Array.fill(4, {arg i; Saw.ar(freq:freq*(i+1), mul:amp/(i+1))})));
+  snd=Splay.ar(snd);
+  Out.ar(0, snd);
+}).add;
+)
+
+// create multiple instances of it
+(
+x = Synth('coolsynth', [\freq, 60.midicps]);
+y = Synth('coolsynth', [\freq, 62.midicps]);
+z = Synth('coolsynth', [\freq, 65.midicps]);
+)
+
+// each can be set later
+(
+x.set(\freq, 58.midicps);
+y.set(\freq, 62.midicps);
+z.set(\freq, 67.midicps);
+)
+
+(
+x.set(\freq, 60.midicps);
+y.set(\freq, 62.midicps);
+z.set(\freq, 65.midicps);
+)
+
+// free them all
+(
+x.free;
+y.free;
+z.free;
+)
+
+// Lesson 8 - Control rate vs audio rate

@@ -84,3 +84,61 @@ s.freqscope;
 
 // Lesson 10 -> a drone with modulation
 // a Pulse waveform with 3 oscillators at frequencies spaced across 3 octaves :
+(
+x = {
+  arg freq=110, amp=0.1; // args for frequency and amplitude
+  var snd; // a variable to hold the waveform
+  snd = Array.fill(3, { 
+    arg i;
+    var snd2;
+    var freq2=freq*(2**i);
+    snd2=PulseDPW.ar(freq:freq2, mul:1/(2**i), width:0.5);
+  });
+  // add in a mixer
+  snd=Mix.ar(snd);
+  // spread the sound across the stereo field
+  snd=Splay.ar(snd);
+  // pass the sound through a Moog-inspired VCF, using the 
+  // mouse's X position to modulate the cutoff frequency
+  snd=MoogFF.ar(snd, LinExp.kr(MouseX.kr(), 0, 1, 100, 12000));
+  // send the sound to a bus, applying amplification
+  Out.ar(0, snd*amp);
+}.play;
+)
+
+// bank of modulators -> rrand(lo, hi) will generate an unique value on init
+(
+{
+  {
+    LFTri.kr(LFNoise0.kr(rrand(10/60, 100/3)).range(10/60, 100/3))
+  }!4;
+}.plot(1);
+)
+
+// and use the first one in the bank to do pulse width and volume modulation
+// each run will sound a bit different, because rrand init differently each time
+
+(
+x = {
+  arg freq=110, amp=0.1; // args for frequency and amplitude
+  var snd; // a variable to hold the waveform
+  snd = Array.fill(8, { 
+    arg i;
+    var snd2;
+    var freq2=freq*(2**i);
+    var modBank=(LFTri.kr(LFNoise0.kr(rrand(1/10,1)).range(1/10,1)))!8;
+    var modAmp=modBank[0].range(0.2,0.5); // convert to correct range
+    var modWidth=modBank[1].range(0.2,0.8);
+    snd2=PulseDPW.ar(
+      freq:freq2, 
+      mul:1/(2**i), 
+      width:0.5
+    );
+  });
+  snd=Mix.ar(snd);
+  snd=Splay.ar(snd);
+  Out.ar(0, snd*amp);
+}.play;
+)
+
+// Lesson 14 -> filters + envelope + panning + fx

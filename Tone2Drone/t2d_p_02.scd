@@ -140,5 +140,3 @@ x = {
   Out.ar(0, snd*amp);
 }.play;
 )
-
-// Lesson 14 -> filters + envelope + panning + fx

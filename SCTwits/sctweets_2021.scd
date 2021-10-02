@@ -74,3 +74,15 @@ play{ar(Saw,a=kr(In,0,e=32),a/d=255).sum.sin/4!2};w=plot(o=Image(e,d),\,12@6*99)
 
 // 07.07.21
 n=play{|a|ar(Blip,[0,1]+e=255,a+3,a)};w=plot(o=Image(c=888,33),\,c);fork({do(inf,{|i|o.pixels=(z=o.pixels).overWrite(z,c).overWrite(z.class.with(*a=(b=div(e*f=sin(i/c),1))!c;{|j|a[c**sin(j/e+f)]=e-b}!e;set(n,\a,a@1/e);e<<8+a<<16));w.refresh;0.01.wait})},AppClock)
+
+// 23.07.21
+play{z=ar(In,6,2);{|i|z=z+ar(AllpassN,ar(BPF,z,i+3*99,c=1/3,1.5),d=i+1/4,d)}!9;z.tanh};r{do(inf,{|i|y.release(30);y={ar(a=VarSaw,midicps(i%9+Scale.yu(\just).at(i)+42),0,ar(a,c/3)+2/4,lagud(ar(a,2.02,[0,0.5],ar(a,c/4)+1/4)>c,3e-4))/3}.play(s,6,i%6);25.wait})}.play
+
+// 06.08.21
+z=Image.color(w=720,h=540);do(w*h,{|i|b=(j=i div:w)/(h-1)*2-1;a=(i=i%w)/(w-1)*3.5-2.5;x=0;y=0;n=0;while({(e=x*x)+(f=y*y)<=4and:{n<999}},{y=2*x*y+b;x=e-f+a;n=n+1});if(n>2,{z.setColor(Color.hsv(v=n/999**0.5,1,1-v),i,j)})});z.plot("",nil,true).fullScreen
+
+// 15.08.21
+SynthDef(0,{|freq|ar(Out,0,ar(a=SinOsc,[f=kr(a,5)+freq]++({|i|i+2*f*1.gauss(d=1e-3)}!4),0,{|i|1-(i/8)**6}!5).mean*kr(XLine,d,1,0.08)+ar(PinkNoise,d*4)*EnvGate()!2)}).add;PmonoArtic(0,\note,(l=Pseq(_,inf)).(b=' #SuperCollider'.ascii+5%11)+6,\dur,l.(b+1/9),\legato,l.(b%3+1/3)).play
+
+// 01.09.21
+w=plot(o=Image(c=99),"Life",c*5,1>0);AppClock.sched(0,{do(p=o.pixels,{|q,i|m=i%c@i.div(c);n=[a= -1,0@a,1@a,a@0,1@0,a@1,0@1,1].count{|e|p[(h=m+e%c).y*c+h.x]>d=a<<24};o.setPixel(if(case{q==d}{n==3}{q==a}{n>1&&(n<4)}{0.1.coin},a,d),m.x,m.y)});w.refresh;1/c})

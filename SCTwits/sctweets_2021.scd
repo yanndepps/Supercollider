@@ -86,3 +86,15 @@ SynthDef(0,{|freq|ar(Out,0,ar(a=SinOsc,[f=kr(a,5)+freq]++({|i|i+2*f*1.gauss(d=1e
 
 // 01.09.21
 w=plot(o=Image(c=99),"Life",c*5,1>0);AppClock.sched(0,{do(p=o.pixels,{|q,i|m=i%c@i.div(c);n=[a= -1,0@a,1@a,a@0,1@0,a@1,0@1,1].count{|e|p[(h=m+e%c).y*c+h.x]>d=a<<24};o.setPixel(if(case{q==d}{n==3}{q==a}{n>1&&(n<4)}{0.1.coin},a,d),m.x,m.y)});w.refresh;1/c})
+
+// 24.10.21
+play{o=ar(HPF,ar(Splay,ar(Blip,ar(a=SinOsc,(b=2pi*[4,3,1,2,5]/5)/9,b)/3+c=round(m=2**ar(a,1/50,b)*99,50),ar(CombC,c/50,2,b/2pi+ar(a,b/50,ar(a,ar(a,1/99,pi).max)**2pi).max,5),50/m*ar(a,b/50).max+0.5))*1.5,15).tanh;o+ar(GVerb,o.mean*kr(Line),50)/5};scope(s).style=2
+
+// 25.10.21
+play{e=kr(a=LFSaw,0.1);ar(HPF,ar(Splay,ar(Blip,ar(a,kr(a,1e-3,b=(1..4)/2).round(ar(a,0.071)>0/8)*5).exprange(kr(l=Latch,2**kr(a,0.041,f=[0,1])*120-59,e),kr(l,2**kr(a,0.051)*500,e)),d=ar(a,11,f).exprange(2**kr(a,0.061,f)*4-1,2**kr(a,0.031,f)*20-8),1/d.max(1))),9)}
+
+// 26.10.21
+i=0;r{loop{play{i=i+1;ar(Pan2,ar(Blip,exprange(t=ar(a=SinOsc,2**(i%11)*150/x=ceil(kr(a,i%9.33)*5+5)),kr(l=Latch,kr(a,i%4.4).exprange(9,999),y=kr(Changed,x)),kr(l,kr(a,i%pi).exprange(99,9e3),y)),t+2,1-t),kr(a,0.1,i),kr(Line,1,0,9,1,0,2).min(0.6)**2)};5.wait}}.play
+
+// 28.10.21
+play{t=ar(a=SinOsc,10,pi*b=(1..3)/3);o=ar(Splay,ar(Blip,ar(l=Latch,ar(a,b)>0*ar(a,b*50)+1/2*(300**ar(a,1/32,c=2pi*b)+99)+(ar(a,1/256,c).round*50+99),t%ar(a,99**ar(a,1/64))),ar(l,ar(a,ar(a,1/16)*3+12)+1/2*ar(a,1/8,c,50,51),t*ar(a,1/4))))/3;o+ar(GVerb,o.mean/3,30)}

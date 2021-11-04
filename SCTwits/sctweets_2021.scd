@@ -98,3 +98,37 @@ i=0;r{loop{play{i=i+1;ar(Pan2,ar(Blip,exprange(t=ar(a=SinOsc,2**(i%11)*150/x=cei
 
 // 28.10.21
 play{t=ar(a=SinOsc,10,pi*b=(1..3)/3);o=ar(Splay,ar(Blip,ar(l=Latch,ar(a,b)>0*ar(a,b*50)+1/2*(300**ar(a,1/32,c=2pi*b)+99)+(ar(a,1/256,c).round*50+99),t%ar(a,99**ar(a,1/64))),ar(l,ar(a,ar(a,1/16)*3+12)+1/2*ar(a,1/8,c,50,51),t*ar(a,1/4))))/3;o+ar(GVerb,o.mean/3,30)}
+
+// Dark Ambience
+play{a=HPF.ar(ar(PinkNoise,5e-3),10)*Line.kr(0,1,9);ar(GVerb,({|i|ar(Ringz,a*LFNoise1.kr(0.05+0.1.rand),55*i+60,0.2)}!99).sum,70,99).tanh}
+
+// PM Stack Tweet
+play{x=0;(50..120).do{|f|f=f/2;x=SinOsc.ar(f+[0,1],x*Line.kr(1,3,240,doneAction:2))};tanh(x+Ringz.ar(Impulse.ar(2),45,0.3,3))}
+
+// Dark Sea Horns
+n=LFNoise1;Ndef(\x,{a=SinOsc.ar(65,Ndef(\x).ar*n.ar(0.1,3),n.ar(3,6)).tanh;9.do{a=AllpassL.ar(a,0.3,{0.2.rand+0.1}!2,5)};a.tanh}).play
+
+// Drum Tweet
+play{a=Impulse;tanh(a.kr(8).lag*Crackle.ar(LFSaw.kr(3).abs.lag*1.8)+GVerb.ar([a.kr(2)+a.kr(4,0.5)].lag*Blip.ar(4.9,7,0.4)!2,1,1)*5)}
+
+// Mettalic Rhythmic Patterns
+play{Limiter.ar(GVerb.ar(sin(Ringz.ar(Impulse.ar(2**LFNoise0.ar(1!2).range(1,4).round),[40,200,234,889],0.7).sum*2),5,2,0.7))}
+
+play{Limiter.ar(GVerb.ar(sin(Ringz.ar(Impulse.ar(2**LFNoise0.ar(1!3).range(1,5).round/2),[40,200,234,889,1320,150],0.7).sum),5,2,0.7)/2)}
+
+// auto rhythm
+play{Ringz.ar(CoinGate.ar([5,3,9]/10*Line.kr(0,1,30),T2A.ar(Impulse.kr([4,12,6]))),[45,9e3,50,8e3],[6,1,10,3]/10,[9,2,3,1]).sin.sum.tanh!2}
+
+// Techno
+(
+play{
+    i=Impulse.ar(_);
+    h = LPF.ar(WhiteNoise.ar(Decay.ar(Impulse.ar([1,1/7],[0.5,0.75]).sum,0.1)!2),12000);
+    Limiter.ar(
+    (z=Pluck.ar(Saw.ar(4),i.(1),1,1,6/7,SinOsc.ar(PulseCount.ar(i.(11),i.(5)).cos%[3,4]*120),2.5).sin)
+    + LPF.ar(HPF.ar(FreeVerb.ar(z.mean,1,0.999,0.2)*0.3,750)*Line.kr(0,1,16),2500)
+    + HPF.ar(Ringz.ar(LPF.ar(Impulse.ar([0.5,1],[1/6,0]).sum,3000),40,0.8,3).sin*3,40).tanh.madd(0.6)
+    + h + RHPF.ar(CombL.ar(h*0.4,1,5/8,10)*Line.kr(0,1,8),10000,0.5)
+    )
+}
+)

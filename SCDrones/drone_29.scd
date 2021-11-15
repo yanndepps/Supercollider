@@ -34,9 +34,6 @@ play{a=SinOsc;LeakDC.ar(a.ar(a.ar(0.31),a.ar(a.ar(0.21),a.ar(a.ar(0.11,a.ar(0.01
 //--tweet0011
 play{f={|o,i|if(i>0,{SinOsc.ar([i,i+1e-4]**2*f.(o,i-1),f.(o,i-1)*1e-4,f.(o,i-1))},o)};f.(60,6)/60}//#SuperCollider
 
-//--tweet0012
-r{loop{Document.current.text[0..z].do{|x|z=x.ascii;play{Blip.ar(z/3,z,Line.kr(3,0,3/z,1,0,2))!2};wait(1/z)}}}.play(AppClock)//#SuperCollider
-
 //--tweet0013
 a=play{|a|Saw.ar(68,a)};fork{inf.do{|i|t="";{|j|b=cos(i*cos(j**(i/1e4)));t=t++" @"[b+1]}!68;a.set(\a,b);t.postcs;0.01.wait}}//#SuperCollider
 
@@ -70,12 +67,6 @@ play{a=1/(2..5);GVerb.ar(Splay.ar(Ball.ar(LPF.ar(Impulse.ar(a),500),7-(1/a),1e-5
 //--tweet0023
 play{Splay.ar({|i|f=i+5*99;RHPF.ar(Ringz.ar(Ball.ar(Saw.ar(i+1)>0,SinOsc.kr(0.1,0,1/5,0.3),0.05,0.02)/99,f,0.05),f,0.1)}!5)}//#SuperCollider
 
-//--tweet0024
-{|j|r{{|i|x=sin(i/5+(j*5));Ndef(i%5+(j*5),{Pan2.ar(LFCub.ar(j*2+x*40+400+i)/15,i%5/2-1)}).play;wait(x.abs+0.5)}!500}.play}!5//#SuperCollider
-
-//--tweet0025
-{|i|defer{Document.allDocuments.do{|d,c|x=sin(c+1*i/91);y=cos(c+1*i/88*x);d.bounds=Rect(a=x*160+320,b=y*120+240,a,b)}}}!555;//#SuperCollider
-
 //--tweet0026
 {CombL.ar(In.ar(8).tanh/8,1,1,8)!2}.play;Pbind(\amp,8,\dur,1/4,\degree,Pseq(List.fib(32)%(List.fib(64)%12),inf),\out,8).play//#SuperCollider
 
@@ -86,7 +77,7 @@ play{GVerb.ar(ceil(In ar:8*4+4)-4/10)};Pbind(\dur,2,\legato,Pgeom(0.5,1.1),\degr
 play{MoogFF.ar(LFTri.ar(CombN.ar(Duty.ar(1/8,0,Dseq(Dshuf(List.fib(16)%8*99,8),inf)),4,4,16))/4,LFTri.kr(1/16,0,2e3,3e3))!2}//#SuperCollider
 
 //--tweet0029
-play{{|i|CombC.ar(In.ar(8),3+i,LFTri.ar(0.5,0,1,2+i),99)}!2};Pbind(\out,8,\note,Pstutter(8,Pseq(List.fib(32)%9/3,inf))).play//#SuperCollider
+play{{|i|CombC.ar(In.ar(8),3+i,LFTri.ar(0.5,0,1,2+i),99)}!2};Pbind(\out,8,\note,Pdup(8,Pseq(List.fib(32)%9/3,inf))).play//#SuperCollider
 
 //--tweet0030
 play{a=LFPar;GVerb.ar(VarSaw.ar(a.ar(1,0,5,a.ar([0.05,0.04],0,50,160).round(50)),0,a.ar(0.2,0,0.5,a.ar(3,0,0.2,0.5)))/8,80)}//#SuperCollider

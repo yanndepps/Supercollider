@@ -1,3 +1,5 @@
+s.boot;
+
 (
 // Code to produce this piece: https://frankchannel.bandcamp.com/track/fragment-vi
 // From this album: http://frankchannel.bandcamp.com/album/fragments

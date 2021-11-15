@@ -125,6 +125,7 @@ r = Synth.new(\reverb, [\in, ~bus]);
 d = Synth.new(\drops, [\out, ~bus]);
 d.set(\gate, 0);
 d.free;
+r.free;
 
 // 2. Order of execution
 r = Synth.new(\reverb, [\in, ~bus]);

@@ -117,4 +117,159 @@ p.clock.tempo = 20;
 ~ring1.play;
 )
 
+// building complexity
+// 1.
+~ring1 = Pbind(
+  \instrument, \ring1,
+  \f, Pkey(\freq),
+  \scale, Scale.minor,
+  \root, 0,
+  \degree, 0,
+  \octave, 5,
+  \dur, 0.25,
+  \d, 0.3,
+  \a, 0.6,
+  \pan, 0,
+  \amp, 1,
+);
+~ring1.play;
+
+// 2.
+~ring1 = Pbind(
+  \instrument, \ring1,
+  \f, Pkey(\freq),
+  \scale, Scale.minor,
+  \root, 0,
+  \degree, 0,
+  \octave, 5,
+  \dur, 0.25,
+  \d, 0.3,
+  \a, Pexprand(0.6, 10),
+  \pan, 0,
+  \amp, 1,
+);
+~ring1.play;
+
+// 3.
+~ring1 = Pbind(
+  \instrument, \ring1,
+  \f, Pkey(\freq),
+  \scale, Scale.minor,
+  \root, 0,
+  \degree, 0,
+  \octave, Pwrand([5,4,3], [0.6, 0.2, 0.2], inf),
+  \dur, 0.25,
+  \d, 0.3,
+  \a, Pexprand(0.6, 10),
+  \pan, 0,
+  \amp, 1,
+);
+~ring1.play;
+
+// 4.
+~ring1 = Pbind(
+  \instrument, \ring1,
+  \f, Pkey(\freq),
+  \scale, Scale.minor,
+  \root, 0,
+  \degree, 0,
+  \octave, Pwrand([5,4,3], [0.6, 0.2, 0.2], inf),
+  \dur, Pbjorklund2(Pwhite(10, 15), 16)/4,
+  \d, 0.3,
+  \a, Pexprand(0.6, 10),
+  \pan, 0,
+  \amp, 1,
+);
+~ring1.play;
+
+// 5.
+~ring1 = Pbind(
+  \instrument, \ring1,
+  \f, Pkey(\freq),
+  \scale, Scale.minor,
+  \root, 0,
+  \degree, 0,
+  \octave, Pwrand([5,4,3], [0.6, 0.2, 0.2], inf),
+  \dur, Pbjorklund2(Pwhite(10, 15), 16)/4,
+  \d, 0.3,
+  \a, Pexprand(0.6, 80),
+  \pan, 0,
+  \amp, 1,
+);
+~ring1.play;
+
+// 6.
+~ring1 = Pbind(
+  \instrument, \ring1,
+  \f, Pkey(\freq),
+  \scale, Scale.minor,
+  \root, 0,
+  \degree, Prand([0, 2, 4, 6, 7], inf),
+  \octave, Pwrand([5,4,3], [0.6, 0.2, 0.2], inf),
+  \dur, Pbjorklund2(Pwhite(10, 15), 16)/4,
+  \d, 0.3,
+  \a, Pexprand(0.6, 80),
+  \pan, 0,
+  \amp, 0.8,
+);
+~ring1.play;
+
+// the beauty of ProxySpace means we can run function proxies
+// alongside pattern proxies
+~sines = {SinOscFB.ar([36.midicps, 48.midicps + 1], SinOsc.kr(0.1).range(0.1, 1), 0.5)}
+~sines.play;
+
+// we can also use function proxies to effect patterns
+~sinfb = Pbind(
+  \instrument, \sinfb,
+  \degree, 0,
+  \octave, 5,
+  \dur, 0.25,
+  \amp, 0.7,
+  \fb, 0.1,
+);
+~sinfb.play;
+
+// then create a control rate proxy to control that pattern
+~sinfbControl = { SinOsc.kr(0,1).range(0.1, 0.9) }
+
+// then set an argument on the pattern against the kr rate proxy
+~sinfb.set(\fb, ~sinfbControl);
+
+// we can chain pattern proxies too
+// add reverb
+~verb = { FreeVerb.ar(~sinfb, 1) }
+~verb.play;
+
+// make the reverb ridiculous
+~verb = { FreeVerb.ar(~sinfb, 1, 1, 0.1) }
+
+// cut the percs for some ambience
+(
+~k.stop;
+~sn.stop;
+~h.stop;
+)
+
+// and make another sinfb pattern a fifth above the old one
+// for more ambience
+~sinfb2 = Pbind(
+  \instrument, \sinfb,
+  \degree, 4,
+  \octave, 6,
+  \dur, 0.25,
+  \amp, 0.7,
+  \fb, 0.1,
+);
+~sinfb2.play;
+
+// make sure it has the control proxy assigned too !
+// or make another one !
+~sinfbControl2 = { SinOsc.kr(0.11).range(0.1, 1.5) }
+~sinfb2.set(\fb, ~sinfbControl2);
+
+// slow it down a bit
+p.clock.tempo = 120/60;
+
+// --- END --- //
 p.clear;

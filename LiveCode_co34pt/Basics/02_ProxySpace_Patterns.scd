@@ -1,4 +1,5 @@
 // --- Basics : ProxySpace Patterns --- //
+
 // to start, either execute the setup file or 
 ("../Setup/setup.scd").loadRelative;
 
@@ -271,5 +272,86 @@ p.clock.tempo = 20;
 // slow it down a bit
 p.clock.tempo = 120/60;
 
-// --- END --- //
+// loud kick
+(
+~kick = Pbind(
+  \instrument, \bplay,
+  \buf, d["k"][0],
+  \dur, 0.75,
+  \amp, 5
+);
+~kick.play;
+)
+
+// percussion crossrhythm
+(
+~p = Pbind(
+  \instrument, \vplaym,
+  \buf, d["sc"][0],
+  \dur, 0.75,
+  \amp, 1,
+);
+~p.play;
+)
+
+// alternate the crossrhythm using a task
+(
+~p.fadeTime = 4;
+(
+Tdef(
+  \task,
+  {loop{
+    ~p = Pbind(
+      \instrument, \vplaym,
+      \buf, d["sc"][2],
+      \dur, 0.75,
+      \amp, 1.5,
+      \rate, rrand(0.8, 1.2)
+    );
+    rrand(1,5).wait;
+  }}
+);
+);
+Tdef(\task).play;
+)
+
+// slow euclidean snare hitting just away from the beat
+(
+~sn = Pbind(
+  \instrument, \vplaym,
+  \buf, d["sc"][3],
+  \dur, Pbjorklund2(5,32)/8,
+  \amp, 1,
+);
+~sn.play;
+)
+
+// raise the tempo
+p.clock.tempo = 135/60;
+
+// tweak volumes
+ProxyMixer.new(p);
+
+// mix individual proxies. default to 1.
+~sn.vol = 0.1;
+~k.vol = 3;
+
+// finished
+
+
+~k.clear;
+~sn.clear;
+~h.clear;
+~sines.clear;
+~ring1.clear;
+~p.clear;
+~sinfb.clear;
+~sinfb2.clear;
+Tdef(\task).stop;
+
+
+// or
 p.clear;
+Server.hardFreeAll;
+
+// --- END --- //

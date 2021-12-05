@@ -127,7 +127,7 @@ p.clock.tempo = 150/60;
     \scale, Scale.chromatic(tuning:\et12),
     \degree, Pseq((0..12).pyramid.mirror, inf),
     \octave, 4,
-    \dur, 0.125/2,
+    \dur, 0.125/4,
     \amp, 0.3,
     \fb, 0.8,
     \rel, 0.1,

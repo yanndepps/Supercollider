@@ -8,7 +8,7 @@ p.fadeTime = 3;
 (
 ~k = Pbind(
   \instrument, \vplaym,
-  \buf, d["sc"][3],
+  \buf, d["sp"][3],
   \pos, 0.2,
   \dur, Pwhite(0.5, 1),
   \amp, 0.5,
@@ -24,11 +24,11 @@ p.fadeTime = 3;
 (
 ~m = Pbind(
   \instrument, \vplaym,
-  \buf, d["sc"][2],
+  \buf, d["sb"][0],
   \pos, Pwhite(0.3, 0.5),
   \dur, 3,
   // \rate, Pwhite(1.0, 1.2),
-  \rate, Pseq([1, 1.2], inf),
+  \rate, Pseq([1.0, 1.2], inf),
   \amp, 0.3,
 );
 ~m.play(out:[2,7]);

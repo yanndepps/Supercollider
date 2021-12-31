@@ -35,6 +35,9 @@ Ndef(\,{|g,f|Pulse.ar([g,f])}).play;{|i|Ndef(\)[i=i+1]=\set->Pbind(\lag,i,\g,Pse
 // 20.02.14
 Ndef(\,{|g,f|LPF.ar(Saw.ar([g,f]),1999)}).play;{|i|Ndef(\)[i+1]=\set->Pbind(\lag,i/9.1,\g,a=Pseq((i..9)*91,inf),\f,a-i)}!19
 
+// 22.02.14
+{play{x=Impulse.ar(0.05);20.do{x=LPF.ar(AllpassL.ar(LeakDC.ar(x),4,8**kr(n=LFNoise2,0s)/2,8)*1.2,8**n.kr({0s.rand}!2)*2500,1).tanh};x*5}}!4
+
 // 18.03.14
 play{Splay.ar(Limiter.ar(Formlet.ar((a=LFSaw).ar((b=(1..8))+200),b*a.ar(b/29).round(0.51)+1*99,a.ar(b/9)*0.5+0.50001)/99))}
 
@@ -122,6 +125,9 @@ play{a=LFTri;BufWr.ar(a.ar(1),b=LocalBuf(c=7e4).clear,a.ar(1.005)*c);Splay.ar(HP
 // 13.04.14
 play{a=LFSaw;Mix(SinOsc.ar(3**Hasher.ar(round(a.ar(0.1)%1,c=(3..1)/16))*(a.ar(c,c)<0*[6,2,1]+[4,[5,5.05],3]*99))).softclip}
 
+// 04.06.14
+play{Splay.ar({Pluck.ar(BPF.ar(f=product({|i|product({LFPulse.ar(2**rrand(-9,1),2.rand/2)}!(i+2))/(1+i)+1}!8)*86,f).sin,Saw.ar,1,1/f,9)}!9)}
+
 // 14.04.14
 a=LFSaw;play{Splay.ar(BBandPass.ar(a.ar(3.7*b=1/(1..16),0,a.ar(99+b,0,a.ar(b*c=0.055).max)),4**a.ar(b/8)*99+99,c,20).tanh)}
 
@@ -142,3 +148,6 @@ a=SinOscFB;play{((c=InFeedback.ar(0,2).lag(b=1/67))+DelayL.ar(HPF.ar(a.ar([99,98
 
 // 15.09.14
 a=LFSaw;play{Splay.ar(BPF.ar(a.ar(f=Duty.ar(a.ar(a.ar(c=3/d=(2..6)))*a.ar(d)/c,0,Dseq(ceil(a ar:d)+d*99,inf))+a.ar(c)),f))}
+
+// 31.10.14
+{|j|play{RLPF.ar(Pulse.ar(f=32**sum({|i|1/4**i*abs(LFNoise0.kr(0.25**j/8)>0-LFPulse.ar(2**i/8))}!10)*30,0.3),f.sqrt.lag(2)*30,0.5)!2/5}}!4

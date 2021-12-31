@@ -151,3 +151,7 @@ Pdefn(\,PSinOsc(0.302)*40)
 
 // 27.11.21 
 play{y={|...x|ar(BBandPass,*x)};ar(Splay,y.(n=ar(GrayNoise,ar(a=SinOsc,1/(b=(1..13).rotate(3))/99).max),f=62.5*b,ar(a,0.5)+ar(a,b/999)/99+0.1,ar(a,b/666)+2)+y.(n,c=f*[6,3,7,5,1,8,4,2],9**ar(a,b/333)/99,666/c)+y.(n,c/2,9**ar(a,b/222)/99,888/c)*ar(a,1e-3,b/9).max)}
+
+// 05.12.21
+play{ar(Splay,3**ar(a=FBSineC,1/b=(1..8).rotate(6))/5*ar(a,999*b,2**ar(a,b/9)*4-1,ar(a,b/8)/2+1+(99**ar(a,1/4)/99),d=ar(a,b/12)>0/80+1.051,ar(a,1/b)/40+0.1)+(ar(a,ar(a,27+b)>0+2+b*d*1400,2,c=ar(a,1/b)+1,c/2,2,2)/12)+ar(HPF,ar(a,32)<0,3,ar(a,b*70/d)*ar(a,1/2)))/2}
+

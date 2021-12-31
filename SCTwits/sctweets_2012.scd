@@ -155,14 +155,26 @@ play{a=Saw;Splay.ar(Formant.ar(a.ar((5,7..15)*19)*99+199,a.ar((1,3..13)*29)*199+
 // 20.07.12
 play({Duty.ar(1/9600,0,Dseq((0..255).collect{|i|[1]++(1-i.asBinaryDigits.reverse)++[0]}.flat,inf),2)!2},s,0,0)
 
+// 17.08.12
+play{Splay.ar({BPF.ar(LFNoise1.kr(1/16)>0.5*9*Saw.ar(4**6.0.rand)*LFPulse.ar(2**11.rand/32,8.rand/8,0.5.rand),2**9.0.rand*20,0.5.rand)}!99)}
+
 // 23.08.12
 play{a=LFNoise2.kr(1/(9..17));Splay.ar(Ringz.ar(BPF.ar(Dust2.ar(a.abs*1e4),a.exprange(99,1e4),1.1-a),(9..1)*99,a+1.1,a)/5)}
+
+// 25.08.12
+play{b=LFTri.kr(1/6);CombN.ar(a=sum({BPF.ar(b<0+(b>0.3)*PinkNoise.ar(1!2)*b,b>0.29+0.2*exprand(30,1e4),0.3**2.0.rand/8)}!30),1,1/40,-0.02)}
 
 // 28.08.12
 play{BLowPass4.ar(Splay.ar(VarSaw.ar(200*Duty.kr(1/(1..5),0,Dseq(flat({|x|{|y|y+1/(x+1)}!8}!8),inf)))),5e3,LFTri.kr(9)+1.1)}
 
 // 25.09.12
 play{a=SinOsc;LPF.ar(LeakDC.ar(a.ar([98,99],a.ar([8,9],a.ar(1/[88,99],0,2pi),pi).lag(a.ar([9,8])),a.ar(1/[8,9])*9)%1),9e3)}
+
+// 06.10.12
+play{f=({|i|DelayC.ar(0-LPF.ar(1-SinOsc.ar(1/2**i)*0.53*InFeedback.ar(2+i),1e3).sin,1,0.9**i/3e2)}!9);Splay.ar(f)++(WhiteNoise.ar/7+f)}
+
+// 07.10.12
+play{f=({|i|DelayC.ar(0-LPF.ar(InFeedback.ar(2+i),2000).tanh,1,1.5**i/4e3)}!6);Splay.ar(f)++(Dust.ar(f*2e4+1)*LFSaw.kr(3/4**(0..5)/8)/5+f)}
 
 // 20.10.12
 play{GVerb.ar(Splay.ar(Ringz.ar(Blip.ar(a=[4,14,5,15,6,16,8],LFNoise0.ar(4/a)*99,LFNoise1.ar(4/a).max(0)),a*99,4/a))/6,200)}
@@ -197,6 +209,9 @@ play{a=LFSaw;b=LocalIn.ar;LocalOut.ar(c=Limiter.ar(CombC.ar(a.ar(d=b+3.3*99)*a.a
 // 27.11.12
 Pspawn(Pbind(\method,\par,\delta,1/8,\pattern,{Pbind(\dur,a=Pseq((1..9).sputter),\sustain,1/8/a,\degree,a,\detune,a)})).play
 
+// 28.11.21
+play{ar(r=RLPF,Saw.ar([200,302]).mean,5**(n={LFNoise1.kr(1/8)})*1e3,0.6)+r.ar(Saw ar:Amplitude.kr(3**n*3e3*InFeedback.ar(0)+1,4,4),1e3)/5!2}
+
 // 29.11.12
 r{loop{x=play{a=DelayN.ar(LPF.ar(InFeedback.ar(0,2),z=1.rrand(9)*99));SinOsc.ar(z+[0,3],a*pi)/2};6.wait;x.release(9)}}.play
 
@@ -224,11 +239,17 @@ play{a=SinOsc;d=a.ar(12*a.ar(9))%1/4;c=Amplitude.ar(InFeedback.ar(0),d,d)+a.ar(d
 // 08.12.12
 play{a=SinOsc;Splay.ar({|i|j=i/700;a.ar(j,a.ar(j*2,a.ar(j*3,a.ar(j*4,a.ar(j*5,InFeedback.ar/99,2pi),2pi),2pi),2pi))}!15)/2}
 
+// 13.12.21
+play{CombL.ar(InFeedback ar:0,1,1/4,9).sin+Pluck.ar(ar(n=LFNoise1,400),a=LFNoise0.kr(1/2),1,1/a.abs/200,99)*SinOsc.ar(n.kr(1/8)*[6,6s])*0.8}
+
 // 14.12.12
 play{a=LFSaw;Formant.ar(b=a.ar(a.ar(a.ar(a.ar(0.1)+1.0905*9)/99)*999)*999,c=CombN.ar(b,1,[0.1,0.11]),CombN.ar(c,1,0.19))/3}
 
 // 17.12.12
 play{Splay.ar({a={LFSaw.kr(0.05.rand2,0,1.0.rand)}!3;BLowPass4.ar(Saw.ar(a@0*250+300,a[2].max(0)),a@1*2e3+2100,0.025)}!99)}
+
+// 17.12.12
+play{Splay.ar(a={|i|RLPF.ar(Trig.ar(InFeedback.ar(i+[-1,1]%6+2).sum.abs.lag(1e-3)<1e-4,8e-3),{2**10.rand*20}!4,1e-3,0s).mean.sin}!6,0.5)++a}
 
 // 23.12.12
 play{a=SinOsc;Splay.ar(a.ar(PulseCount.ar(f=InFeedback.ar(0,2).sum)%999+(60,63.0005..99)*a.ar(2**f)*2+[3,4],f>0*f*9)).tanh}

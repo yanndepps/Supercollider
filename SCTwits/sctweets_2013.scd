@@ -23,6 +23,9 @@ s.record;
 s.stopRecording;
 
 // ---
+// 07.01.13
+x=(1..8);y=scramble(8/x);z=y/.x y;d={|d,a|Duty.ar(d,0,Dseq(a,inf))};play{d.(d.(0.16,z*.x z)/4e3,z)/5-d.(d.(0.04,x*2)/8e2,[0,1])/3!2}
+
 // 01.02.13
 r{inf.do{|i|Ndef(\,{VarSaw.ar(Duty.ar(1/12,0,Dseq((12..0)*(i%63+99)),2)*[1,1.01],0,i/9%9/9)/9}).play.spawn;wait(1/3)}}.play
 
@@ -161,8 +164,14 @@ play{b=(1,3.075..16);a=SinOsc;GVerb.ar(Splay.ar(a.ar(1/b,3*a.ar(b*Duty.ar(b,0,Ds
 // 27.08.13
 a=SinOscFB;play{LeakDC.ar(Splay.ar(RHPF.ar(PinkNoise.ar(a.ar(b=1/(1..32),b)),a.ar(a.ar(b,b),1.35)+1/b*50,0.009,b))).tanh/2}
 
+// 08.10.13
+play{x=Saw.ar(0.7**lag(kr(n=LFNoise0,1/5),2)*[601,500,749]);Splay.ar({|i|x=x+BAllPass.ar(x,9**n.kr(a=1b**i)*2e3)+CombL.ar(x,1,a,8)/2s}!9@8)}
+
 // 02.09.13
 {|i|Pmono(\default,\dur,Pseq(1/[i=i+0.999,Pn(Pseq(b=(2..8)*i),Pseq(b))],inf),\amp,1/b,\freq,Pseq([b,b*i/4]*99,inf)).play}!8
+
+// 15.11.13
+play{mean({|i|99**(-1-LFSaw.kr(i+1/180,1))*SinOsc.ar(i+1*55)}!48)!2}
 
 // 16.11.13
 play{a=SinOscFB;c=a.ar([50,99],0.4);RecordBuf.ar(InFeedback.ar(0,2)+c/3,b=LocalBuf(8e4,2).clear);BufRd.ar(2,b,a.ar(c)*6e4)}
@@ -214,6 +223,9 @@ SynthDef(\,{|f|Out.ar(0,LFPar.ar(f)*EnvGate()!2)}).add;PmonoArtic(\,\legato,c=Pn
 
 // 04.12.13
 {|i|SynthDef(i,{|f|Out.ar(i,Saw.ar(f)*EnvGate())},0.123456).add;Pmono(i,\dur,c=Pn(Pshuf(i*4+4/8.fib,8))/20,\f,15/c).play}!2
+
+// 04.12.13
+play{mean({|j|i=j+1;CombC.ar(x=0.5**i*Pluck.ar(a=Saw.ar(1/i+1/6),a,1,1/i/(3-LFPulse.ar(1/i))/30,9,1b/i),1,SinOsc ar:i+[4,9]*1e-3,0)-x}!9)/9}
 
 // 12.12.13
 play{a=LFTri;b=(1..8)+0.505;Splay.ar(a.ar(a.ar(1/(101-b))+1*99|a.ar(a.ar(1/b,1/b,pi,a.ar(1/b)+9)/b,1/b,404,404))*3).tanh/2}

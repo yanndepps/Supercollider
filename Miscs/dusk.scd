@@ -15,9 +15,9 @@ Homepage: http://www.schemawound.com/
         var dawn;
 
         //-----SynthDefs-----
-        SynthDef(\additivePad, { 
+        SynthDef(\additivePad, {
             |
-                outbus = 0,     freq = 40,      amp = 1,    attack = 0.1,   decay = 0.1,    
+                outbus = 0,     freq = 40,      amp = 1,    attack = 0.1,   decay = 0.1,
                 lfo0L = 0.5,    lfo0R = 0.5,    lfo1L= 0.1, lfo1R = 0.1,    lfo2L= 0.5,     lfo2R = 0.5
             |
             var syn, env, ampMod, output;
@@ -32,13 +32,13 @@ Homepage: http://www.schemawound.com/
             syn = SinOsc.ar(freq) * lfo[2];
             output = syn * env * amp;
             Out.ar(outbus, output);
-        }).add; 
+        }).add;
 
         //-----Sync-----
         Server.default.sync;
 
         //-----Patterns-----
-        dawn = Pbind(*[instrument: \additivePad, 
+        dawn = Pbind(*[instrument: \additivePad,
             dur:        1,
             amp:        0.02,
             freq:       100,
@@ -69,4 +69,4 @@ Homepage: http://www.schemawound.com/
         Pdef(\dawn).stop;
         "-----End Sequence-----".postln; "".postln;
     }.fork;
-)<Paste>
+)

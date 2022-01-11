@@ -32,6 +32,9 @@ x=0;{|i|Pbind(\dur,i+1/4,\lag,i/6/6,\octave,i+3,\legato,i+1/6,\degree,Pn(Plazy{x
 // 08.04.11
 {Splay.ar({|i|l=LFTri.ar(1/6,i/1.5,2.5,3.5).round;SinOsc.ar(142.857*l,lag(l,i-3/6),1-poll(0.142857*l,10/6,"\t\t"))}!6)}.play
 
+// 04.06.11
+f=0;{inf.do{|i|f=f+log2(2*i%6+1+floor(f)/(i%5+1))%2;play{SyncSaw.ar(2**f*99+[0,1],i%8+2*52)*Line.kr(0.1,0,1,1,0,2)};0.3.wait}}.r.play
+
 // 14.09.11
 play{f=LFPar.ar(1/14).round*20+80;Splay.ar(LFPar.ar({|i|[i+1*f,i*f+(i+1/3)]}!4)>BrownNoise.ar(Pulse.ar({|i|i+1}!4,0.35))/3)}
 
@@ -43,6 +46,14 @@ play{x=CombC.ar(Phasor.ar(0,{|i|i+1/4}!5),0.2,LFPar.ar(0.09,0,0.05,0.1).round(0.
 
 // 25.09.11
 play{Splay.ar({|i|SinOsc.ar(i+SinOsc.ar(0.01,a=pi/[2,4,8]@@i,0.1,1)*80+SinOsc.ar(i+1*1e-4+i),a,SinOsc.ar(i+1*1e-3,a)/4)}!9)}
+
+// 17.10.11
+play{x = PinkNoise.ar(0.1!2);x+FreqShift.ar(x, [0.15,0.1501])}
+
+// 06.11.11
+p={|x,a,f|9.do{x=BAllPass.ar(x*a,f).tanh};x};play{p.(Dust.ar(XLine.kr(1e4,0.01,5)*XLine.kr(0.001,1,0.8)),1.2,50)/2+p.(Impulse.ar(0),2,40)!2}
+
+fork{{play{LPF.ar(PinkNoise.ar,100)*Pulse.ar(XLine.kr(2000,1500,2))*EnvGen.kr(Env.triangle(2),1,1,0,1,2)!2};2.0.rand.wait}!20}
 
 // 19.11.11
 play{a=LFCub;n=8;Splay.ar(a.ar({|i|pow(i+1,a.kr(1/n,i/n,1/n,1))}!n*150,0,a.kr({|i|pow(i+1,a.kr(i+0.5/n,i/n))}!n).max(0))/4)}

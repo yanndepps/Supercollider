@@ -1,5 +1,6 @@
 s.boot;
 
+
 (
 SynthDef(\main,{arg out=0, f=50,t_trig=0,p=0,i=0,d=10,l=0.1,a=0.5,n=1;
   var fmod=SinOsc.ar(f/60,0,f/60);

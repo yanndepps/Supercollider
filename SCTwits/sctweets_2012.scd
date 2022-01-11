@@ -23,6 +23,9 @@ s.record;
 s.stopRecording;
 
 // ---
+// 07.01.12
+play{s=SinOsc;f=Duty.kr(0.8,0,Dseq([5,5,9,8]*9,inf));RLPF.ar(Pulse ar:f,4**s.ar(4**LFNoise1.kr(1.2)*4)*4*f)+s.ar(9**LFSaw.kr(-2.5,1)*9)/4!2}
+
 // 19.01.12
 a={play{|b|LFTri.ar(b+69)}}!3;fork{inf.do{|i|x=sin(sin(i/99)*i/(i%3+68))*34+34;a[i%3].set(1,x);join($@!x).postln;0.01.wait}}
 
@@ -56,6 +59,12 @@ play{Splay.ar(SinOsc.ar(9,SinOsc.ar(midicps((Sweep.ar(0,(33..3))%128&(Sweep.ar(0
 // 02.05.12
 play{a=Saw;b=(2..12);c=0.015;GVerb.ar(Splay.ar(Klank.ar(`[b*50+b,c,c],Hasher.ar(a.ar(b/4pi,a.ar(c)*b+b).ceil)))/9,5.rand+1)}
 
+// 05.05.12
+play{l=LFSaw;SinOsc.ar(15**(l.kr(-4.8,1)*l.kr(-1.8,1))*20).sqrt+(99**l.kr(-0.6,0.5)/99*CuspL.ar)+Blip.ar(0.8,1+LFNoise0.kr(0.2)*3e3,4)!2/4}
+
+// 06.05.12
+Pbind(\dur,1/6,\note,Pseq(stutter(x=[0,7,12,7,-2,5,10,5,-7,0,5,7,8,7,5];x=x++7++x++3!4;y=0!8++[5,3,2,0,3,2,0,-2]+5!4;flat(x++y)-8),4)).play
+
 // 06.05.12
 play{a=Saw;GVerb.ar(Splay.ar(BBandPass.ar(a.ar("sunday".ascii),a.ar(9/"slow".ascii)*400+500,a.ar(7/"coding".ascii)+1.1)/5))}
 
@@ -67,6 +76,9 @@ Pbind(\freq,Pseq("SUPERCOLLIDER".ascii,inf)*Pstutter(64,Pseq([3,4,5],inf))*[1,2.
 
 // 07.05.12
 play{CombN.ar(SyncSaw.ar(Saw.ar([3,4],32,64),Saw.ar([4,3],99,Duty.kr(1,0,flop(Dseq(2!6++4++3,99)*(4**(0..4))))))/9,1,1/6,2)}
+
+// 08.05.12
+Ndef(\,{CombN.ar(BPF.ar(Saw.ar(1/8)*1e5+CuspN.ar*1e-3-Ndef(\).ar/40,200,4),1,LFNoise0.ar(1/8).lag+2/[2.02,3]/99++4,9).sum.tanh!2}).play
 
 // 08.05.12
 play{a=Pulse;CombN.ar(Slope.ar(a.ar(a.ar([1,2]/3,1/9,50,[50,150])),a.ar([3,4],1/3)+a.ar([2,3],1/4)/10+0.005).cos/5,1,1/6,2)}
@@ -155,11 +167,20 @@ play{a=Saw;Splay.ar(Formant.ar(a.ar((5,7..15)*19)*99+199,a.ar((1,3..13)*29)*199+
 // 20.07.12
 play({Duty.ar(1/9600,0,Dseq((0..255).collect{|i|[1]++(1-i.asBinaryDigits.reverse)++[0]}.flat,inf),2)!2},s,0,0)
 
+// 15.08.12
+play{Splay.ar({BPF.ar(PinkNoise.ar(20)*LFPulse.ar(2**rrand(-2,2),rand(4)/4,0.5.rand)*(LFNoise1.kr(1/4)>0),exprand(50,15000),1.0.rand)}!10)}
+
+// 17.08.12
+play{Splay.ar({BPF.ar(LFNoise1.kr(1/16)>0.5*9*Saw.ar(4**6.0.rand)*LFPulse.ar(2**11.rand/32,8.rand/8,0.5.rand),2**9.0.rand*20,0.5.rand)}!99)}
+
 // 17.08.12
 play{Splay.ar({BPF.ar(LFNoise1.kr(1/16)>0.5*9*Saw.ar(4**6.0.rand)*LFPulse.ar(2**11.rand/32,8.rand/8,0.5.rand),2**9.0.rand*20,0.5.rand)}!99)}
 
 // 23.08.12
 play{a=LFNoise2.kr(1/(9..17));Splay.ar(Ringz.ar(BPF.ar(Dust2.ar(a.abs*1e4),a.exprange(99,1e4),1.1-a),(9..1)*99,a+1.1,a)/5)}
+
+// 25.08.12
+play{b=LFTri.kr(1/6);CombN.ar(a=sum({BPF.ar(b<0+(b>0.3)*PinkNoise.ar(1!2)*b,b>0.29+0.2*exprand(30,1e4),0.3**2.0.rand/8)}!30),1,1/40,-0.02)}
 
 // 25.08.12
 play{b=LFTri.kr(1/6);CombN.ar(a=sum({BPF.ar(b<0+(b>0.3)*PinkNoise.ar(1!2)*b,b>0.29+0.2*exprand(30,1e4),0.3**2.0.rand/8)}!30),1,1/40,-0.02)}

@@ -1,4 +1,4 @@
-(/*
+/*
 
 Copyright (c) 2018 Luka Prinčič, All rights reserved.
 This program is free software distributed under

@@ -87,8 +87,6 @@ SynthDef(0,{|freq|ar(Out,0,ar(a=SinOsc,[f=kr(a,5)+freq]++({|i|i+2*f*1.gauss(d=1e
 // 01.09.21
 w=plot(o=Image(c=99),"Life",c*5,1>0);AppClock.sched(0,{do(p=o.pixels,{|q,i|m=i%c@i.div(c);n=[a= -1,0@a,1@a,a@0,1@0,a@1,0@1,1].count{|e|p[(h=m+e%c).y*c+h.x]>d=a<<24};o.setPixel(if(case{q==d}{n==3}{q==a}{n>1&&(n<4)}{0.1.coin},a,d),m.x,m.y)});w.refresh;1/c})
 
-// --- continue above this comment (rec)
-
 // 24.10.21
 play{o=ar(HPF,ar(Splay,ar(Blip,ar(a=SinOsc,(b=2pi*[4,3,1,2,5]/5)/9,b)/3+c=round(m=2**ar(a,1/50,b)*99,50),ar(CombC,c/50,2,b/2pi+ar(a,b/50,ar(a,ar(a,1/99,pi).max)**2pi).max,5),50/m*ar(a,b/50).max+0.5))*1.5,15).tanh;o+ar(GVerb,o.mean*kr(Line),50)/5};scope(s).style=2
 

@@ -5,7 +5,7 @@ s.boot
 {CombN.ar(SoundIn.ar, 1, 0.4, 4)!2}.play;
 
 //test with file
-b= Buffer.read(s, "/Users/yanndepps/Documents/Musik/samplz/Dirts/CL_TH/110 I Modular A_A1_.wav");
+b= Buffer.read(s, "/home/depps/Musique/Samplz/folderkits/s/c/mono_n_sc_pads_013.wav");
 
 {Splay.ar(AllpassN.ar(PlayBuf.ar(b.numChannels, b, loop:0), 1, 0.4, 4))}.play;
 {CombN.ar(PlayBuf.ar(1, b, loop:0), 1, 0.2, 2)!2}.play;

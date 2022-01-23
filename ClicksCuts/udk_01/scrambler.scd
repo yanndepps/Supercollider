@@ -2,10 +2,11 @@ s.boot
 
 (
 ~buffers = [
-	"/Users/yanndepps/Documents/Musik/samplz/Dirts/H_ISO/Hainbach - Isolation Loops (soundpack) - 04 Metasonix D1000.wav",
-	"/Users/yanndepps/Documents/Musik/samplz/Dirts/H_ISO/Hainbach - Isolation Loops (soundpack) - 06 Metasonix D1000.wav",
-	"/Users/yanndepps/Documents/Musik/samplz/Dirts/H_ISO/Hainbach - Isolation Loops (soundpack) - 07 Metasonix D1000.wav",
-	"/Users/yanndepps/Documents/Musik/samplz/Dirts/H_ISO/Hainbach - Isolation Loops (soundpack) - 12 Bandpass Ambience.wav"
+	"/home/depps/Musique/Samplz/folderkits/s/f/mono_n_sc_pads_005.wav",
+	"/home/depps/Musique/Samplz/folderkits/s/e/mono_n_sc_pads_015.wav",
+	"/home/depps/Musique/Samplz/folderkits/s/d/mono_n_sc_pads_014.wav",
+	"/home/depps/Musique/Samplz/folderkits/s/c/mono_n_sc_pads_013.wav",
+
 	// add more buffers here
 ].collect{|path| Buffer.readChannel(s, path, channels:[0])};
 SynthDef(\sampler, {|buf, atk = 5, sus = 5, rel = 5, rate = 1|

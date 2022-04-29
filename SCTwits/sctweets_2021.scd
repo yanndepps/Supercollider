@@ -136,17 +136,6 @@ play{
 // 29.10.21 
 play{a={|r,i,n,q,p=0|ar(RLPF,ar(Impulse,r,p),kr(Select,i%5,[0,3,5,7,10]+n).midicps,q)};o=ar(Splay,[a.(2,ar(l=LFSaw,x=1e-3)*88,51,x*9),a.(1,0,70,x*5,b=(1..8)/8),a.(ar(l,1/9)+1,5**ar(l,b/9),82,x*3,b*3)/8,a.(3,ar(l,x*2,0.5)*88,63,x*7)/4].sum);o+ar(GVerb,o.sum/9,50)}
 
-// 16.11.21 
-Quarks.install("UGenPatterns");
-Pbind(\dur,1/8,\degree,Pindex((0..9),Pdefn(\,0)%9)).play
-Pdefn(\,PLFSaw(16)*9)
-Pdefn(\,PLFSaw(16)*1+1)
-Pdefn(\,PLFSaw(16)*2+2)
-Pdefn(\,PLFSaw(20)*2+2)
-Pdefn(\,PLFSaw(3.3)*2+2)
-Pdefn(\,PLFSaw(3.3)*4+2)
-Pdefn(\,PSinOsc(0.302)*40)
-
 // 27.11.21 
 play{y={|...x|ar(BBandPass,*x)};ar(Splay,y.(n=ar(GrayNoise,ar(a=SinOsc,1/(b=(1..13).rotate(3))/99).max),f=62.5*b,ar(a,0.5)+ar(a,b/999)/99+0.1,ar(a,b/666)+2)+y.(n,c=f*[6,3,7,5,1,8,4,2],9**ar(a,b/333)/99,666/c)+y.(n,c/2,9**ar(a,b/222)/99,888/c)*ar(a,1e-3,b/9).max)}
 

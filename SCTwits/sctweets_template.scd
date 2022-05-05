@@ -141,3 +141,109 @@ a=Pulse;play{SinOsc.ar(0,a.ar([400,404])*a.ar(CombN.ar(a.ar(0.1))*40)*2pi)}
 //////////////////////////////
 // -- tricks
 //////////////////////////////
+1000
+999
+
+1000
+1e3
+
+100000
+1e5
+
+0.001
+1e-3
+
+99.rrand(999)
+900.rand+99
+
+{}.play
+play{}
+
+abs(50)
+50.abs
+
+[60,63,66,69]
+[0,3,6,9]+60
+
+[3,4,5,6]
+(3..6)
+
+[0,3,6,9]
+(0,3..9)
+
+(24.rand+60).midicps
+midicps(24.rand+60)
+
+12.rand+60+(LFPulse.kr(0.3.rand)*3)
+LFPulse.kr(0.3.rand)*3+12.rand+60
+
+{EnvGen.ar(Env.perc,Impulse.ar(2))*SinOsc.ar}.play
+{EnvGen.ar(Env.perc,LFTri.ar(2))*SinOsc.ar}.play
+
+play{SinOsc.ar(0,SinOsc.ar([400,404]),SinOsc.ar([0.1,0.2]))}
+a=SinOsc;play{a.ar(0,a.ar([400,404]),a.ar([0.1,0.2]))}
+
+// some ugens are similar enough to be used as substitutes
+{WhiteNoise.ar*0.1}.play
+{ClipNoise.ar*0.1}.play
+
+{SinOsc.ar*0.1}.play
+{LFCub.ar*0.1}.play
+
+//but it all depends on your usage.
+//e.g. LFCub can not be phase modulated, but as steady LFO it is ok.
+//and one character less than SinOsc!
+
+//////////////////////////////
+// -- multi channel
+//////////////////////////////
+
+// we only hear two channels
+play{SinOsc.ar([400,404,500])*0.1}
+
+// Splay spreads out 3 channels in the stereo field ( 2 channels )
+play{Splay.ar(SinOsc.ar([400,404,500,600,700,800])*0.1)}
+
+// .sum will add all channels together
+play{SinOsc.ar([400,404,500]).sum*0.1!2}
+
+// .mean will add all channels together and then divide by the number
+play{SinOsc.ar([400,404,500]).mean*0.1!2}
+
+play{Splay.ar(SinOsc.ar([400,404,500,600,700,800]).mean*0.1!2)}
+
+//////////////////////////////
+// -- step by step
+//////////////////////////////
+
+// a very simple two channel synth
+play{SinOsc.ar(midicps([60,63]))}
+
+// Splay spreads out channels in stereo
+play{Splay.ar(SinOsc.ar(midicps([60,63,66,69])))}
+
+// adding note changes ( LFPulse varies between 0 and 1 )
+// .kr means control rate
+play{Splay.ar(SinOsc.ar(midicps([60,63,66,69] + LFPulse.kr(1/[3,4,5,6]))))}
+
+// adding rhythm ( LFSaw ramps -1 to 1. the clicks happen when jumping from 1 back to -1 )
+play{Splay.ar(SinOsc.ar(midicps([60,63,66,69]+LFPulse.kr(1/[3,4,5,6]))) * LFSaw.ar(1/[1,2,3,0.4]))}
+
+// same thing but more developed
+play{Splay.ar(SinOsc.ar(midicps([60,63,66,69]+LFPulse.kr(1/[3,4,5,6])) * LFPulse.kr(2/[3,4,5,6],0,0.1,1,1)) * LFSaw.ar(1/[1,2,3,0.4]))}
+
+// same, written more compact using tricks
+a=LFPulse;play{Splay.ar(SinOsc.ar(midicps((0,3..9)+60+a.kr(1/b=(3..6)))*a.kr(2/b,0,0.1,1,1))*LFSaw.ar(1/[1,2,30,0.4]))}
+
+//////////////////////////////
+// -- different techniques
+//////////////////////////////
+
+//LocalIn and LocalOut
+//BufRd and BufWr
+//InFeedback
+//Dseq and other Demand rate ugens
+//Pbind, fork and Routine
+//.reduce
+//recursion
+//fm and pm  //we mainly used only these in this workshop!

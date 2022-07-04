@@ -247,3 +247,28 @@ a=LFPulse;play{Splay.ar(SinOsc.ar(midicps((0,3..9)+60+a.kr(1/b=(3..6)))*a.kr(2/b
 //.reduce
 //recursion
 //fm and pm  //we mainly used only these in this workshop!
+
+//////////////////////////////
+// -- taking it further
+//////////////////////////////
+
+//good sounding tweets can be reused in your 'real' music.
+//and also combined with other code to great effect.
+
+//one way is to use simple {}.play.
+//first remove the play form your tweet,
+//then add any arguments you like (like amp and lag).
+//also add these in the tweet code.
+//last save the function in a variable (here ~mytweet123)
+(
+~mytweet123 = {|amp=1, lag=1|
+	CombN.ar(SinOsc.ar(Saw.ar(3,64,99),Saw.ar([3,4],Saw.ar(1,32,128),Duty.ar(1,0,flop(Dseq([0,8,1,5])*[1,4,8]))))/9,1,1/6)*amp.lag(lag);
+}
+)
+
+x = ~mytweet123.play(fadeTime: 8); // start synth and fade in over 8s
+x.set(\amp, 0.4); // fade to 40% amplitude in 1s
+x.set(\amp, 1, \lag, 10); // back to full amplitude over 10s
+x.release(3); // fade out and free the synth in 3s
+
+// another way is to rewrite it as a SynthDef. -> more work but more flexible

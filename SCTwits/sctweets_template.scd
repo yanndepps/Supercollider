@@ -272,3 +272,58 @@ x.set(\amp, 1, \lag, 10); // back to full amplitude over 10s
 x.release(3); // fade out and free the synth in 3s
 
 // another way is to rewrite it as a SynthDef. -> more work but more flexible
+(
+SynthDef(\mytweet123, {|out=0, tempo=3, amp=1, lag=1|
+	var src = CombN.ar(SinOsc.ar(Saw.ar(tempo,64,99),Saw.ar([3,4],Saw.ar(1,32,128),Duty.ar(1,0,flop(Dseq([0,8,1,5])*[1,4,8]))))/9,1,1/6);
+	Out.ar(out, src*amp.lag(lag));
+}).add;
+)
+
+a = Synth(\mytweet123);
+b = Synth(\mytweet123, [\tempo, 4]);
+a.free;
+b.free;
+
+// a third possibility is to used Ndef.
+(
+Ndef(\mytweet123, {
+	CombN.ar(SinOsc.ar(Saw.ar(3,64,99),Saw.ar([3,4],Saw.ar(1,32,128),Duty.ar(1,0,flop(Dseq([0,8,1,5])*[1,4,8]))))/9,1,1/6);
+});
+)
+
+Ndef(\mytweet123).play;
+Ndef(\mytweet123).gui;
+Ndef(\mytweet123).clear;
+
+// another example
+(
+Ndef(\mytweet_abc, {
+	CombN.ar(SinOsc.ar(Saw.ar(3,64,99)+50,Saw.ar([3,4],Saw.ar(1,32,128),Duty.ar(1,0,flop(Dseq([0,8,1,5])*[1,4,8]))))/9,1,1/6)
+});
+)
+
+Ndef(\mytweet_abc).play;
+Ndef(\mytweet_abc).stop(5);
+
+// fadeTime
+Ndef(\test3, {SinOsc.ar([400,404]+SinOsc.ar(50,0,50))*0.5});
+Ndef(\test3).play;
+Ndef(\test3).fadeTime = 8; // set 8s crossfade time
+Ndef(\test3, {SinOsc.ar([505,808]+SinOsc.ar(50,0,80))*0.5});
+
+// with Ndef, the code can be changed while it is running
+Ndef(\test3, {LFTri.ar([505,808]+SinOsc.ar(50,0,80))*0.5});
+Ndef(\test3, {SinOsc.ar(1)%LFTri.ar([505,808]+SinOsc.ar(50,0,80))*0.5});
+Ndef(\test3, {SinOsc.ar(1)%LFTri.ar([505,808]+SinOsc.ar(150,0,180))*0.5});
+Ndef(\test3, {SinOsc.ar(1)%LFTri.ar([200,200]+SinOsc.ar(150,0,180))*0.5});
+Ndef(\test3).stop(5);
+
+//////////////////////////////
+// -- extra
+//////////////////////////////
+
+{LFSaw.ar(400,1)}.plot; // useful for learning
+{LFSaw.ar(-400,1)}.plot;
+
+// draw tweets with graphviz
+draw{b=(1..9)*99;Splay.ar(SinOsc.ar(b+LFSaw.kr(-9/b,1,99))*SinOsc.ar(4.5/b))/2};

@@ -42,7 +42,7 @@ s.doWhenBooted{
 
 s.waitForBoot {
 	~clean = SuperClean(2, s); // Two output channels, increase if you want to pan across more channels.
-	~clean.loadSoundFiles("~/Musique/Samplz/Dirts/*"); // Hot swap in samples from anywhere!
+	~clean.loadSoundFiles("~/Musique/Samplz/Cleans/*"); // Hot swap in samples from anywhere!
 	// for example: ~clean.loadSoundFiles("~/Downloads/rnb");
 	s.sync; // Wait for samples to be read.
 	~clean.start([0,0,0]); // First 8 out looks like [0,2,4,6]

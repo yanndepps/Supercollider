@@ -15,13 +15,13 @@ let d1 = p 1 . (|< orbit 0)
 -----------------------------------------------------------------------
 -- The more you add, the faster it goes - the 'cycle' stays constant
 
-d1 $ s "pno:0 pno:2" # legato 2
+d1 $ s "bd:0 bd:2" # legato 2
 
-d1 $ s "[ vnl:0 pno:1 ] stn:4" # legato 2
+d1 $ s "[ bd:0 bd:0 ] bd:0" # legato 2
 
 d1 $ s "pno:0 [ vnl:0 [ stn:4 vnl:7 ] pno:3 ] bcm:1" # legato 2
 
-d2 $ silence
+d1 $ silence
 
 
 hush

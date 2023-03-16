@@ -43,6 +43,11 @@ play{ar(LeakDC,ar(FreeVerb,kr(EnvGen,Env([0,1,0,1,0,1,0,0],0.007*[0,1,1,1,1,18,0
 // 23.08.22
 play{mean({|i|ar(a=SinOscFB,(i+1*c=ar(a,1/64).round*10+50)+ar(a,2.02,1,2),ar(a,i+1/24,1)+1/2,ar(a,i+1/16,1))%ar(a,i+1*50.05**ar(a,6,1),1,ar(a,i+1/36,1))}!12).tanh+ar(Splay,ar(a,ar(a,(1..5),1,3).round+5*c,1,ar(a,12,1).max*3).tanh/9)+ar(a,c,0.7,ar(a,3,1).min(0)/3)}
 
+// 10.11.22
+play{ar(Splay,7**ar(a=SinOsc,g=1/(b=(1..9))/99)/9*ar(a,999*b.scramble/ar(f=RLPF,ar(c=Latch,round(ar(d=WhiteNoise),0.5)+2,ar(e=BrownNoise)+1.4>ar(a,b/999)),9**ar(a,g*9)*999,ar(a,b/77)/2+0.6))*ar(f,ar(c,ar(d),ar(e)+1.3>ar(a,b/99)),9**ar(a,g)*999,ar(a,b/88)/2+0.6))}
+
+
+
 //---
 // #supercollider with bass please...
 play{AllpassC.ar(SinOsc.ar(55).tanh,0.4,TExpRand.ar(2e-4,0.4,Impulse.ar(8)).round([2e-3,4e-3]),2)};

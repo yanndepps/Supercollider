@@ -2,6 +2,8 @@
 // increase this if "alloc failed" messages
 s.options.memSize = 8192 * 256;
 
+s.options.sampleRate = 44100;
+
 s.boot;
 
 s.quit;
@@ -16,9 +18,10 @@ FreqScope.new;
 s.plotTree;
 
 // record
-s.prepareForRecord;
+s.recSampleFormat = "int24";  // default to 32
+s.recHeaderFormat = "wav";    // default to aiff
 
-s.record;
+s.record("/home/depps/Musique/Samplz/SC_Recs/sctweets_040323.wav", duration:60);
 
 s.stopRecording;
 

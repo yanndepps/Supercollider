@@ -1,0 +1,116 @@
+
+-- © Tidal Cyclist : Atsushi Tadokoro
+
+---------------------------------------------------------------------
+
+let d1 = p 1 . (|< orbit 0)
+    d2 = p 2 . (|< orbit 1)
+    d3 = p 3 . (|< orbit 2)
+    d4 = p 4 . (|< orbit 3)
+    d5 = p 5 . (|< orbit 4)
+    d6 = p 6 . (|< orbit 5)
+    d7 = p 7 . (|< orbit 6)
+    d8 = p 8 . (|< orbit 7)
+
+-----------------------------------------------------------------------
+
+setcps(132/240)
+
+-----------------------------------------------------------------------
+
+hush
+
+d1
+  $ sometimesBy 0.1 (rev)
+  $ sometimesBy 0.3 (jux (iter 16))
+  $ s "both:0 dfam:0 m32:0"
+  # note (scale "minPent" "{-12..0}%5")
+  # lpf (range 200 10000 $ slow 8 $ sine) # resonance "0.2"
+  # legato 1
+  # orbit 0
+
+---
+d1
+  $ s "subh:0  [ dfam:0 dfam:1 ] both:0"
+  # pan (rand)
+  # sustain "0.35"
+  # note (scale "indian" "{-12..[0, 5]}%[5, 7]")
+  # lpf (range 200 10000 $ slow 8 $ sine) # resonance "0.2"
+  # orbit 0
+
+---
+
+d1
+  $ sometimesBy 0.3 (jux (iter 16))
+  $ sometimesBy 0.1 (rev)
+  $ s "dfam:0 subh:0 m32:0"
+  # pan (rand)
+  # sustain "0.4"
+  # note (scale "indian" "{-12..[0, 5]}%[5, 7]")
+  # lpf (range 200 10000 $ slow 8 $ sine) # resonance "0.2"
+  # orbit 0
+
+---
+
+do
+  d3
+    $ s "subh:0 m32:1 dfam:0"
+    # note "7"
+    |+| note 2
+    # room "0.2" # size "0.5"
+    # gain "0.8"
+    # lpf (range 200 10000 $ slow 8 $ sine) # resonance "0.2"
+    # legato 1
+    # orbit 2
+
+---
+
+do
+  d2
+    $ s "dfam:1"
+    # room "0.2" # size "0.5"
+    # gain "0.9"
+    # lpf (range 200 10000 $ slow 8 $ sine) # resonance "0.2"
+    # legato 1
+    # orbit 1
+  d1
+    $ sometimesBy 0.1 (slow 4)
+    $ sometimesBy 0.2 (rev)
+    $ s "dfam:0 both:0"
+    # gain "0.7"
+    # pan (rand)
+    # n "{0..3}%5"
+    # room "0.3" # size "0.5"
+    # lpf (range 100 10000 $ rand) # resonance "0.2"
+    # up "<[0, -5][0, 7][-12, -5][12, 19]>*4"
+    # delay "0.7" # delaytime "{0.03 0.01 0.015 0.005}%3" # delayfeedback "0.92"
+    # legato 1
+    # orbit 0
+
+---
+
+do
+  d1
+    $ sometimesBy 0.8 (slow 8)
+    $ sometimesBy 0.2 (rev)
+    $ s "scrs:0"
+    # room "0.2" # size "0.5"
+    # gain "0.9"
+    # lpf (range 200 10000 $ slow 8 $ sine) # resonance "0.2"
+    # legato 1.8
+    # orbit 0
+  d2
+    $ sometimesBy 0.1 (slow 4)
+    $ sometimesBy 0.2 (rev)
+    $ jux (iter 16)
+    $ s "scrs:0"
+    # speed "[1.01, 1.00]"
+    # pan (rand)
+    # lpf (range 100 18000 $ rand) # resonance "0.3"
+    # gain "0.9"
+    # legato 1.8
+    # orbit 1
+
+---
+
+hush

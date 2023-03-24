@@ -13,7 +13,7 @@ let d1 = p 1 . (|< orbit 0)
 
 -----------------------------------------------------------------------
 
-d1 $ jux rev $ s "H_ELE:17 H_ELE:31*2" # legato 1 # orbit 0
+d1 $ jux rev $ s "dfam:0" # legato 1 # orbit 0
 
 d1 $ silence
 

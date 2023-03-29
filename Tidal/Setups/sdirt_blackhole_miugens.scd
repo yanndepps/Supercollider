@@ -17,6 +17,9 @@ s.options.numInputBusChannels = 2; // set this to your hardware output channel s
 // boot the server and start SuperDirt
 s.waitForBoot {
 	~dirt = SuperDirt(2, s); // two output channels, increase if you want to pan across more channels
+	  // load mi-ugens.scd synthdefs
+  	load("/home/depps/.local/share/SuperCollider/synthdefs/mi-ugens.scd");
+  	// end load mi-ugens.scd synthdefs
 	// ~dirt.loadSoundFiles;   // load samples (path containing a wildcard can be passed in)
 	~dirt.loadSoundFiles("/home/depps/Musique/Samplz/Dirts/MOOG_DS/*");
 	~dirt.postSampleInfo;
@@ -30,6 +33,16 @@ s.waitForBoot {
 		~d7 = ~dirt.orbits[6]; ~d8 = ~dirt.orbits[7]; ~d9 = ~dirt.orbits[8];
 		~d10 = ~dirt.orbits[9]; ~d11 = ~dirt.orbits[10]; ~d12 = ~dirt.orbits[11];
 	);
+	 // define global effects for mutable instruments effects
+	~dirt.orbits.do { |x|
+		var clouds = GlobalDirtEffect(\global_mi_clouds, [\cloudspitch, \cloudspos, \cloudssize, \cloudsdens, \cloudstex, \cloudswet, \cloudsgain, \cloudsspread, \cloudsrvb, \cloudsfb, \cloudsfreeze, \cloudsmode, \cloudslofi]);
+		var verb = GlobalDirtEffect(\global_mi_verb, [\verbwet, \verbtime, \verbdamp, \verbhp, \verbfreeze, \verbdiff, \verbgain]);
+		x.globalEffects = x.globalEffects
+		.addFirst(clouds)
+		.addFirst(verb);
+		x.initNodeTree;
+	};
+      // end define global effects for mutable instruments effects
 };
 
 s.latency = 0.3; // increase this if you get "late" messages

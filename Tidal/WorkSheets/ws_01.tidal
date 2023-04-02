@@ -13,7 +13,64 @@ let d1 = p 1 . (|< orbit 0)
 
 -----------------------------------------------------------------------
 
-d1 $ jux rev $ s "dfam:0" # legato 1 # orbit 0
+d1 $ jux rev $ s "d:0" # legato 1 # orbit 0
+
+-----------------------------------------------------------------------
+-- specify folder and sample in two parts
+
+d1 $ jux rev $ s "d"
+  # n 3
+  # legato 1
+  # orbit 0
+
+
+-----------------------------------------------------------------------
+-- change the length of the cycle (cycles per second)
+
+setcps 0.55
+
+-----------------------------------------------------------------------
+-- solo, mute channels
+
+mute 1
+
+unmute 1
+
+solo 1
+
+unsolo 1
+
+-----------------------------------------------------------------------
+-- basic patterns & more variety
+-- add silences with ~
+
+d1 $ s "d:3 ~ s:3 d:3 s:5 ~ b:3 s:3"
+  # legato 2
+  # orbit 0
+
+-- fit a subsequence into a step with []
+
+d1 $ s "b:3 [b:3 d:3] d:3 s:3"
+  # legato 2
+  # orbit 0
+
+-- makes for flexible time signature
+
+d1 $ s "[b:5 b:3 s:5] [b:3 s:3]"
+  # legato 2
+  # orbit 0
+
+-- put subsequences inside subsequences
+
+d1 $ s "[[b:3 b:3] b:5 s:5] [b:3 s:3]"
+  # legato 2
+  # orbit 0
+
+d1 $ rev $ s "[[b:12 [s:12 s:9 s:9 d:9]] b:9 s:9] [b:9 s:9]"
+  # legato 2
+  # orbit 0
+
+-----------------------------------------------------------------------
 
 d1 $ silence
 

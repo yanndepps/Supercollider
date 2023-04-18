@@ -1,5 +1,6 @@
 // Boot
 // increase this if "alloc failed" messages
+
 s.options.memSize = 8192 * 256;
 s.boot;
 s.quit;
@@ -43,7 +44,7 @@ Ndef('x',{Normalizer.ar(FreqShift.ar(Rotate2.ar(*Ndef('x').ar++1/8).tanh,20*[-3,
 Ndef(\x,{DelayN.ar(BRF.ar(Saw.ar(20!2)*0.01+Rotate2.ar(*(Ndef(\x).ar*2).tanh++0.1),20**LFNoise1.kr(0.6)*500,1),1,1)}).play
 
 // 06.04.09
-b=Buffer.read(s,"/home/depps/Musique/Samplz/sc-final/sp/mono_n_sc_pads_013.wav");play{t=Impulse.kr(5);PlayBuf.ar(1,b,1,t,Demand.kr(t,0,Dseq(1e3*[103,41,162,15,141,52,124,190],4)))!2}
+b=Buffer.read(s,"/home/depps/Musique/Samplz/Dirts/:::");play{t=Impulse.kr(5);PlayBuf.ar(1,b,1,t,Demand.kr(t,0,Dseq(1e3*[103,41,162,15,141,52,124,190],4)))!2}
 
 // 08.04.09
 Ndef('x',{x=Ndef('x').ar+0.01;a=BPF.ar(x,6**Latch.ar(x,Dust.ar(x))*200,0.1).sin;9.do{a=AllpassN.ar(a,0.2,{0.2.rand}!2,9)};a+a.mean}).play
